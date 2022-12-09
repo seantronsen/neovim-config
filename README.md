@@ -1,10 +1,10 @@
 # neovim-config
 
-Simple backup of the neovim config used for writing code within unix-like terminals. Requires a few items to be installed on the target system:
+Simple backup of the neovim config used for writing code within unix-like terminals. Currently using this toolset for writing source code based in Rust, C, C++, and Python. Requires a few items to be installed on the target system:
 
-- [neovim $$ \geq $$ v0.8 ](https://github.com/neovim/neovim/releases)
+- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.8.*
 - [sharkdp/fd -- find-fd](https://github.com/sharkdp/fd)
-- nodejs $$\geq$$ v18
+- nodejs $\geq$ v18.*
 - BurntSushi/ripgrep (available on apt)
 
 
