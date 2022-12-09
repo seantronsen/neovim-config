@@ -6,6 +6,7 @@ Simple backup of the neovim config used for writing code within unix-like termin
 - [sharkdp/fd -- find-fd](https://github.com/sharkdp/fd)
 - nodejs $\geq$ v18.*
 - BurntSushi/ripgrep (available on apt)
+- Nerd Fonts -- Fira Code (Monospaced is preferred since it works with PuTTY)
 
 
 Probably needs to be run in a bash terminal too. As for how to actually use this tooling, see which plugins are currently installed within the init.vim file and visit the docs of the associated projects. It should also be possible to find most of that information using vim/nvims `:help [item-name]` command. 
