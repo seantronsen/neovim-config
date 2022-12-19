@@ -1,27 +1,57 @@
 call plug#begin()
-Plug 'EdenEast/nightfox.nvim' 
+
+" THEMES
+" ------------------------------
+Plug 'EdenEast/nightfox.nvim'
+
+" STATUS LINE
+" ------------------------------
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'neovim/nvim-lspconfig' 
+
+" LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
+" ------------------------------
+Plug 'neovim/nvim-lspconfig'
 Plug 'j-hui/fidget.nvim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'simrat39/rust-tools.nvim'
+
+" DOCUMENT FORMATTING
+" ------------------------------
+Plug 'mhartington/formatter.nvim'
+
+" FILE EXPLORATION AND PREVIEWS
+" ------------------------------
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', {'tag': '0.1.0'}
 Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do':'make'}
 
+" AUTOCOMPLETE
+" ------------------------------
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
+
+
 call plug#end()
 
 
+" DEFAULT SETTINGS
 set completeopt=menu,menuone,noselect
 set number
 set t_Co=256
 colorscheme carbonfox
+" AUTO COMPLETE ON-DEMAND ONLY
+inoremap <C-x><C-o> <Cmd>lua require'cmp'.complete()<CR>
 
-" LUA - BASED PLUGIN CONFIGURATION 
+" LUA - BASED PLUGIN CONFIGURATION
 lua << END
 
 require'lualine'.setup {
@@ -96,11 +126,65 @@ local lsp_flags = {
 	debounce_text_changes = 150,
 }
 
--- ------------------------------
 
 -- A NVIM FILE EXPLORER
 --------------------------------
 require'nvim-tree'.setup{}
+
+
+
+-- CONFIGURATION FOR AUTO-COMPLETE
+--------------------------------
+-- Set up nvim-cmp.
+local cmp = require'cmp'
+
+cmp.setup(
+{
+	snippet = {
+		-- REQUIRED - you must specify a snippet engine
+		expand = function(args)
+		require('luasnip').lsp_expand(args.body)
+		end,
+	},
+	window = {
+		-- completion = cmp.config.window.bordered(),
+		-- documentation = cmp.config.window.bordered(),
+	},
+	mapping = cmp.mapping.preset.insert({
+	-- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+	-- ['<C-f>'] = cmp.mapping.scroll_docs(4),
+	['<C-Space>'] = cmp.mapping.complete(),
+	-- ['<C-e>'] = cmp.mapping.abort(),
+	-- ['<CR>'] = cmp.mapping.confirm({ select = true }),
+	-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+	}),
+	sources = cmp.config.sources({{ name = 'nvim_lsp' }, { name = 'luasnip' }}, {{ name = 'buffer' }}),
+	preselect = cmp.PreselectMode,
+	completion = { autocomplete = false }
+})
+
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+	sources = cmp.config.sources({{ name = 'cmp_git' }}, {{ name = 'buffer' }})
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = {{ name = 'buffer' }}
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':',
+{
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = cmp.config.sources({{ name = 'path' }}, {{ name = 'cmdline' }})
+})
+
+
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+
 
 
 -- CONFIGURATION FOR LSP SERVERS
@@ -116,12 +200,16 @@ require"mason-lspconfig".setup_handlers {
 			server = {
 				on_attach = on_attach,
 				flags = lsp_flags,
+				inlay_hints = {
+					enable = true,
+				},
+				capabilities=capabilities
 			}
-		}
-	end,
-	-- Next, you can provide a dedicated handler for specific servers.
-	-- For example, a handler override for the `rust_analyzer`:
-	["rust_analyzer"] = function ()
+			}
+		end,
+		-- Next, you can provide a dedicated handler for specific servers.
+		-- For example, a handler override for the `rust_analyzer`:
+		["rust_analyzer"] = function ()
 		require("rust-tools").setup {
 			server = {
 				on_attach = on_attach,
@@ -129,35 +217,36 @@ require"mason-lspconfig".setup_handlers {
 					enable = true,
 				},
 				flags = lsp_flags,
+				capabilities=capabilities
 			}
-		}
-	end
+			}
+		end
 }
 require'fidget'.setup{}
 
--- CONFIGURATION FOR SYNTAX HIGHLIGHTING 
+-- CONFIGURATION FOR SYNTAX HIGHLIGHTING
 --------------------------------
 require'nvim-treesitter.configs'.setup {
 	highlight = {
 		enable = true,
-		additional_vim_regex_highlighting = false, 
+		additional_vim_regex_highlighting = false,
 	}
-}
+	}
 require'nvim-treesitter.configs'.setup {
 	parser_install_dir = "~/.local/share/nvim/plugged/nvim-treesitter",
 }
 vim.opt.runtimepath:append("~/.local/share/nvim/plugged/nvim-treesitter")
 
--- configuration for telescope 
+-- configuration for telescope
 -----------------------------
 require'telescope'.setup{
-	extensions = {
-		fzf = {
-			fuzz = true, 
-			override_generic_sorter = true,
-			override_file_sorter = true,
-			case_mode = "smart_case",
-		}
+extensions = {
+	fzf = {
+		fuzz = true,
+		override_generic_sorter = true,
+		override_file_sorter = true,
+		case_mode = "smart_case",
+	}
 	}
 }
 require'telescope'.load_extension'fzf'
@@ -167,4 +256,26 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
+
+-- CONFIGURATION FOR DOCUMENT FORMATTING
+-----------------------------
+-- Utilities for creating configurations
+local util = require "formatter.util"
+
+-- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
+require("formatter").setup {
+	-- Enable or disable logging
+	logging = true,
+	-- Set the log level
+	log_level = vim.log.levels.WARN,
+	-- All formatter configurations are opt-in
+	filetype = {
+		-- Formatter configurations for filetype "lua" go here
+		-- and will be executed in order
+		lua = { require("formatter.filetypes.lua").stylua, },
+		rust = { require("formatter.filetypes.rust").rustfmt, },
+		python = { require("formatter.filetypes.python").black, },
+		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
+} }
 END
+
