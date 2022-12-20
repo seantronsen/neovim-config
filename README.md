@@ -7,9 +7,10 @@ Simple backup of the neovim config used for writing code within unix-like termin
 - nodejs $\geq$ v18.*
 - BurntSushi/ripgrep (available on apt)
 - Nerd Fonts -- Fira Code (Monospaced is preferred since it works with PuTTY)
+- luarocks -- see `:checkhealth` for more info
 
 
-Probably needs to be run in a bash terminal too. As for how to actually use this tooling, see which plugins are currently installed within the init.vim file and visit the docs of the associated projects. It should also be possible to find most of that information using vim/nvims `:help [item-name]` command. 
+Probably needs to be run in a bash terminal too. As for how to actually use this tooling, see which plugins are currently installed within the init.vim file and visit the docs of the associated projects. It should also be possible to find most of that information using vim/nvims `:help [item-name]` command. More detailed information can also be found within the 'LOCAL ADDITIONS' section after executing `:help`.
 
 **Important**
 Ensure that the only parser directory being used by neovim is the nvim-treesitter/parser directory. Find and delete any conflicting directories via the command:
@@ -22,3 +23,6 @@ Lastly, in regards to the current code editing features, it is important to reme
 	a. Repeat as needed for each unique type of tool. 
 	b. Note that a list of all available tools can be found using the command `:Mason`
 2. `:LspInstall [language name]`
+	a. Language server protocol support -- **Important**
+3. `:TSInstall [language name]`
+	a. Treesitter syntax highlighting support
