@@ -1,6 +1,6 @@
 # neovim-config
 
-Simple backup of the neovim config used for writing code within unix-like terminals. Currently using this toolset for writing source code based in Rust, C, C++, and Python. Requires a few items to be installed on the target system:
+Simple backup of the neovim config used for writing code within unix-like terminals. Currently using this toolset for writing source code based in Rust, C, and Python. Requires a few items to be installed on the target system:
 
 - [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.8.*
 - [sharkdp/fd -- find-fd](https://github.com/sharkdp/fd)
@@ -26,3 +26,7 @@ Lastly, in regards to the current code editing features, it is important to reme
 	a. Language server protocol support -- **Important**
 3. `:TSInstall [language name]`
 	a. Treesitter syntax highlighting support
+
+
+## Version Notes
+1. There is currently an issue with simrat39/rust-tools.nvim that causes inlay hints to not function correctly. More information on that can be found in [issue #311](https://github.com/simrat39/rust-tools.nvim/issues/311). For the meantime, this config will be using the [kdarkhan fork](https://github.com/kdarkhan/rust-tools.nvim) which is one of the solutions recommended in the comments of issue #311. 

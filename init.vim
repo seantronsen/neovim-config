@@ -17,7 +17,8 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'simrat39/rust-tools.nvim'
+" Plug 'simrat39/rust-tools.nvim'
+Plug 'kdarkhan/rust-tools.nvim'
 
 " DOCUMENT FORMATTING
 " ------------------------------
@@ -50,6 +51,10 @@ set t_Co=256
 colorscheme carbonfox
 " AUTO COMPLETE ON-DEMAND ONLY
 inoremap <C-x><C-o> <Cmd>lua require'cmp'.complete()<CR>
+
+" CUSTOM COMMANDS 
+command NVO NvimTreeOpen
+command NVC NvimTreeClose
 
 " LUA - BASED PLUGIN CONFIGURATION
 lua << END
@@ -153,14 +158,16 @@ cmp.setup(
 	mapping = cmp.mapping.preset.insert({
 	-- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
 	-- ['<C-f>'] = cmp.mapping.scroll_docs(4),
-	['<C-Space>'] = cmp.mapping.complete(),
+	-- ['<C-Space>'] = cmp.mapping.complete(),
 	-- ['<C-e>'] = cmp.mapping.abort(),
-	-- ['<CR>'] = cmp.mapping.confirm({ select = true }),
+	['<C-Space>'] = cmp.mapping.confirm({ select = true }),
 	-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 	}),
 	sources = cmp.config.sources({{ name = 'nvim_lsp' }, { name = 'luasnip' }}, {{ name = 'buffer' }}),
-	preselect = cmp.PreselectMode,
-	completion = { autocomplete = false }
+	-- TODO - write a command that toggles the behavior below.
+	-- comment/uncomment the lines below to disable/enable autocomplete features
+	-- preselect = cmp.PreselectMode,
+	-- completion = { autocomplete = false }
 })
 
 -- Set configuration for specific filetype.
@@ -278,4 +285,3 @@ require("formatter").setup {
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
 } }
 END
-
