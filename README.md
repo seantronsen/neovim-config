@@ -29,4 +29,4 @@ Lastly, in regards to the current code editing features, it is important to reme
 
 
 ## Version Notes
-1. There is currently an issue with simrat39/rust-tools.nvim that causes inlay hints to not function correctly. More information on that can be found in [issue #311](https://github.com/simrat39/rust-tools.nvim/issues/311). For the meantime, this config will be using the [kdarkhan fork](https://github.com/kdarkhan/rust-tools.nvim) which is one of the solutions recommended in the comments of issue #311. 
+None

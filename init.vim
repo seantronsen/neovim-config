@@ -17,8 +17,8 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-" Plug 'simrat39/rust-tools.nvim'
-Plug 'kdarkhan/rust-tools.nvim'
+Plug 'simrat39/rust-tools.nvim'
+
 
 " DOCUMENT FORMATTING
 " ------------------------------
@@ -40,6 +40,9 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 
+" tmux compatibility
+" ------------------------------
+Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
@@ -48,11 +51,18 @@ call plug#end()
 set completeopt=menu,menuone,noselect
 set number
 set t_Co=256
+set mouse=c
 colorscheme carbonfox
+
+" DISABLED
+let g:loaded_python3_provider = 0
+let g:loaded_node_provider = 0
+let g:loaded_perl_provider = 0
+
 " AUTO COMPLETE ON-DEMAND ONLY
 inoremap <C-x><C-o> <Cmd>lua require'cmp'.complete()<CR>
 
-" CUSTOM COMMANDS 
+" CUSTOM COMMANDS
 command NVO NvimTreeOpen
 command NVC NvimTreeClose
 
@@ -282,6 +292,7 @@ require("formatter").setup {
 		lua = { require("formatter.filetypes.lua").stylua, },
 		rust = { require("formatter.filetypes.rust").rustfmt, },
 		python = { require("formatter.filetypes.python").black, },
+		json = { require("formatter.filetypes.json").prettier, },
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
 } }
 END
