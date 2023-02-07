@@ -40,7 +40,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 
-" tmux compatibility
+" TMUX COMPATIBILITY
 " ------------------------------
 Plug 'christoomey/vim-tmux-navigator'
 
@@ -60,7 +60,7 @@ let g:loaded_node_provider = 0
 let g:loaded_perl_provider = 0
 
 " AUTO COMPLETE ON-DEMAND ONLY
-" TODO: is this actually doing anything? 
+" TODO: is this actually doing anything?
 inoremap <C-x><C-o> <Cmd>lua require'cmp'.complete()<CR>
 
 " CUSTOM COMMANDS
@@ -70,7 +70,7 @@ command Nvt NvimTreeToggle
 lua << END
 
 
--- LuaLine/PowerLine
+-- LUALINE/POWERLINE
 -- ------------------------------
 require'lualine'.setup {}
 
@@ -114,7 +114,6 @@ require'nvim-tree'.setup{}
 
 -- CONFIGURATION FOR AUTO-COMPLETE
 --------------------------------
--- Set up nvim-cmp.
 local cmp = require'cmp'
 
 cmp.setup(
@@ -171,12 +170,18 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 -- CONFIGURATION FOR LSP SERVERS
 --------------------------------
 require'mason'.setup{}
-require"mason-lspconfig".setup{}
+require"mason-lspconfig".setup{
+	ensure_installed = {"rust_analyzer", "sumneko_lua", "bashls", "clangd", "cmake", "dockerls", "html", "jsonls", "ltex", "marksman", "pyright", "taplo", "yamlls"},
+	automatic_installation = false,
+}
 require"mason-lspconfig".setup_handlers {
-	-- The first entry (without a key) will be the default handler
-	-- and will be called for each installed server that doesn't have
-	-- a dedicated handler.
-	function (server_name) -- default handler (optional)
+	-- default handler that's called for any installed server that
+	-- doesn't already have a dedicated handler.
+	--
+	-- note that it makes some assumptions about the nature of
+	-- the server (compare the default with the setup for
+	-- rust_analyzer).
+	function (server_name)
 		require("lspconfig")[server_name].setup {
 			on_attach = on_attach,
 			flags = lsp_flags,
@@ -200,32 +205,23 @@ require"mason-lspconfig".setup_handlers {
 		}
 	}
 	end
-	-- ["pyright"] = function ()
-	-- require("pyright").setup {
-	-- 	on_attach = on_attach,
-	-- 	inlay_hints = {
-	-- 		enable = true,
-	-- 	},
-	-- 	flags = lsp_flags,
-	-- 	capabilities=capabilities
-	-- }
-	-- end,
-
 }
 require'fidget'.setup{}
 
 -- CONFIGURATION FOR SYNTAX HIGHLIGHTING
 --------------------------------
+vim.opt.runtimepath:append("~/.local/share/nvim/plugged/nvim-treesitter")
 require'nvim-treesitter.configs'.setup {
+	ensure_installed = { "c", "cpp", "lua", "vim", "python", "rust", "json", "html", "bash", "markdown", "make", "yaml", "toml" },
+	sync_install = false,
+	auto_install = true,
 	highlight = {
 		enable = true,
 		additional_vim_regex_highlighting = false,
-	}
-}
-require'nvim-treesitter.configs'.setup {
+	},
 	parser_install_dir = "~/.local/share/nvim/plugged/nvim-treesitter",
+
 }
-vim.opt.runtimepath:append("~/.local/share/nvim/plugged/nvim-treesitter")
 
 -- configuration for telescope
 -----------------------------
