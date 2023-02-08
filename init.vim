@@ -212,7 +212,7 @@ require'fidget'.setup{}
 --------------------------------
 vim.opt.runtimepath:append("~/.local/share/nvim/plugged/nvim-treesitter")
 require'nvim-treesitter.configs'.setup {
-	ensure_installed = { "c", "cpp", "lua", "vim", "python", "rust", "json", "html", "bash", "markdown", "make", "yaml", "toml" },
+	ensure_installed = { "c", "cpp", "dockerfile", "lua", "vim", "python", "rust", "json", "html", "bash", "markdown", "make", "yaml", "toml" },
 	sync_install = false,
 	auto_install = true,
 	highlight = {
