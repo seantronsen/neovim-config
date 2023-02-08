@@ -1,7 +1,7 @@
 -- CONFIGURATION FOR SYNTAX HIGHLIGHTING
 --------------------------------
 -- fix the tree sitter install and runtime path directories
-vim.opt.runtimepath:append("~/.local/share/nvim/plugged/nvim-treesitter")
+vim.opt.runtimepath:append("~/.local/share/nvim/packed/nvim-treesitter")
 require("nvim-treesitter.configs").setup({
 	ensure_installed = {
 		"c",
@@ -25,5 +25,5 @@ require("nvim-treesitter.configs").setup({
 		enable = true,
 		additional_vim_regex_highlighting = false,
 	},
-	parser_install_dir = "~/.local/share/nvim/plugged/nvim-treesitter",
+	parser_install_dir = "~/.local/share/nvim/packed/nvim-treesitter",
 })

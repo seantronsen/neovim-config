@@ -29,4 +29,4 @@ Lastly, in regards to the current code editing features, it is important to reme
 
 
 ## Version Notes
-None
+- Working on switching over to lua and packer. Notes pending. 

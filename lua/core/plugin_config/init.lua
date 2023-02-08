@@ -1,8 +1,9 @@
-require("core.plugin_config.nightfox")
-require("core.plugin_config.lualina")
-require("core.plugin_config.nvim-tree")
-require("core.plugin_config.tree-sitter")
-require("core.plugin_config.telescope")
-
-
-
+require("core.plugin_config.colorscheme")
+require("core.plugin_config.status-line")
+require("core.plugin_config.file-tree")
+require("core.plugin_config.syntax-highlight")
+require("core.plugin_config.search")
+require("core.plugin_config.lsp-config")
+require("core.plugin_config.document-format")
+require("core.plugin_config.autocomplete")
+require("core.plugin_config.tmux-compatibility")

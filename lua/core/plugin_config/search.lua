@@ -1,3 +1,4 @@
+-----------------------------
 -- CONFIGURATION FOR TELESCOPE
 -----------------------------
 require("telescope").setup({
@@ -17,4 +18,3 @@ vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
 vim.keymap.set("n", "<leader>fo", builtin.oldfiles, {})
-
