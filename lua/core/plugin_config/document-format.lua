@@ -10,12 +10,22 @@ require("formatter").setup({
 	log_level = vim.log.levels.WARN,
 	-- All formatter configurations are opt-in
 	filetype = {
-		-- Formatter configurations for filetype "lua" go here
-		-- and will be executed in order
+		-- programming languages
+		c = { require("formatter.filetypes.c").clangformat },
+		cpp = { require("formatter.filetypes.c").clangformat },
 		lua = { require("formatter.filetypes.lua").stylua },
-		rust = { require("formatter.filetypes.rust").rustfmt },
 		python = { require("formatter.filetypes.python").black },
+		rust = { require("formatter.filetypes.rust").rustfmt },
+
+		-- object documents
 		json = { require("formatter.filetypes.json").prettier },
+
+		-- markup languages
+		html = { require("formatter.filetypes.html").prettier },
+		latex = { require("formatter.filetypes.latex").latexindent },
+		markdown = { require("formatter.filetypes.markdown").prettier },
+		toml = { require("formatter.filetypes.toml").taplo },
+		yaml = { require("formatter.filetypes.yaml").yamlfmt },
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
 	},
 })
