@@ -17,6 +17,7 @@ return require("packer").startup(function(use)
 	--THEMES
 	--------------------------------
 	use("EdenEast/nightfox.nvim")
+	use("folke/tokyonight.nvim")
 
 	--STATUS LINE
 	--------------------------------
@@ -25,6 +26,7 @@ return require("packer").startup(function(use)
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
+	use ("kyazdani42/nvim-web-devicons")
 	use("j-hui/fidget.nvim")
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
