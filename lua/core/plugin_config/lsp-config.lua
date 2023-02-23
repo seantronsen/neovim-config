@@ -24,7 +24,6 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, {})
 end
 
-
 local lsp_flags = { debounce_text_changes = 150 }
 
 --------------------------------
@@ -41,8 +40,6 @@ require("mason").setup({
 })
 require("mason-lspconfig").setup({
 	ensure_installed = {
-		"rust_analyzer",
-		"lua_ls",
 		"bashls",
 		"clangd",
 		"cmake",
@@ -50,8 +47,10 @@ require("mason-lspconfig").setup({
 		"html",
 		"jsonls",
 		"ltex",
+		"lua_ls",
 		"marksman",
 		"pyright",
+		"rust_analyzer",
 		"taplo",
 		"yamlls",
 	},
