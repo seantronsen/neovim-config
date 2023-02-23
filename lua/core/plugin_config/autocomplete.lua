@@ -15,29 +15,42 @@ cmp.setup({
 		end,
 	},
 	window = {
-		completion = cmp.config.window.bordered(),
-		documentation = cmp.config.window.bordered(),
+		completion = {
+			border = cmp.config.window.bordered().border,
+			scrollbar = true,
+		},
+		documentation = {
+			border = cmp.config.window.bordered().border,
+			max_height = 80,
+			max_width = 80,
+		},
+		-- completion = cmp.config.window.bordered(),
+		-- documentation = cmp.config.window.bordered(),
 	},
 	mapping = cmp.mapping.preset.insert({
-		["<C-b>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<leader>c"] = cmp.mapping.complete(),
-		["<leader>a"] = cmp.mapping.abort(),
+		["<C-u>"] = cmp.mapping.scroll_docs(-4),
+		["<C-d>"] = cmp.mapping.scroll_docs(4),
+		["<C-c>"] = cmp.mapping.complete(),
+		["<C-a>"] = cmp.mapping.abort(),
 		["<C-Space>"] = cmp.mapping.confirm({ select = true }),
 		-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 	}),
 
-	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-		-- { name = "nvim_lsp_signature_help" },
-	}, { { name = "buffer" } }),
+	sources = cmp.config.sources(
+		{
+			{ name = "nvim_lsp", max_item_count = 15 },
+			{ name = "luasnip" },
+			{ name = "nvim_lsp_signature_help" },
+		}
+		--	{ { name = "buffer" } }
+	),
 	completion = {
 		keyword_length = 3,
 	},
 	performance = {
-		throttle = 10,
+		throttle = 0,
 	},
+
 	-- TODO - write a command that toggles the behavior below.
 	-- comment/uncomment the lines below to disable/enable autocomplete features
 	-- preselect = cmp.PreselectMode,
