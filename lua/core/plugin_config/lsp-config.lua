@@ -24,12 +24,21 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, {})
 end
 
+
 local lsp_flags = { debounce_text_changes = 150 }
 
 --------------------------------
 -- CONFIGURATION FOR LSP SERVERS
 --------------------------------
-require("mason").setup({})
+require("mason").setup({
+	ui = {
+		icons = {
+			package_installed = "✓",
+			package_pending = "➜",
+			package_uninstalled = "✗",
+		},
+	},
+})
 require("mason-lspconfig").setup({
 	ensure_installed = {
 		"rust_analyzer",
@@ -81,6 +90,27 @@ require("mason-lspconfig").setup_handlers({
 				},
 				flags = lsp_flags,
 				capabilities = capabilities,
+			},
+		})
+	end,
+
+	["lua_ls"] = function()
+		require("lspconfig").lua_ls.setup({
+
+			server = {
+				on_attach = on_attach,
+				inlay_hints = {
+					enable = true,
+				},
+				flags = lsp_flags,
+				capabilities = capabilities,
+			},
+			settings = {
+				Lua = {
+					diagnostics = {
+						globals = { "vim" },
+					},
+				},
 			},
 		})
 	end,

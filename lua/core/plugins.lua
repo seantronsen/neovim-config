@@ -26,7 +26,7 @@ return require("packer").startup(function(use)
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
-	use ("kyazdani42/nvim-web-devicons")
+	use("kyazdani42/nvim-web-devicons")
 	use("j-hui/fidget.nvim")
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
@@ -57,17 +57,17 @@ return require("packer").startup(function(use)
 		tag = "0.1.1",
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
-	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+	-- use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 
 	--AUTOCOMPLETE
 	--------------------------------
+	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-nvim-lsp")
 	use("hrsh7th/cmp-buffer")
 	use("hrsh7th/cmp-path")
 	use("hrsh7th/cmp-cmdline")
-	use("hrsh7th/nvim-cmp")
+	-- use("hrsh7th/cmp-nvim-lsp-signature-help")
 	use("L3MON4D3/LuaSnip")
-	use("saadparwaiz1/cmp_luasnip")
 
 	--TMUX COMPATIBILITY
 	--------------------------------
