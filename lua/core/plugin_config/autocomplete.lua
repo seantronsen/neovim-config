@@ -5,6 +5,7 @@ local cmp = require("cmp")
 -- set value via CLI to toggle autocomplete
 vim.g.cmp_autocomplete = true
 
+
 cmp.setup({
 	enabled = function()
 		return vim.g.cmp_autocomplete
