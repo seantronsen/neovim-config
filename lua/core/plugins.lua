@@ -42,6 +42,13 @@ return require("packer").startup(function(use)
 	})
 	use("simrat39/rust-tools.nvim")
 
+	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
+	--------------------------------
+	use({ "mfussenegger/nvim-dap", tag = "0.5.0", lock = true, requires = {
+		{ "mfussenegger/nvim-dap-python" },
+	} })
+	-- CONDA_PREFIX
+
 	--DOCUMENT FORMATTING
 	--------------------------------
 	use("mhartington/formatter.nvim")
@@ -55,19 +62,25 @@ return require("packer").startup(function(use)
 	use({
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.1",
-		requires = { { "nvim-lua/plenary.nvim" } },
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			-- { "nvim-telescope/telescope-fzf-native.nvim", run = "make" }
+		},
 	})
-	-- use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 
 	--AUTOCOMPLETE
 	--------------------------------
-	use("hrsh7th/nvim-cmp")
-	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-buffer")
-	use("hrsh7th/cmp-path")
-	use("hrsh7th/cmp-cmdline")
-	use("hrsh7th/cmp-nvim-lsp-signature-help")
-	use("L3MON4D3/LuaSnip")
+	use({
+		"hrsh7th/nvim-cmp",
+		requires = {
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-path" },
+			{ "hrsh7th/cmp-cmdline" },
+			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
+			{ "L3MON4D3/LuaSnip" },
+		},
+	})
 
 	--TMUX COMPATIBILITY
 	--------------------------------
