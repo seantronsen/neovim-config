@@ -9,13 +9,13 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
+local on_attach = function(_, _)
 	-- Enable completion triggered by <c-x><c-o>
 	-- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
 	-- Mappings.
 	-- See  for documentation on any of the below functions
-	local bufopts = { noremap = true, silent = true, buffer = bufnr }
+	-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
 	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
 	vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
 	-- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
@@ -56,6 +56,11 @@ require("mason-lspconfig").setup({
 	},
 	automatic_installation = false,
 })
+
+require("neodev").setup({
+  -- library = { plugins = { "nvim-dap-ui" }, types = true },
+})
+
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason-lspconfig").setup_handlers({
 	--------------------------------

@@ -41,12 +41,19 @@ return require("packer").startup(function(use)
 		run = ":TSUpdate",
 	})
 	use("simrat39/rust-tools.nvim")
+	use("folke/neodev.nvim")
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
-	use({ "mfussenegger/nvim-dap", tag = "0.5.0", lock = true, requires = {
-		{ "mfussenegger/nvim-dap-python" },
-	} })
+	use({
+		"mfussenegger/nvim-dap",
+		tag = "0.5.0",
+		lock = true,
+		requires = {
+			{ "mfussenegger/nvim-dap-python" },
+			-- { "rcarriga/nvim-dap-ui"},
+		},
+	})
 	-- CONDA_PREFIX
 
 	--DOCUMENT FORMATTING
