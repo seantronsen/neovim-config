@@ -9,19 +9,19 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
+local on_attach = function(_, _)
 	-- Enable completion triggered by <c-x><c-o>
 	-- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
 	-- Mappings.
 	-- See  for documentation on any of the below functions
-	local bufopts = { noremap = true, silent = true, buffer = bufnr }
-	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {})
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+	-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
+	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
+	vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
 	-- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
 	-- vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, {})
-	vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, {})
-	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, {})
+	vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
+	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
 end
 
 local lsp_flags = { debounce_text_changes = 150 }
@@ -56,6 +56,11 @@ require("mason-lspconfig").setup({
 	},
 	automatic_installation = false,
 })
+
+require("neodev").setup({
+  -- library = { plugins = { "nvim-dap-ui" }, types = true },
+})
+
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason-lspconfig").setup_handlers({
 	--------------------------------
@@ -81,6 +86,11 @@ require("mason-lspconfig").setup_handlers({
 	-- For example, a handler override for the `rust_analyzer`:
 	--------------------------------
 	["rust_analyzer"] = function()
+		local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.8.1/"
+		local codelldb_path = extension_path .. "adapter/codelldb"
+		local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+
+		-- Normal setup
 		require("rust-tools").setup({
 			server = {
 				on_attach = on_attach,
@@ -89,6 +99,9 @@ require("mason-lspconfig").setup_handlers({
 				},
 				flags = lsp_flags,
 				capabilities = capabilities,
+			},
+			dap = {
+				adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
 			},
 		})
 	end,
