@@ -3,7 +3,7 @@
 -- ---------------------
 -- dap.adapters.lldb = {
 -- 	type = "executable",
--- 	command = "/home/sean/.vscode/extensions/vadimcn.vscode-lldb-1.8.1/lldb/bin/lldb",
+-- 	command = "/home/sean/bin/lldb",
 -- 	name = "lldb",
 -- }
 
@@ -29,6 +29,8 @@ vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "[d]ap toggle 
 vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "[d]ap [c]ontinue" })
 vim.keymap.set("n", "<leader>dso", dap.step_over, { desc = "[d]ap [s]tep [o]ver" })
 vim.keymap.set("n", "<leader>dsi", dap.step_into, { desc = "[d]ap [s]tep [i]nto" })
+vim.keymap.set("n", "<leader>dd", dap.down, { desc = "[d]ap travel [d]own the stack" })
+vim.keymap.set("n", "<leader>du", dap.up, { desc = "[d]ap travel [u]p the stack" })
 vim.keymap.set("n", "<leader>dr", dap.repl.open, { desc = "[d]ap [r]epl" })
 vim.keymap.set("n", "<leader>dh", widgets.hover, { desc = "[d]ap [h]over (see variables)" })
 vim.keymap.set("n", "<leader>dsc", function()
