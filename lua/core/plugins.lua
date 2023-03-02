@@ -38,6 +38,7 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"nvim-treesitter/nvim-treesitter",
+		tag = "v0.7.2",
 		run = ":TSUpdate",
 	})
 	use("simrat39/rust-tools.nvim")
