@@ -32,3 +32,5 @@ vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[f]ind [h]elp tag
 vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "[f]ind [o]old files" })
 vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "[f]ind [k]eymaps" })
 vim.keymap.set("n", "<leader>fc", builtin.commands, { desc = "[f]ind and execute [c]ommands" })
+vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[f]ind [d]iagnostics (code issues)" })
+
