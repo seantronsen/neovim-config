@@ -16,12 +16,15 @@ local on_attach = function(_, _)
 	-- Mappings.
 	-- See  for documentation on any of the below functions
 	-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
-	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
+	vim.keymap.set("n", "gdD", vim.lsp.buf.declaration, { desc = "[g]o to [d]efinition: [D]eclaration" })
+	vim.keymap.set("n", "gdd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition: [d]efinition" })
+	vim.keymap.set("n", "gdt", vim.lsp.buf.type_definition, { desc = "[g]o to [d]efinition: symbol [t]ype definition" })
 	-- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
-	-- vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, {})
 	vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
 	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
+
+	-- refactoring
+	vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
 end
 
 local lsp_flags = { debounce_text_changes = 150 }
@@ -58,7 +61,7 @@ require("mason-lspconfig").setup({
 })
 
 require("neodev").setup({
-  -- library = { plugins = { "nvim-dap-ui" }, types = true },
+	-- library = { plugins = { "nvim-dap-ui" }, types = true },
 })
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
