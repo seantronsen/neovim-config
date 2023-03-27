@@ -19,19 +19,15 @@ dapui.setup({
 			elements = {
 				{
 					id = "scopes",
-					size = 0.25,
+					size = 0.6,
 				},
 				{
 					id = "breakpoints",
-					size = 0.25,
+					size = 0.2,
 				},
 				{
 					id = "stacks",
-					size = 0.25,
-				},
-				{
-					id = "watches",
-					size = 0.25,
+					size = 0.2,
 				},
 			},
 			position = "left",
@@ -70,13 +66,14 @@ end
 -- KEYBINDINGS
 vim.keymap.set("n", "<leader>dx", dapui.toggle, { desc = "[d]ap toggle [b]reakpoint" })
 vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "[d]ap toggle [b]reakpoint" })
-vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "[d]ap [c]ontinue" })
+vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "[d]ap [c]ontinue (will start the debugger for certain languages)" })
+vim.keymap.set("n", "<leader>dt", dap.terminate, { desc = "[d]ap [t]erminate" })
 vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "[d]ap step [o]ver" })
 vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "[d]ap step [i]nto" })
 vim.keymap.set("n", "<leader>dd", dap.down, { desc = "[d]ap travel [d]own the stack" })
 vim.keymap.set("n", "<leader>du", dap.up, { desc = "[d]ap travel [u]p the stack" })
 vim.keymap.set("n", "<leader>dr", dap.repl.open, { desc = "[d]ap [r]epl" })
 vim.keymap.set("n", "<leader>dh", widgets.hover, { desc = "[d]ap [h]over (see variables)" })
-vim.keymap.set("n", "<leader>dc", function()
+vim.keymap.set("n", "<leader>ds", function()
 	widgets.centered_float(widgets.scopes)
-end, { desc = "[d]ap s[c]ope" })
+end, { desc = "[d]ap [s]cope" })
