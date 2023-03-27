@@ -52,7 +52,7 @@ return require("packer").startup(function(use)
 		lock = true,
 		requires = {
 			{ "mfussenegger/nvim-dap-python" },
-			-- { "rcarriga/nvim-dap-ui"},
+			{ "rcarriga/nvim-dap-ui"},
 		},
 	})
 	-- CONDA_PREFIX

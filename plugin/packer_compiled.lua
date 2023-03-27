@@ -154,6 +154,11 @@ _G.packer_plugins = {
     path = "/home/sean/.local/share/nvim/site/pack/packer/start/nvim-dap-python",
     url = "https://github.com/mfussenegger/nvim-dap-python"
   },
+  ["nvim-dap-ui"] = {
+    loaded = true,
+    path = "/home/sean/.local/share/nvim/site/pack/packer/start/nvim-dap-ui",
+    url = "https://github.com/rcarriga/nvim-dap-ui"
+  },
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/home/sean/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
