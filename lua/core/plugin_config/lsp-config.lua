@@ -2,7 +2,7 @@
 -- IDE-LIKE COMMANDS
 -- ------------------------------
 local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
 -- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
@@ -20,7 +20,7 @@ local on_attach = function(_, _)
 	vim.keymap.set("n", "gdd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition: [d]efinition" })
 	vim.keymap.set("n", "gdt", vim.lsp.buf.type_definition, { desc = "[g]o to [d]efinition: symbol [t]ype definition" })
 	-- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
-	vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
+	vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
 	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
 
 	-- refactoring
@@ -60,9 +60,7 @@ require("mason-lspconfig").setup({
 	automatic_installation = false,
 })
 
-require("neodev").setup({
-	-- library = { plugins = { "nvim-dap-ui" }, types = true },
-})
+require("neodev").setup()
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason-lspconfig").setup_handlers({
@@ -124,6 +122,9 @@ require("mason-lspconfig").setup_handlers({
 				Lua = {
 					diagnostics = {
 						globals = { "vim" },
+					},
+					workspace = {
+						checkThirdParty = false,
 					},
 				},
 			},
