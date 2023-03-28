@@ -8,7 +8,36 @@
 -- }
 
 local dap = require("dap")
+dap.adapters.codelldb = {
+	type = "server",
+	port = "${port}",
+	executable = {
+		-- CHANGE THIS to your path!
+
+		command = "/home/sean/bin/codelldb",
+		args = { "--port", "${port}" },
+
+		-- On windows you may have to uncomment this:
+		-- detached = false,
+	},
+}
+local dap = require("dap")
+
+dap.configurations.c = {
+	{
+		name = "Launch file",
+		type = "codelldb",
+		request = "launch",
+		program = function()
+			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+		end,
+		cwd = "${workspaceFolder}",
+		stopOnEntry = false,
+	},
+}
+
 local widgets = require("dap.ui.widgets")
+
 require("dap-python").setup("$CONDA_PREFIX/bin/python")
 
 -- DAPUI SETUP
@@ -66,7 +95,12 @@ end
 -- KEYBINDINGS
 vim.keymap.set("n", "<leader>dx", dapui.toggle, { desc = "[d]ap toggle [b]reakpoint" })
 vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "[d]ap toggle [b]reakpoint" })
-vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "[d]ap [c]ontinue (will start the debugger for certain languages)" })
+vim.keymap.set(
+	"n",
+	"<leader>dc",
+	dap.continue,
+	{ desc = "[d]ap [c]ontinue (will start the debugger for certain languages)" }
+)
 vim.keymap.set("n", "<leader>dt", dap.terminate, { desc = "[d]ap [t]erminate" })
 vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "[d]ap step [o]ver" })
 vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "[d]ap step [i]nto" })
