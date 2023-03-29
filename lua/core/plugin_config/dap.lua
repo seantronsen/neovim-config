@@ -36,6 +36,8 @@ dap.configurations.c = {
 	},
 }
 
+dap.configurations.cpp = dap.configurations.c
+
 local widgets = require("dap.ui.widgets")
 
 require("dap-python").setup("$CONDA_PREFIX/bin/python")
