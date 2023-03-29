@@ -61,7 +61,6 @@ require("mason-lspconfig").setup({
 })
 
 require("neodev").setup()
-
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason-lspconfig").setup_handlers({
 	--------------------------------
@@ -103,6 +102,20 @@ require("mason-lspconfig").setup_handlers({
 			},
 			dap = {
 				adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+			},
+		})
+	end,
+
+	["clangd"] = function()
+		-- Normal setup
+		require("lspconfig").clangd.setup({
+			server = {
+				on_attach = on_attach,
+				inlay_hints = {
+					enable = true,
+				},
+				flags = lsp_flags,
+				capabilities = capabilities,
 			},
 		})
 	end,
