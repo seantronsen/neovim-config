@@ -64,7 +64,7 @@ require("neodev").setup()
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason-lspconfig").setup_handlers({
 	--------------------------------
-	-- default handler that's called for any installed server that
+	-- the default handler that's called for any installed server that
 	-- doesn't already have a dedicated handler.
 	--
 	-- note that it makes some assumptions about the nature of
