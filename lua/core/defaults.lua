@@ -12,7 +12,6 @@ vim.o.number = true
 vim.o.mouse = c
 vim.o.t_Co = 256
 vim.o.termguicolors = true
-
 vim.o.diffopt = vertical
 
 ------------------------

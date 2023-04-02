@@ -44,6 +44,8 @@ return require("packer").startup(function(use)
 	use("simrat39/rust-tools.nvim")
 	use("folke/neodev.nvim")
 
+	use({ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu", commit = "e4399db", lock = true })
+
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
 	use({

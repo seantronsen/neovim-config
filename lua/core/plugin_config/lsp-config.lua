@@ -9,6 +9,7 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
+
 local on_attach = function(_, _)
 	-- Enable completion triggered by <c-x><c-o>
 	-- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -23,7 +24,18 @@ local on_attach = function(_, _)
 	vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
 	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
 
-	-- refactoring
+	-- CODE ACTION
+	vim.keymap.set(
+		"n",
+		"<leader>ca",
+		-- vim.lsp.buf.code_action,
+		function()
+			vim.api.nvim_command("CodeActionMenu")
+		end,
+		{ desc = "[c]ode [a]ction" }
+	)
+
+	-- REFACTORING
 	vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
 end
 
