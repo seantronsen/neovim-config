@@ -1,6 +1,10 @@
 ------------------------
 -- DEFAULT SETTINGS
 ------------------------
+vim.o.tabstop = 2
+vim.o.softtabstop = 0
+vim.g.expandtab = false
+vim.o.shiftwidth = 2
 vim.g.mapleader = ","
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 vim.o.completeopt = menu, menuone, noselect

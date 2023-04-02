@@ -21,8 +21,6 @@ dap.adapters.codelldb = {
 		-- detached = false,
 	},
 }
-local dap = require("dap")
-
 dap.configurations.c = {
 	{
 		name = "Launch file",
@@ -37,6 +35,20 @@ dap.configurations.c = {
 }
 
 dap.configurations.cpp = dap.configurations.c
+dap.configurations.rust = {
+	{
+		name = "Launch file",
+		type = "codelldb",
+		request = "launch",
+		program = function()
+			local cwd = vim.fn.getcwd()
+			local dirname = vim.fn.substitute(vim.fn.getcwd(), "^.*/", "", "")
+			return cwd .. "/target/debug/" .. dirname
+		end,
+		cwd = "${workspaceFolder}",
+		stopOnEntry = false,
+	},
+}
 
 local widgets = require("dap.ui.widgets")
 
