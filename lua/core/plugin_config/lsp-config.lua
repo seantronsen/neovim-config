@@ -11,29 +11,20 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 -- after the language server attaches to the current buffer
 
 local on_attach = function(_, _)
-	-- Enable completion triggered by <c-x><c-o>
-	-- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
 	-- Mappings.
 	-- See  for documentation on any of the below functions
 	-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
-	vim.keymap.set("n", "gdD", vim.lsp.buf.declaration, { desc = "[g]o to [d]efinition: [D]eclaration" })
-	vim.keymap.set("n", "gdd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition: [d]efinition" })
-	vim.keymap.set("n", "gdt", vim.lsp.buf.type_definition, { desc = "[g]o to [d]efinition: symbol [t]ype definition" })
-	-- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
+	vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
+	vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
+	vim.keymap.set("n", "<leader>gt", vim.lsp.buf.type_definition, { desc = "[g]o to symbol [t]ype definition" })
+	vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, { desc = "[g]o to [i]mplementation" })
 	vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
 	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
 
 	-- CODE ACTION
-	vim.keymap.set(
-		"n",
-		"<leader>ca",
-		-- vim.lsp.buf.code_action,
-		function()
-			vim.api.nvim_command("CodeActionMenu")
-		end,
-		{ desc = "[c]ode [a]ction" }
-	)
+	vim.keymap.set("n", "<leader>ca", function()
+		vim.api.nvim_command("CodeActionMenu")
+	end, { desc = "[c]ode [a]ction" })
 
 	-- REFACTORING
 	vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
@@ -114,20 +105,6 @@ require("mason-lspconfig").setup_handlers({
 			},
 			dap = {
 				adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-			},
-		})
-	end,
-
-	["clangd"] = function()
-		-- Normal setup
-		require("lspconfig").clangd.setup({
-			server = {
-				on_attach = on_attach,
-				inlay_hints = {
-					enable = true,
-				},
-				flags = lsp_flags,
-				capabilities = capabilities,
 			},
 		})
 	end,
