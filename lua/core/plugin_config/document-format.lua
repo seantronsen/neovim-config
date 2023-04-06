@@ -12,7 +12,7 @@ require("formatter").setup({
 	filetype = {
 		-- programming languages
 		c = { require("formatter.filetypes.c").clangformat },
-		cpp = { require("formatter.filetypes.c").clangformat },
+		cpp = { require("formatter.filetypes.cpp").clangformat },
 		cmake = { require("formatter.filetypes.cmake").cmakeformat },
 		lua = { require("formatter.filetypes.lua").stylua },
 		python = { require("formatter.filetypes.python").black },
