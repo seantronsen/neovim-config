@@ -56,7 +56,7 @@ require("dap-python").setup("$CONDA_PREFIX/bin/python")
 
 -- DAPUI SETUP
 local dapui = require("dapui")
-dapui.setup({
+local dapui_config = {
 	layouts = {
 		{
 			elements = {
@@ -91,12 +91,15 @@ dapui.setup({
 			size = 20,
 		},
 	},
-})
+}
+dapui.setup(dapui_config)
+
+local dapui_open_args = { reset = true }
 dap.listeners.after.event_initialized["dapui_config"] = function()
-	dapui.open()
+	dapui.open(dapui_open_args)
 end
 dap.listeners.after.event_breakpoint["dapui_config"] = function()
-	dapui.open()
+	dapui.open(dapui_open_args)
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
 	dapui.close()
@@ -120,7 +123,9 @@ vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "[d]ap step [o]ver" })
 vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "[d]ap step [i]nto" })
 vim.keymap.set("n", "<leader>dd", dap.down, { desc = "[d]ap travel [d]own the stack" })
 vim.keymap.set("n", "<leader>du", dap.up, { desc = "[d]ap travel [u]p the stack" })
-vim.keymap.set("n", "<leader>dr", dap.repl.open, { desc = "[d]ap [r]epl" })
+vim.keymap.set("n", "<leader>dr", function()
+	dapui.open(dapui_open_args)
+end, { desc = "[d]ap [r]eset ui" })
 vim.keymap.set("n", "<leader>dh", widgets.hover, { desc = "[d]ap [h]over (see variables)" })
 vim.keymap.set("n", "<leader>ds", function()
 	widgets.centered_float(widgets.scopes)
