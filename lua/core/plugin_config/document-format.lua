@@ -18,6 +18,9 @@ require("formatter").setup({
 		python = { require("formatter.filetypes.python").black },
 		rust = { require("formatter.filetypes.rust").rustfmt },
 
+		-- scripting languages
+		sh = { require("formatter.filetypes.sh").shfmt },
+
 		-- object documents
 		json = { require("formatter.filetypes.json").prettier },
 
