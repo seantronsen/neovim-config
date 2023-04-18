@@ -5,11 +5,11 @@ local cmp = require("cmp")
 -- set value via CLI to toggle autocomplete
 vim.g.cmp_autocomplete = true
 
-
 cmp.setup({
 	enabled = function()
 		return vim.g.cmp_autocomplete
 	end,
+
 	snippet = {
 		expand = function(args)
 			require("luasnip").lsp_expand(args.body)
@@ -78,4 +78,12 @@ cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
 	completion = { keyword_length = 0 },
+})
+
+-- use dap as a source for debugging related completions
+cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+	enabled = true,
+	sources = {
+		{ name = "dap" },
+	},
 })
