@@ -58,7 +58,13 @@ return require("packer").startup(function(use)
 			{ "rcarriga/cmp-dap", commit = "d16f14a", lock = true },
 		},
 	})
-	-- CONDA_PREFIX
+
+	-- JUPYTER | REPL
+	--------------------------------
+	-- plugin is currently broken and mainly based around python?
+	-- basically, it's not good for speed and extremely fragile.
+	-- use({"dccsillag/magma-nvim", run = ":UpdateRemotePlugins", commit="395b48e", lock=true})
+	-- use {'hkupty/iron.nvim', tag = "v3.0"}
 
 	--DOCUMENT FORMATTING
 	--------------------------------

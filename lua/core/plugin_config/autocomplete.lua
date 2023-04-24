@@ -85,5 +85,6 @@ cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
 	enabled = true,
 	sources = {
 		{ name = "dap" },
+		{ name = "nvim_lsp_signature_help" },
 	},
 })
