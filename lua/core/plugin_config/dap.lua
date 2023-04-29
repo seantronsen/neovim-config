@@ -1,19 +1,12 @@
--- RUST
--- the config can be found in the setup for the rust-tools.nvim plugin.
--- ---------------------
--- dap.adapters.lldb = {
--- 	type = "executable",
--- 	command = "/home/sean/bin/lldb",
--- 	name = "lldb",
--- }
-
+------------------------------------------
+-- CONFIGURATION FOR DAP
+------------------------------------------
 local dap = require("dap")
+
 dap.adapters.codelldb = {
 	type = "server",
 	port = "${port}",
 	executable = {
-		-- CHANGE THIS to your path!
-
 		command = "/home/sean/bin/codelldb",
 		args = { "--port", "${port}" },
 
@@ -50,9 +43,20 @@ dap.configurations.rust = {
 	},
 }
 
-local widgets = require("dap.ui.widgets")
+local dap_python = require("dap-python")
+dap_python.setup("$CONDA_PREFIX/bin/python")
+dap_python.test_runner = "pytest"
 
-require("dap-python").setup("$CONDA_PREFIX/bin/python")
+-- SUPPORT LAUNCH.JSON FILES
+local launch = require("dap.ext.vscode")
+local launch_path = vim.loop.cwd() .. "/launch.json"
+local launch_filetype_maps = {
+	codelldb = { "rust", "c", "cpp" },
+	python = { "python" },
+	pdb = { "python" },
+	debugpy = { "python" },
+}
+launch.load_launchjs(launch_path, launch_filetype_maps)
 
 -- DAPUI SETUP
 local dapui = require("dapui")
@@ -94,6 +98,7 @@ local dapui_config = {
 }
 dapui.setup(dapui_config)
 
+-- ATTACH DAPUI TO THE EVENT LISTENERS
 local dapui_open_args = { reset = true }
 dap.listeners.after.event_initialized["dapui_config"] = function()
 	dapui.open(dapui_open_args)

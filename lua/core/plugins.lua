@@ -57,6 +57,7 @@ return require("packer").startup(function(use)
 			{ "mfussenegger/nvim-dap-python" },
 			{ "rcarriga/nvim-dap-ui", tag = "v3.8.0", lock = true },
 			{ "rcarriga/cmp-dap", commit = "d16f14a", lock = true },
+			{ "theHamsta/nvim-dap-virtual-text", commit = "ab988db", lock = true },
 		},
 	})
 
