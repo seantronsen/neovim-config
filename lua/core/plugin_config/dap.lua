@@ -126,7 +126,3 @@ vim.keymap.set("n", "<leader>du", dap.up, { desc = "[d]ap travel [u]p the stack"
 vim.keymap.set("n", "<leader>dr", function()
 	dapui.open(dapui_open_args)
 end, { desc = "[d]ap [r]eset ui" })
-vim.keymap.set("n", "<leader>dh", widgets.hover, { desc = "[d]ap [h]over (see variables)" })
-vim.keymap.set("n", "<leader>ds", function()
-	widgets.centered_float(widgets.scopes)
-end, { desc = "[d]ap [s]cope" })
