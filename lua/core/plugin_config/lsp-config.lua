@@ -78,9 +78,6 @@ require("mason-lspconfig").setup_handlers({
 		require("lspconfig")[server_name].setup({
 			on_attach = on_attach,
 			flags = lsp_flags,
-			inlay_hints = {
-				enable = true,
-			},
 			capabilities = capabilities,
 		})
 	end,
@@ -95,13 +92,15 @@ require("mason-lspconfig").setup_handlers({
 
 		-- Normal setup
 		require("rust-tools").setup({
-			server = {
-				on_attach = on_attach,
+			flags = lsp_flags,
+			capabilities = capabilities,
+			tools = {
 				inlay_hints = {
 					enable = true,
 				},
-				flags = lsp_flags,
-				capabilities = capabilities,
+			},
+			server = {
+				on_attach = on_attach,
 			},
 			dap = {
 				adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
@@ -111,15 +110,9 @@ require("mason-lspconfig").setup_handlers({
 
 	["lua_ls"] = function()
 		require("lspconfig").lua_ls.setup({
-
-			server = {
-				on_attach = on_attach,
-				inlay_hints = {
-					enable = true,
-				},
-				flags = lsp_flags,
-				capabilities = capabilities,
-			},
+			on_attach = on_attach,
+			flags = lsp_flags,
+			capabilities = capabilities,
 			settings = {
 				Lua = {
 					diagnostics = {

@@ -18,6 +18,7 @@ return require("packer").startup(function(use)
 	--------------------------------
 	use("EdenEast/nightfox.nvim")
 	use("folke/tokyonight.nvim")
+	-- use("water-sucks/darkrose.nvim")
 
 	--STATUS LINE
 	--------------------------------
