@@ -17,7 +17,7 @@ return require("packer").startup(function(use)
 	--THEMES
 	--------------------------------
 	use("EdenEast/nightfox.nvim")
-	use("folke/tokyonight.nvim")
+	-- use("folke/tokyonight.nvim")
 	-- use("water-sucks/darkrose.nvim")
 
 	--STATUS LINE
@@ -61,12 +61,25 @@ return require("packer").startup(function(use)
 		},
 	})
 
-	-- JUPYTER | REPL
+	-- VIM SLIME
 	--------------------------------
-	-- plugin is currently broken and mainly based around python?
-	-- basically, it's not good for speed and extremely fragile.
-	-- use({"dccsillag/magma-nvim", run = ":UpdateRemotePlugins", commit="395b48e", lock=true})
-	-- use {'hkupty/iron.nvim', tag = "v3.0"}
+	use({
+		"klafyvel/vim-slime-cells",
+		commit = "2252bc8",
+		lock = true,
+		requires = {
+			{ "jpalardy/vim-slime", commit = "bb15285", lock = true },
+		},
+		ft = { "python", "irust" },
+		config = function()
+			vim.cmd([[
+    nmap <leader>sv <Plug>SlimeConfig
+    nmap <leader>sc <Plug>SlimeCellsSendAndGoToNext
+    nmap <leader>sj <Plug>SlimeCellsNext
+    nmap <leader>sk <Plug>SlimeCellsPrev
+    ]])
+		end,
+	})
 
 	--DOCUMENT FORMATTING
 	--------------------------------

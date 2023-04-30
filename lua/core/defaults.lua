@@ -20,3 +20,16 @@ vim.o.diffopt = vertical
 vim.g.loaded_python3_provider = false
 vim.g.loaded_node_provider = false
 vim.g.loaded_perl_provider = false
+
+
+
+
+------------------------
+--  VIM-SLIME 
+------------------------
+vim.g.slime_target = "neovim"
+vim.g.slime_no_mappings = 1
+vim.g.slime_python_ipython = 1
+vim.g.slime_cell_delimiter = "^\\s*# %%"
+vim.g.slime_cells_no_highlight = 1
+
