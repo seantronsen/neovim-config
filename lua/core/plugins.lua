@@ -70,7 +70,6 @@ return require("packer").startup(function(use)
 		requires = {
 			{ "jpalardy/vim-slime", commit = "bb15285", lock = true },
 		},
-		ft = { "python", "irust" },
 		config = function()
 			vim.cmd([[
     nmap <leader>sv <Plug>SlimeConfig
