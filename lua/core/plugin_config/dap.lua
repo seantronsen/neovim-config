@@ -93,10 +93,15 @@ local dapui_open_args = { reset = true }
 local function open_dap_ui()
 	dapui.open(dapui_open_args)
 end
+
+local function close_dap_ui()
+	dapui.close()
+end
+
 dap.listeners.after.event_initialized["dapui_config"] = open_dap_ui
 dap.listeners.after.event_breakpoint["dapui_config"] = open_dap_ui
-dap.listeners.before.event_terminated["dapui_config"] = open_dap_ui
-dap.listeners.before.event_exited["dapui_config"] = open_dap_ui
+dap.listeners.before.event_terminated["dapui_config"] = close_dap_ui
+dap.listeners.before.event_exited["dapui_config"] = close_dap_ui
 
 -- KEYBINDINGS DAP
 ------------------------------------------
@@ -114,3 +119,8 @@ vim.keymap.set("n", "<leader>du", dap.up, { desc = "[d]ap travel [u]p the stack"
 ------------------------------------------
 vim.keymap.set("n", "<leader>dx", dapui.toggle, { desc = "[d]ap toggle UI" })
 vim.keymap.set("n", "<leader>dr", open_dap_ui, { desc = "[d]ap [r]eset ui" })
+
+-- SETUP VIRTUAL TEXT
+------------------------------------------
+local virtual_text = require("nvim-dap-virtual-text")
+virtual_text.setup({})
