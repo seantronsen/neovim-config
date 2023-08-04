@@ -14,9 +14,19 @@ require("formatter").setup({
 		c = { require("formatter.filetypes.c").clangformat },
 		cpp = { require("formatter.filetypes.cpp").clangformat },
 		cmake = { require("formatter.filetypes.cmake").cmakeformat },
+		javascript = { require("formatter.filetypes.javascript").prettier },
 		lua = { require("formatter.filetypes.lua").stylua },
 		python = { require("formatter.filetypes.python").black },
 		rust = { require("formatter.filetypes.rust").rustfmt },
+		typescript = { require("formatter.filetypes.javascript").prettier },
+
+		-- data languages
+		sql = {
+			function()
+				local current_filename = vim.fn.bufname()
+				return { exe = "sqlfmt", args = {"" .. " " .. "-"} , stdin=true}
+			end,
+		},
 
 		-- scripting languages
 		sh = { require("formatter.filetypes.sh").shfmt },

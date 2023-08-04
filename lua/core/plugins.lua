@@ -28,7 +28,7 @@ return require("packer").startup(function(use)
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
 	use("kyazdani42/nvim-web-devicons")
-	use("j-hui/fidget.nvim")
+	use({ "j-hui/fidget.nvim", lock = true, tag = "legacy" })
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
@@ -46,6 +46,30 @@ return require("packer").startup(function(use)
 	use("folke/neodev.nvim")
 
 	use({ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu", commit = "e4399db", lock = true })
+
+	use({
+		"epwalsh/obsidian.nvim",
+		requires = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("obsidian").setup({
+				dir = "~/notes",
+				completion = {
+					nvim_cmp = true,
+					min_chars = 3,
+					new_notes_location = "notes_subdir",
+					prepend_note_id = true,
+				},
+				mappings = {
+					["<leader>gl"] = function()
+						vim.cmd("ObsidianFollowLink")
+					end,
+				},
+				finder = "telescope.nvim",
+			})
+		end,
+		lock = true,
+		tag = "v1.12.0",
+	})
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------

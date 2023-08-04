@@ -52,7 +52,7 @@ require("mason-lspconfig").setup({
 		"dockerls",
 		"html",
 		"jsonls",
-		"ltex",
+		-- "ltex",
 		"lua_ls",
 		"marksman",
 		"pyright",
