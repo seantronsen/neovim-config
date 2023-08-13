@@ -5,7 +5,8 @@ vim.keymap.set("n", "<leader>ob", function() vim.cmd("ObsidianBacklinks") end, {
 vim.keymap.set("n", "<leader>on", function()
 	local result = vim.fn.input("Note name: ")
 	if vim.fn.empty(result) == 1 then
-		print("name cannot be empty...")
+		print("error: name cannot be empty")
+	else
+		vim.cmd("ObsidianNew " .. result)
 	end
-	vim.cmd("ObsidianNew " .. result)
 end, { desc = "[o]bsidian create [n]ew note" })
