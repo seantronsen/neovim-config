@@ -46,3 +46,4 @@ editor you must perform the following commands:
 ## Todos
 
 1. On first run, Packer doesn't install the plugins unless explicitly told to do so. Consider fixing to minimize future confusion.
+2. figure out what the issue is with hlsearch

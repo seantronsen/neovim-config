@@ -9,6 +9,8 @@ vim.g.mapleader = ","
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 vim.o.completeopt = menu, menuone, noselect
 vim.o.number = true
+vim.o.hlsearch = false
+vim.o.showmatch = true
 vim.o.mouse = c
 vim.o.t_Co = 256
 vim.o.termguicolors = true
@@ -32,4 +34,3 @@ vim.g.slime_no_mappings = 1
 vim.g.slime_python_ipython = 1
 vim.g.slime_cell_delimiter = "^\\s*# %%"
 vim.g.slime_cells_no_highlight = 1
-
