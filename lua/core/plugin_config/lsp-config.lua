@@ -52,7 +52,6 @@ require("mason-lspconfig").setup({
 		"dockerls",
 		"html",
 		"jsonls",
-		-- "ltex",
 		"lua_ls",
 		"marksman",
 		"pyright",
@@ -61,6 +60,19 @@ require("mason-lspconfig").setup({
 		"yamlls",
 	},
 	automatic_installation = false,
+})
+
+require("mason-tool-installer").setup({
+	ensure_installed = {
+		"black",
+		"debugpy",
+		"prettier",
+		"shfmt",
+		"sqlfmt",
+		"stylua",
+		"yamlfmt",
+	},
+	auto_update = true,
 })
 
 require("neodev").setup()
