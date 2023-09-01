@@ -4,14 +4,6 @@
 local action_layout = require("telescope.actions.layout")
 
 require("telescope").setup({
-	-- extensions = {
-	-- 	fzf = {
-	-- 		fuzz = true,
-	-- 		override_generic_sorter = true,
-	-- 		override_file_sorter = true,
-	-- 		case_mode = "smart_case",
-	-- 	},
-	-- },
 	defaults = {
 		mappings = {
 			i = {
@@ -23,7 +15,6 @@ require("telescope").setup({
 		},
 	},
 })
--- require("telescope").load_extension("fzf")
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[f]ind [f]iles" })
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[f]ind with live [g]rep" })
@@ -33,4 +24,4 @@ vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "[f]ind [o]old file
 vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "[f]ind [k]eymaps" })
 vim.keymap.set("n", "<leader>fc", builtin.commands, { desc = "[f]ind and execute [c]ommands" })
 vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[f]ind [d]iagnostics (code issues)" })
-
+vim.keymap.set("n", "<leader>fm", builtin.man_pages, { desc = "[f]ind [m]an pages" })

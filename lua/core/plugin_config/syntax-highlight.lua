@@ -14,6 +14,7 @@ require("nvim-treesitter.configs").setup({
 		"lua",
 		"make",
 		"markdown",
+		"markdown_inline",
 		"python",
 		"rust",
 		"toml",
@@ -24,7 +25,7 @@ require("nvim-treesitter.configs").setup({
 	auto_install = true,
 	highlight = {
 		enable = true,
-		additional_vim_regex_highlighting = false,
+		additional_vim_regex_highlighting = { "markdown" },
 	},
 	parser_install_dir = "~/.local/share/nvim/packed/nvim-treesitter",
 })

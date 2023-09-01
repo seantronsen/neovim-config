@@ -2,10 +2,10 @@
 -- IDE-LIKE COMMANDS
 -- ------------------------------
 local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display error",  noremap = true, silent = true})
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {desc = "go to previous [d]iagnostic",  noremap = true, silent = true})
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {desc = "go to next [d]iagnostic",  noremap = true, silent = true})
 -- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
