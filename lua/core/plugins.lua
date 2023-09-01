@@ -35,8 +35,10 @@ return require("packer").startup(function(use)
 	use({
 		"neovim/nvim-lspconfig",
 		"williamboman/mason.nvim",
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		"williamboman/mason-lspconfig.nvim",
 	})
+
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		tag = "v0.7.2",
