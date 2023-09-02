@@ -40,9 +40,6 @@ editor you must perform the following commands:
 
 ## Version Notes
 
-- Working on switching over to lua and packer. Notes pending.
-- now requires that tree-sitter-cli is installed on the command line.
-
 ## Todos
 
 1. On first run, Packer doesn't install the plugins unless explicitly told to do so. Consider fixing to minimize future confusion.
