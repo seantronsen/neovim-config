@@ -1,3 +1,7 @@
 FROM ubuntu:22.04
-COPY install.bash install.bash
+RUN apt-get update
+RUN apt-get install -y git wget xz-utils zip gcc g++ file python3 python3-pip python3-venv
+WORKDIR /root
+COPY install.bash .
+RUN echo "export PATH='$HOME/bin:$HOME/.cargo/bin:$PATH'" >> .bashrc
 RUN bash install.bash
