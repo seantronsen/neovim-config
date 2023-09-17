@@ -37,26 +37,18 @@ cmp.setup({
 		-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 	}),
 
-	sources = cmp.config.sources(
-		{
-			{ name = "nvim_lsp", max_item_count = 15 },
-			{ name = "nvim_lsp_signature_help" },
-			{ name = "luasnip" },
-			{ name = "buffer" },
-		}
+	sources = cmp.config.sources({
+		{ name = "nvim_lsp", max_item_count = 15 },
+		{ name = "nvim_lsp_signature_help" },
+		{ name = "luasnip" },
 		--	{ { name = "buffer" } }
-	),
+	}),
 	completion = {
 		keyword_length = 3,
 	},
 	performance = {
 		throttle = 0,
 	},
-
-	-- TODO - write a command that toggles the behavior below.
-	-- comment/uncomment the lines below to disable/enable autocomplete features
-	-- preselect = cmp.PreselectMode,
-	-- completion = { autocomplete = false }
 })
 
 -- Set configuration for specific filetype.

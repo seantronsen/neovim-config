@@ -126,7 +126,7 @@ return require("packer").startup(function(use)
 		},
 	})
 
-	--AUTOCOMPLETE
+	-- AUTOCOMPLETE
 	--------------------------------
 	use({
 		"hrsh7th/nvim-cmp",
@@ -137,12 +137,19 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-cmdline" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "L3MON4D3/LuaSnip" },
-			{ "rafamadriz/friendly-snippets" },
+			-- { "rafamadriz/friendly-snippets" },
 			{ "saadparwaiz1/cmp_luasnip" },
 		},
 	})
 
+	-- AUTODOCUMENTATION
+	--------------------------------
 
+	-- better rust documentation generation
+	use({ "kkoomen/vim-doge", run = ":call doge#install()" })
+
+	-- too many issues as of 09172023. might try again in the future
+	-- use({ "danymat/neogen", tag = "2.14.1" })
 
 	--TMUX COMPATIBILITY
 	--------------------------------

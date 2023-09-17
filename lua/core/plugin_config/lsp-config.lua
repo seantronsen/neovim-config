@@ -30,7 +30,9 @@ local on_attach = function(_, _)
 	vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
 end
 
-local lsp_flags = { debounce_text_changes = 150 }
+local lsp_flags = { debounce_text_changes = 100 }
+
+
 
 --------------------------------
 -- CONFIGURATION FOR LSP SERVERS
@@ -74,6 +76,7 @@ require("mason-tool-installer").setup({
 	},
 	auto_update = true,
 })
+
 
 require("neodev").setup()
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
