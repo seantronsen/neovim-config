@@ -40,8 +40,9 @@ cmp.setup({
 	sources = cmp.config.sources(
 		{
 			{ name = "nvim_lsp", max_item_count = 15 },
-			{ name = "luasnip" },
 			{ name = "nvim_lsp_signature_help" },
+			{ name = "luasnip" },
+			{ name = "buffer" },
 		}
 		--	{ { name = "buffer" } }
 	),
@@ -61,7 +62,8 @@ cmp.setup({
 -- Set configuration for specific filetype.
 cmp.setup.filetype("gitcommit", {
 	enabled = true,
-	sources = cmp.config.sources({ { name = "cmp_git" } }, { { name = "buffer" } }),
+	sources = cmp.config.sources({ { name = "git" } }, { { name = "buffer" } }),
+	-- sources = cmp.config.sources({ { name = "cmp_git" } }, { { name = "buffer" } }),
 })
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
