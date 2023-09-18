@@ -151,6 +151,10 @@ return require("packer").startup(function(use)
 	-- too many issues as of 09172023. might try again in the future
 	-- use({ "danymat/neogen", tag = "2.14.1" })
 
+	-- GIT
+	--------------------------------
+	use({ "sindrets/diffview.nvim", commit = "a111d19" })
+
 	--TMUX COMPATIBILITY
 	--------------------------------
 	use("christoomey/vim-tmux-navigator")
