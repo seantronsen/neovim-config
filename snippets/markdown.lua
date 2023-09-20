@@ -28,11 +28,11 @@ return {
 		"benv",
 		fmta(
 			[[
-	\begin{<>}
+	\\begin{<>}
 
 	<>
 
-	\end{<>}
+	\\end{<>}
 	]],
 			{ i(1, "section-type"), i(2, "content"), rep(1) }
 		)
@@ -41,17 +41,46 @@ return {
 		"beq",
 		fmta(
 			[[
-	\begin{equation}
+	\\begin{equation}
 
 	<>
 
-	\end{equation}
+	\\end{equation}
 	]],
 			{ i(1, "content") }
 		)
 	),
-	s("mf", fmta("\frac {<>}{<>} ", { i(1, "numerator"), i(2, "denominator") })),
+	s("mv", fmta("\\vec{<>} ", { i(1, "variable") })),
+	s("mr", fmta("\\sqrt[<>]{<>} ", { i(1, "degree"), i(2, "component") })),
+	s("mt", t("\\times")),
+	s("vd", t("\\cdot")),
+	s("mf", fmta("\\frac {<>}{<>} ", { i(1, "numerator"), i(2, "denominator") })),
 	s("mpro", fmta("\\prod_{<>}^{<>} <>", { i(1, "start"), i(2, "stop"), i(3, "equation") })),
 	s("msum", fmta("\\sum_{<>}^{<>} <>", { i(1, "start"), i(2, "stop"), i(3, "equation") })),
 	s("mint", fmta("\\int_{<>}^{<>} <>", { i(1, "start"), i(2, "stop"), i(3, "equation") })),
+
+	s(
+		"bbm",
+		fmta(
+			[[
+	\\begin{bmatrix}
+	<> \\\\
+	<>
+	\\end{bmatrix}
+	]],
+			{ i(1, "row_00"), i(2, "row_01") }
+		)
+	),
+	s(
+		"bdm",
+		fmta(
+			[[
+	\\begin{Vmatrix}
+	<> \\\\
+	<>
+	\\end{Vmatrix}
+	]],
+			{ i(1, "row_00"), i(2, "row_01") }
+		)
+	),
 }
