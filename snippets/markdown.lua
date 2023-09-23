@@ -50,7 +50,7 @@ return {
 			{ i(1, "content") }
 		)
 	),
-	s("mv", fmta("\vec{<>} ", { i(1, "variable") })),
+	s("mv", fmta("\\vec{<>} ", { i(1, "variable") })),
 	s("mr", fmta("\\sqrt[<>]{<>} ", { i(1, "degree"), i(2, "component") })),
 	s("mt", t("\\times")),
 	s("vd", t("\\cdot")),
