@@ -1,27 +1,7 @@
 #!/bin/bash
 
-function logger() {
-	echo "[$(date --utc) UTC] $1"
-}
+source bash-common-lib/lib.bash
 
-function info() {
-	logger "[INFO]: $1"
-}
-
-function error() {
-	logger "[ERROR]: $1"
-	exit $2
-}
-
-function dependency_check() {
-	for arg in "$@"; do
-		if [[ -z "$(which $arg)" ]]; then
-			error "dependency not found: '$arg'"
-		else
-			echo "dependency found: '$arg'"
-		fi
-	done
-}
 
 PATH_USER_SOURCES="$HOME/sources"
 PATH_USER_BIN="$HOME/bin"
@@ -29,10 +9,8 @@ PATH_USER_DOTCONFIG="$HOME/.config"
 
 set -e -x
 
-dependency_check git wget xz-utils zip gcc g++ file python3 pip
-if [[ -z "$(pip list | grep virtualenv)" ]]; then
-	error "python package 'virtualenv' not found" 1
-fi
+binary_dependency_check git wget xz unxz zip gcc g++ file python3 pip
+python_dependency_check virtualenv
 
 # REMOVE EXISTING CONFIGURATIONS TO AVOID CONFLICTS
 rm -v "$PATH_USER_DOTCONFIG/nvim" -rf
@@ -43,7 +21,7 @@ DIR_START=$PWD
 U_BIN="$DIR_START/bin"
 export PATH="$U_BIN:$PATH"
 
-if [[ "$DIR_START" == "$HOME" ]]; then error "script must be run in the home directory: '$HOME'"; fi
+if [[ "$DIR_START" != "$HOME" ]]; then error "script must be run in the home directory: '$HOME'"; fi
 
 # MAKE INITIAL DIRECTORY TARGETS
 mkdir -vp bin sources .config .fonts
@@ -119,7 +97,6 @@ if [[ -z "$(which fd)" ]]; then
 fi
 
 # PYTHON
-python --version
 python3 --version
 
 # INSTALL CODELLDB VSCODE EXTENSION DEPENDENCY
