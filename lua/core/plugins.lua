@@ -52,23 +52,6 @@ return require("packer").startup(function(use)
 	use({
 		"epwalsh/obsidian.nvim",
 		requires = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("obsidian").setup({
-				dir = "~/notes",
-				completion = {
-					nvim_cmp = true,
-					min_chars = 3,
-					new_notes_location = "notes_subdir",
-					prepend_note_id = true,
-				},
-				mappings = {
-					["<leader>gl"] = function()
-						vim.cmd("ObsidianFollowLink")
-					end,
-				},
-				finder = "telescope.nvim",
-			})
-		end,
 		lock = true,
 		tag = "v1.12.0",
 	})

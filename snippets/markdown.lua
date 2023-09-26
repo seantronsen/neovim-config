@@ -50,11 +50,11 @@ return {
 			{ i(1, "content") }
 		)
 	),
-	s("mv", fmta("\\vec{<>} ", { i(1, "variable") })),
+	s("mv", fmta("\\vec{<>}", { i(1, "variable") })),
 	s("mr", fmta("\\sqrt[<>]{<>} ", { i(1, "degree"), i(2, "component") })),
 	s("mt", t("\\times")),
 	s("vd", t("\\cdot")),
-	s("mf", fmta("\frac {<>}{<>} ", { i(1, "numerator"), i(2, "denominator") })),
+	s("mf", fmta("\\frac {<>}{<>}", { i(1, "numerator"), i(2, "denominator") })),
 	s("mpro", fmta("\\prod_{<>}^{<>} <>", { i(1, "start"), i(2, "stop"), i(3, "equation") })),
 	s("msum", fmta("\\sum_{<>}^{<>} <>", { i(1, "start"), i(2, "stop"), i(3, "equation") })),
 	s("mint", fmta("\\int_{<>}^{<>} <>", { i(1, "start"), i(2, "stop"), i(3, "equation") })),
@@ -84,3 +84,11 @@ return {
 		)
 	),
 }
+
+
+-- TODO: add the following snippets
+-- - mmag for magnitude
+-- - something for determinant
+-- - something for > Theorem:
+-- - something for > Def:
+--
