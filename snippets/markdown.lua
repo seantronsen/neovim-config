@@ -92,4 +92,4 @@ return {
 -- - something for > Theorem:
 -- - something for > Def:
 -- - something for \hat \bar \prime, etc.
---
+-- - something for \cancel (cross out sections of the equation which cancel out)
