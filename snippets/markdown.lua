@@ -91,4 +91,5 @@ return {
 -- - something for determinant
 -- - something for > Theorem:
 -- - something for > Def:
+-- - something for \hat \bar \prime, etc.
 --
