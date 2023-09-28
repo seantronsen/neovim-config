@@ -10,3 +10,6 @@ vim.keymap.set("n", "<leader>on", function()
 		vim.cmd("ObsidianNew " .. result)
 	end
 end, { desc = "[o]bsidian create [n]ew note" })
+
+-- formatting
+vim.keymap.set("n", "<leader>re", function() vim.cmd("Format") end, { desc = "[r]e[f]ormat" })
