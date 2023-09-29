@@ -64,27 +64,28 @@ return {
 		fmta(
 			[[
 	\begin{bmatrix}
-	<> \\
-	<>
+	<> & <> & <>\\
+	<> & <> & <> \\
+	<> & <> & <> \\
 	\end{bmatrix}
 	]],
-			{ i(1, "row_00"), i(2, "row_01") }
+			{ i(1, "a"), i(2, "b"), i(1, "c"), i(1, "d"), i(2, "e"), i(1, "f"), i(1, "g"), i(2, "h"), i(1, "i") }
 		)
 	),
 	s(
 		"bdm",
 		fmta(
 			[[
-	\begin{Vmatrix}
-	<> \\
-	<>
-	\end{Vmatrix}
+	\begin{vmatrix}
+	<> & <> & <>\\
+	<> & <> & <> \\
+	<> & <> & <> \\
+	\end{vmatrix}
 	]],
-			{ i(1, "row_00"), i(2, "row_01") }
+			{ i(1, "a"), i(2, "b"), i(1, "c"), i(1, "d"), i(2, "e"), i(1, "f"), i(1, "g"), i(2, "h"), i(1, "i") }
 		)
 	),
 }
-
 
 -- TODO: add the following snippets
 -- - mmag for magnitude

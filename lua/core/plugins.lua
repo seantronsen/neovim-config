@@ -56,6 +56,8 @@ return require("packer").startup(function(use)
 		tag = "v1.12.0",
 	})
 
+	use({ "lervag/vimtex", tag = "v2.13", lock = true })
+
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
 	use({

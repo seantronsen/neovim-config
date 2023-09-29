@@ -22,10 +22,14 @@ require("nvim-treesitter.configs").setup({
 		"yaml",
 	},
 	sync_install = false,
-	auto_install = true,
+	-- auto_install = true,
 	highlight = {
 		enable = true,
-		additional_vim_regex_highlighting = { "markdown" },
+		additional_vim_regex_highlighting = { "markdown", "latex" },
 	},
+
+	-- disable = {"latex", "markdown"},
+	--ignore_install = {"latex", "markdown"},
+
 	parser_install_dir = "~/.local/share/nvim/packed/nvim-treesitter",
 })
