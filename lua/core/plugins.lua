@@ -56,7 +56,7 @@ return require("packer").startup(function(use)
 		tag = "v1.12.0",
 	})
 
-	use({ "lervag/vimtex", tag = "v2.13", lock = true })
+	use({ "lervag/vimtex", tag = "v2.13", lock = true, ft = { "plaintex", "latex", "tex", "markdown", "mkd" } })
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
@@ -81,14 +81,6 @@ return require("packer").startup(function(use)
 		requires = {
 			{ "jpalardy/vim-slime", commit = "bb15285", lock = true },
 		},
-		config = function()
-			vim.cmd([[
-    nmap <leader>sv <Plug>SlimeConfig
-    nmap <leader>sc <Plug>SlimeCellsSendAndGoToNext
-    nmap <leader>sj <Plug>SlimeCellsNext
-    nmap <leader>sk <Plug>SlimeCellsPrev
-    ]])
-		end,
 	})
 
 	--DOCUMENT FORMATTING
