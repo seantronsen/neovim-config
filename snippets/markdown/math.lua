@@ -89,7 +89,7 @@ return {
 	),
 
 	s(
-		{ trig = "vec ([%a]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "vec ([^%s]+)[ ]+", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta("\\vec{<>}" .. postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
@@ -97,6 +97,36 @@ return {
 		}),
 		{ condition = in_mathzone }
 	),
+
+	s(
+		{ trig = "vec2", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta(
+			[[
+	\begin{bmatrix}
+	<> \\
+	<> \\
+	\end{bmatrix}
+	]],
+			{ i(1, "a"), i(2, "b")}
+		),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "vec3", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta(
+			[[
+	\begin{bmatrix}
+	<> \\
+	<> \\
+	<> \\
+	\end{bmatrix}
+	]],
+			{ i(1, "a"), i(2, "b"), i(3, "c") }
+		),
+		{ condition = in_mathzone }
+	),
+
 	s(
 		{ trig = "mr", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta("\\sqrt[<>]{<>}" .. postspace, { i(1, "degree"), i(2, "component") }),
@@ -136,7 +166,7 @@ return {
 
 	s(
 		{ trig = "mdet", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\det{<>}" .. postspace, { i(1, "elements") }),
+		fmta("\\det{(<>)}" .. postspace, { i(1, "elements") }),
 		{ condition = in_mathzone }
 	),
 
@@ -151,8 +181,9 @@ return {
 		fmta("\\cancel{<>}" .. postspace, { d(1, get_visual) }),
 		{ condition = in_mathzone }
 	),
+
 	s(
-		{ trig = "bmat", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "bmat9", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta(
 			[[
 	\begin{bmatrix}
@@ -165,8 +196,28 @@ return {
 		),
 		{ condition = in_mathzone }
 	),
+
 	s(
-		{ trig = "bdet", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{
+			trig = "bmat4",
+			wordTrig = false,
+			regTrig = true,
+			snippetType = "autosnippet",
+		},
+		fmta(
+			[[
+	\begin{bmatrix}
+	<> & <> \\
+	<> & <> \\
+	\end{bmatrix}
+	]],
+			{ i(1, "a"), i(2, "b"), i(3, "c"), i(4, "d") }
+		),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "bdet9", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta(
 			[[
 	\begin{vmatrix}
@@ -179,4 +230,46 @@ return {
 		),
 		{ condition = in_mathzone }
 	),
+
+	s(
+		{
+			trig = "bdet4",
+			wordTrig = false,
+			regTrig = true,
+			snippetType = "autosnippet",
+		},
+		fmta(
+			[[
+	\begin{vmatrix}
+	<> & <> \\
+	<> & <> \\
+	\end{vmatrix}
+	]],
+			{ i(1, "a"), i(2, "b"), i(3, "c"), i(4, "d") }
+		),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "perp ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\perp]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	-- logical operations
+	s(
+		{ trig = "[%s]+imp ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\implies]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "ifof ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\iff]] .. postspace),
+		{ condition = in_mathzone }
+	),
 }
+
+
+-- create one for the identity matrix
+-- create one for the inverse matrix

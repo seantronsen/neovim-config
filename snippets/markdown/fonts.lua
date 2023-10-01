@@ -9,6 +9,13 @@ local d = ls.dynamic_node
 local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
+local in_mathzone = function()
+	return vim.fn["vimtex#syntax#in_mathzone"]() == 1
+end
+
+local not_mathzone = function()
+	return not in_mathzone()
+end
 
 local get_visual = function(_, parent)
 	if #parent.snippet.env.LS_SELECT_RAW > 0 then
@@ -39,5 +46,11 @@ return {
 		fmta("\\text{<>}" .. postspace, {
 			d(1, get_visual),
 		})
+	),
+
+	s(
+		{ trig = "nl", dscr = "latex math newline", snippetType = "autosnippet" },
+		t([[\\]] .. postspace),
+		{ condition = in_mathzone }
 	),
 }
