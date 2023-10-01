@@ -29,10 +29,6 @@ end
 local nalphnum = "([^%w])"
 local postspace = " "
 
--- TODO: add the following snippets
--- - something for > Theorem:
--- - something for > Def:
-
 return {
 	s(
 		{ trig = "[^%w]p ([%w]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
@@ -55,6 +51,16 @@ return {
 	s(
 		{ trig = "[^%w]h ([%w]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta("\\hat {<>}" .. postspace, {
+			f(function(_, snip)
+				return snip.captures[1]
+			end),
+		}),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "inv ([%a]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta("{<>}^{-1}" .. postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
@@ -107,7 +113,7 @@ return {
 	<> \\
 	\end{bmatrix}
 	]],
-			{ i(1, "a"), i(2, "b")}
+			{ i(1, "a"), i(2, "b") }
 		),
 		{ condition = in_mathzone }
 	),
@@ -183,6 +189,18 @@ return {
 	),
 
 	s(
+		{ trig = "imat9", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[
+	\begin{bmatrix}
+	1 & 0 & 0 \\
+	0 & 1 & 0 \\
+	0 & 0 & 1 \\
+	\end{bmatrix}
+	]]),
+		{ condition = in_mathzone }
+	),
+
+	s(
 		{ trig = "bmat9", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta(
 			[[
@@ -194,6 +212,17 @@ return {
 	]],
 			{ i(1, "a"), i(2, "b"), i(3, "c"), i(4, "d"), i(5, "e"), i(6, "f"), i(7, "g"), i(8, "h"), i(9, "i") }
 		),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "imat4", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[
+	\begin{bmatrix}
+	1 & 0  \\
+	0 & 1  \\
+	\end{bmatrix}
+	]]),
 		{ condition = in_mathzone }
 	),
 
@@ -269,7 +298,3 @@ return {
 		{ condition = in_mathzone }
 	),
 }
-
-
--- create one for the identity matrix
--- create one for the inverse matrix
