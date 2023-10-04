@@ -31,8 +31,8 @@ local postspace = " "
 
 return {
 	s(
-		{ trig = "[^%w]p ([%w]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\prime {<>}" .. postspace, {
+		{ trig = "[^%w]p ([%w\\]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta([[{<>} \prime]] .. postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
@@ -154,6 +154,12 @@ return {
 		fmta("\\frac {<>}{<>}" .. postspace, { i(1, "numerator"), i(2, "denominator") }),
 		{ condition = in_mathzone }
 	),
+	s(
+		{ trig = "df", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta("\\frac {d <>}{d <>}" .. postspace, { i(1, "numerator"), i(2, "denominator") }),
+		{ condition = in_mathzone }
+	),
+
 	s(
 		{ trig = "mpro", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta("\\prod_{<>}^{<>} <>" .. postspace, { i(1, "start"), i(2, "stop"), i(3, "equation") }),
@@ -300,7 +306,7 @@ return {
 
 	s(
 		{ trig = ";th", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\theta]] .. postspace),
+		t([[\theta]]),
 		{ condition = in_mathzone }
 	),
 
@@ -345,11 +351,15 @@ return {
 	),
 
 
+	s(
+		{ trig = ";pl", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\mathcal{P}]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
 }
 -- add snippet for plane notation (P_1) with the weird squiggle P
--- add snippet for plane intersection (the stats intersection symbol
 -- add snippet for \ne
 -- add snippet for infinity
--- add snippet for stackable primes (derivatives) integrals, etc. 
--- snippets should include the \ symbol when consuming for easier stacking. 
--- snippets for derivative fractions. 
+-- add snippet for stackable primes (derivatives) integrals, etc.
+-- snippets should include the \ symbol when consuming for easier stacking.
