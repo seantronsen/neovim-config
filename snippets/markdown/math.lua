@@ -297,4 +297,59 @@ return {
 		t([[\iff]] .. postspace),
 		{ condition = in_mathzone }
 	),
+
+	s(
+		{ trig = ";th", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\theta]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = ";del", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\delta]] .. postspace),
+		{ condition = in_mathzone }
+	),
+	s(
+		{ trig = ";phi", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\phi]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "ne", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\ne]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "cap", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\cap]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "cup", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\cap]] .. postspace),
+		{ condition = in_mathzone }
+	),
+	s(
+		{ trig = "inf", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\infty]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = "appr", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\approx]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+
 }
+-- add snippet for plane notation (P_1) with the weird squiggle P
+-- add snippet for plane intersection (the stats intersection symbol
+-- add snippet for \ne
+-- add snippet for infinity
+-- add snippet for stackable primes (derivatives) integrals, etc. 
+-- snippets should include the \ symbol when consuming for easier stacking. 
+-- snippets for derivative fractions. 
