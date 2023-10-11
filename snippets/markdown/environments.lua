@@ -94,3 +94,7 @@ return {
 		{ condition = in_mathzone }
 	),
 }
+
+
+-- there is an issue with the bmi snippet as it occurs within the middle of a word
+-- this may hint at other snippets needed review as well. 
