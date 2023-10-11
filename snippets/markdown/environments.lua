@@ -22,6 +22,29 @@ local nalphnum = "([^%w])"
 local postspace = " "
 
 return {
+
+	s(
+		{ trig = "bpe ([%w]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta(
+			[[
+			```<>
+
+			<>
+
+			```
+	]],
+			{
+
+				f(function(_, snip)
+					return snip.captures[1]
+				end),
+
+				i(1, "code content"),
+			}
+		),
+		{ condition = not_mathzone }
+	),
+
 	s(
 		{ trig = "bme", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta(
