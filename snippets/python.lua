@@ -13,11 +13,3 @@ local rep = require("luasnip.extras").rep
 return {
 	s("pyig", t("# pyright: ignore")),
 }
-
-
--- TODO: add the following snippets
--- - mmag for magnitude
--- - something for determinant
--- - something for > Theorem:
--- - something for > Def:
---

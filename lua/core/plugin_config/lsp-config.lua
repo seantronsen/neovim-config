@@ -2,9 +2,14 @@
 -- IDE-LIKE COMMANDS
 -- ------------------------------
 local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display error",  noremap = true, silent = true})
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {desc = "go to previous [d]iagnostic",  noremap = true, silent = true})
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {desc = "go to next [d]iagnostic",  noremap = true, silent = true})
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display error", noremap = true, silent = true })
+vim.keymap.set(
+	"n",
+	"[d",
+	vim.diagnostic.goto_prev,
+	{ desc = "go to previous [d]iagnostic", noremap = true, silent = true }
+)
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "go to next [d]iagnostic", noremap = true, silent = true })
 -- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
 -- Use an on_attach function to only map the following keys
@@ -31,8 +36,6 @@ local on_attach = function(_, _)
 end
 
 local lsp_flags = { debounce_text_changes = 100 }
-
-
 
 --------------------------------
 -- CONFIGURATION FOR LSP SERVERS
@@ -76,7 +79,6 @@ require("mason-tool-installer").setup({
 	},
 	auto_update = true,
 })
-
 
 require("neodev").setup()
 local capabilities = require("cmp_nvim_lsp").default_capabilities()

@@ -4,30 +4,27 @@ Simple backup of the neovim config used for writing code within unix-like
 terminals. Currently using this toolset for writing source code based in Rust,
 C, C++, and Python. Requires a few items to be installed on the target system:
 
-- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.8.\*
+- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.8.3
 - [sharkdp/fd -- find-fd](https://github.com/sharkdp/fd)
-- nodejs $\geq$ v18.\*
-- BurntSushi/ripgrep (available on apt)
-- Nerd Fonts -- Fira Code (Monospaced is preferred since it works with PuTTY)
+- BurntSushi/ripgrep
 - luarocks -- see `:checkhealth` for more info
+- nodejs $\geq$ v18
+- python $\geq$ v3
 
-Probably needs to be run in a bash terminal too. As for how to actually use
-this tooling, see which plugins are currently installed within the `plugins.lua`
-file and visit the docs of the associated projects. It should also be possible
-to find most of that information using vim/nvims `:help [item-name]` command.
-More detailed information can also be found within the 'LOCAL ADDITIONS'
-section after executing `:help`.
+As for how to actually use the tooling, view a list of currently installed
+plugins within `plugins.lua` and visit the docs of the associated projects. It
+should be possible to find most of that information using nvims `:help
+[item-name]` command. More detailed information can also be found within the
+'LOCAL ADDITIONS' section after executing `:help` at the bottom of the buffer.
 
-**Important**
-Ensure that the only parser directory being used by neovim is the
-nvim-treesitter/parser directory. Find and delete any conflicting directories
-via the command:
-`:echo nvim_get_runtime_file('parser', v:true)`
+## Syntax Highlighting and Code Editing
 
-Lastly, in regards to the current code editing features, it is important to
-remember to install functionality for each language. No additional
-configuration is needed within the `.lua` files, but to add a language to the
-editor you must perform the following commands:
+Proper syntax highlighting and IDE-like features must be installed on a
+language-by-language basis. In the current working version much of it is
+installed automatically, but for languages not included by default (those
+outside my preferences) the features must be installed somewhat manually.
+
+To perform a one-time installation, execute the following in command mode:
 
 1. `:MasonInstall [language analyzer/parser/formatter]`
    a. Repeat as needed for each unique type of tool.
@@ -38,10 +35,18 @@ editor you must perform the following commands:
 3. `:TSInstall [language name]`
    a. Treesitter syntax highlighting support
 
-## Version Notes
+> To ensure automatic installation later on, add the appropriate language
+> server to the table of auto installs in the `lsp-config.lua` file. At the
+> time of writing, the configuration properties exist under the section for
+> `mason.nvim`.
 
-## Todos
+## Possible Installation Issues
 
-1. On first run, Packer doesn't install the plugins unless explicitly told to do so. Consider fixing to minimize future confusion.
-2. Fix the issue with packer auto installing treesitter. keeps complaining about a missing TSUpdate command. 
+### Multiple Parser Issues
 
+Ensure the only parser directory used by neovim is the nvim-treesitter/parser
+directory. Find and delete any conflicting directories via the command:
+`:echo nvim_get_runtime_file('parser', v:true)`
+
+Typically, this only occurs if more than a single installation exists globally
+on all user `$PATH`'s (via `apt`, `snap`, etc.).

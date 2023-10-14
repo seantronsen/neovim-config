@@ -48,9 +48,5 @@ return {
 		})
 	),
 
-	s(
-		{ trig = "nl", dscr = "latex math newline", snippetType = "autosnippet" },
-		t([[\\]] .. postspace),
-		{ condition = in_mathzone }
-	),
+	s({ trig = "nl", dscr = "latex math newline", snippetType = "autosnippet" }, t([[\\]] .. postspace), { condition = in_mathzone }),
 }

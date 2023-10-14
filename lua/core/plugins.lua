@@ -17,7 +17,6 @@ return require("packer").startup(function(use)
 	--THEMES
 	--------------------------------
 	use("EdenEast/nightfox.nvim")
-	-- use("folke/tokyonight.nvim")
 	-- use("water-sucks/darkrose.nvim")
 
 	--STATUS LINE
@@ -42,8 +41,12 @@ return require("packer").startup(function(use)
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		tag = "v0.7.2",
-		run = ":TSUpdate",
+		run = function()
+			local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
+			ts_update()
+		end,
 	})
+
 	use("simrat39/rust-tools.nvim")
 	use("folke/neodev.nvim")
 
@@ -99,7 +102,6 @@ return require("packer").startup(function(use)
 		lock = true,
 		requires = {
 			{ "nvim-lua/plenary.nvim" },
-			-- { "nvim-telescope/telescope-fzf-native.nvim", run = "make" }
 		},
 	})
 
@@ -114,7 +116,6 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-cmdline" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "L3MON4D3/LuaSnip" },
-			-- { "rafamadriz/friendly-snippets" },
 			{ "saadparwaiz1/cmp_luasnip" },
 		},
 	})

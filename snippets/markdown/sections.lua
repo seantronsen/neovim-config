@@ -28,20 +28,7 @@ end
 local nalphnum = "([^%w])"
 local postspace = " "
 
--- TODO: add the following snippets
--- - something for > Theorem:
--- - something for > Def:
-
 return {
-	s(
-		{ trig = "sthe ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[> Theorem: ]]),
-		{ condition = not_mathzone }
-	),
-
-	s(
-		{ trig = "sdef ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[> Definition: ]]),
-		{ condition = not_mathzone }
-	),
+	s({ trig = "sthe ", wordTrig = false, regTrig = true, snippetType = "autosnippet" }, t([[> Theorem: ]]), { condition = not_mathzone }),
+	s({ trig = "sdef ", wordTrig = false, regTrig = true, snippetType = "autosnippet" }, t([[> Definition: ]]), { condition = not_mathzone }),
 }
