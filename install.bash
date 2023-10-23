@@ -1,20 +1,18 @@
 #!/bin/bash
 
-source bash-common-lib/lib.bash
-
-
+set -e -x
+source "$(dirname $(realpath ${BASH_SOURCE[0]}))/bash-common-lib/lib.bash"
 PATH_USER_SOURCES="$HOME/sources"
 PATH_USER_BIN="$HOME/bin"
 PATH_USER_DOTCONFIG="$HOME/.config"
 
-set -e -x
 
 binary_dependency_check git wget xz unxz zip gcc g++ file python3 pip
 python_dependency_check virtualenv
 
 # REMOVE EXISTING CONFIGURATIONS TO AVOID CONFLICTS
-rm -v "$PATH_USER_DOTCONFIG/nvim" -rf
-rm -v "$HOME/.local/share/nvim" -rf
+rm -vrf "$PATH_USER_DOTCONFIG/nvim"
+rm -vrf "$HOME/.local/share/nvim"
 
 # ENSURE INSTALLATION IS NOT OCCURRING IN THE ROOT DIRECTORY
 DIR_START=$PWD
@@ -98,6 +96,16 @@ fi
 
 # PYTHON
 python3 --version
+if ! python3 -m pip show --quiet virtualenv; then
+	PATH_PDB_ENV="$HOME/.virtualenvs/debugenv"
+	python3 -m pip install virtualenv
+	python3 -m virtualenv "$PATH_PDB_ENV"
+	source "$PATH_PDB_ENV/bin/activate"
+	pip install debugpy
+	python3 -m debugpy --version
+	deactivate
+
+fi
 
 # INSTALL CODELLDB VSCODE EXTENSION DEPENDENCY
 if [[ -z "$(which codelldb)" ]]; then
