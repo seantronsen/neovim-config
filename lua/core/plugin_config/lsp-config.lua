@@ -103,7 +103,7 @@ require("mason-lspconfig").setup_handlers({
 	-- For example, a handler override for the `rust_analyzer`:
 	--------------------------------
 	["rust_analyzer"] = function()
-		local extension_path = vim.env.HOME .. "/sources/codelldb-x86_64-linux"
+		local extension_path = vim.env.HOME .. "/sources/codelldb-1.8.1/codelldb-x86_64-linux"
 		local codelldb_path = extension_path .. "/adapter/codelldb"
 		local liblldb_path = extension_path .. "/lldb/lib/liblldb.so"
 
