@@ -69,7 +69,7 @@ dap.configurations.rust = {
 	},
 }
 
-local path_debugpy = vim.fn.expand("$HOME/.virtualenvs/debugenv")
+local path_debugpy = vim.fn.expand("$HOME/.virtualenvs/debugenv/bin/python")
 local dap_python = require("dap-python")
 dap_python.setup(path_debugpy)
 dap_python.test_runner = "pytest"
