@@ -11,7 +11,6 @@ PATH_USER_SOURCES="$HOME/sources"
 PATH_USER_BIN="$HOME/bin"
 PATH_USER_DOTCONFIG="$HOME/.config"
 
-
 binary_dependency_check git wget xz unxz zip gcc g++ file python3 pip
 python_dependency_check virtualenv
 
@@ -100,10 +99,14 @@ if [[ -z "$(which fd)" ]]; then
 fi
 
 # PYTHON
+PATH_PDB_ENV="$HOME/.virtualenvs/debugenv"
 python3 --version
 if ! python3 -m pip show --quiet virtualenv; then
-	PATH_PDB_ENV="$HOME/.virtualenvs/debugenv"
 	python3 -m pip install virtualenv
+
+fi
+
+if [[ ! -d "$PATH_PDB_ENV" ]]; then
 	python3 -m virtualenv "$PATH_PDB_ENV"
 	source "$PATH_PDB_ENV/bin/activate"
 	pip install debugpy
