@@ -1,8 +1,11 @@
 #!/bin/bash
 
 set -e -x
-git submodule init
-git submodule update
+(
+	cd "$(dirname $(realpath ${BASH_SOURCE[0]}))"
+	git submodule init
+	git submodule update
+)
 source "$(dirname $(realpath ${BASH_SOURCE[0]}))/bash-common-lib/lib.bash"
 PATH_USER_SOURCES="$HOME/sources"
 PATH_USER_BIN="$HOME/bin"
