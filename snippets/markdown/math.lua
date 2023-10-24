@@ -321,8 +321,8 @@ return {
 		{ condition = in_mathzone }
 	),
 	s(
-		{ trig = "lim", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta(nalphnum .. [[\lim_{<> \to <>}]] .. postspace, { i(1, "a"), i(2, "b") }),
+		{ trig = nalphnum .. "lim", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta([[\lim_{<> \to <>}]] .. postspace, { i(1, "a"), i(2, "b") }),
 		{ condition = in_mathzone }
 	),
 
