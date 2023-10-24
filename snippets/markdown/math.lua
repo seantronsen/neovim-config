@@ -304,12 +304,12 @@ return {
 		{ condition = in_mathzone }
 	),
 
+	s({ trig = ";th", wordTrig = false, regTrig = true, snippetType = "autosnippet" }, t([[\theta]]), { condition = in_mathzone }),
 	s(
-		{ trig = ";th", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\theta]]),
+		{ trig = ";Del", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\Delta]] .. postspace),
 		{ condition = in_mathzone }
 	),
-
 	s(
 		{ trig = ";del", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		t([[\delta]] .. postspace),
@@ -320,13 +320,28 @@ return {
 		t([[\phi]] .. postspace),
 		{ condition = in_mathzone }
 	),
-
 	s(
-		{ trig = "ne", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\ne]] .. postspace),
+		{ trig = "lim", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta(nalphnum .. [[\lim_{<> \to <>}]] .. postspace, { i(1, "a"), i(2, "b") }),
 		{ condition = in_mathzone }
 	),
 
+	s(
+		{ trig = nalphnum .. "ne", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\ne]] .. postspace),
+		{ condition = in_mathzone }
+	),
+	s(
+		{ trig = nalphnum .. "geq", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\geq]] .. postspace),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = nalphnum .. "leq", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\leq]] .. postspace),
+		{ condition = in_mathzone }
+	),
 	s(
 		{ trig = "cap", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		t([[\cap]] .. postspace),
@@ -350,13 +365,11 @@ return {
 		{ condition = in_mathzone }
 	),
 
-
 	s(
 		{ trig = ";pl", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		t([[\mathcal{P}]] .. postspace),
 		{ condition = in_mathzone }
 	),
-
 }
 -- add snippet for plane notation (P_1) with the weird squiggle P
 -- add snippet for stackable primes (derivatives) integrals, etc.

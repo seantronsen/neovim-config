@@ -13,3 +13,4 @@ end, { desc = "[o]bsidian create [n]ew note" })
 
 -- formatting
 vim.keymap.set("n", "<leader>re", function() vim.cmd("Format") end, { desc = "[r]e[f]ormat" })
+vim.keymap.set("n", "<leader>nh", function() vim.cmd("nohls") end, { desc = "[r]e[f]ormat" })
