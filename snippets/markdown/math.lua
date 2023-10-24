@@ -155,8 +155,20 @@ return {
 		{ condition = in_mathzone }
 	),
 	s(
-		{ trig = "df", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\frac {d <>}{d <>}" .. postspace, { i(1, "numerator"), i(2, "denominator") }),
+		{ trig = nalphnum .. "df", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta([[\frac {d <>}{d <>}]] .. postspace, { i(1, "numerator"), i(2, "denominator") }),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = nalphnum .. "pdf", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		fmta([[\frac {\partial  <>}{\partial  <>}]] .. postspace, { i(1, "numerator"), i(2, "denominator") }),
+		{ condition = in_mathzone }
+	),
+
+	s(
+		{ trig = nalphnum .. "pd" .. postspace, wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		t([[\partial]] .. postspace),
 		{ condition = in_mathzone }
 	),
 
