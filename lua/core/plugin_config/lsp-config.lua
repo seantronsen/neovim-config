@@ -71,6 +71,7 @@ require("mason-tool-installer").setup({
 	ensure_installed = {
 		"black",
 		"debugpy",
+		"bash-debug-adapter",
 		"prettier",
 		"shfmt",
 		"sqlfmt",
