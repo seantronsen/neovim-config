@@ -27,14 +27,7 @@ require("lazy").setup({
 
 	"kyazdani42/nvim-web-devicons",
 	"nvim-lualine/lualine.nvim",
-	{
-		"j-hui/fidget.nvim",
-		tag = "legacy",
-		event = "LspAttach",
-		opts = {
-			-- options
-		},
-	},
+	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach" },
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
@@ -42,46 +35,23 @@ require("lazy").setup({
 	"williamboman/mason.nvim",
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
 	"williamboman/mason-lspconfig.nvim",
-
-	{
-		"nvim-treesitter/nvim-treesitter",
-		tag = "v0.9.1",
-		run = function()
-			local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
-			ts_update()
-		end,
-	},
-
+	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
 	"simrat39/rust-tools.nvim",
 	"folke/neodev.nvim",
-
-	{ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu", commit = "e4399db", lock = true },
-
-	{
-		"epwalsh/obsidian.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		lock = true,
-		tag = "v1.12.0",
-	},
-
-	{
-		"lervag/vimtex",
-		tag = "v2.13",
-		lock = true,
-		ft = { "plaintex", "latex", "tex", "markdown", "mkd" },
-	},
+	{ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu", commit = "e4399db" },
+	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v1.12.0" },
+	{ "lervag/vimtex", tag = "v2.13", ft = { "latex", "tex", "markdown" } },
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
 	{
 		"mfussenegger/nvim-dap",
-		tag = "0.5.0",
-		lock = true,
+		tag = "0.6.0",
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
-			{ "rcarriga/nvim-dap-ui", tag = "v3.8.0", lock = true },
-			{ "rcarriga/cmp-dap", commit = "d16f14a", lock = true },
-			{ "theHamsta/nvim-dap-virtual-text", commit = "ab988db", lock = true },
+			{ "rcarriga/nvim-dap-ui", tag = "v3.9.1" },
+			{ "rcarriga/cmp-dap", commit = "d16f14a" },
+			{ "theHamsta/nvim-dap-virtual-text", commit = "57f1dbd" },
 		},
 	},
 
@@ -90,9 +60,8 @@ require("lazy").setup({
 	{
 		"klafyvel/vim-slime-cells",
 		commit = "2252bc8",
-		lock = true,
 		dependencies = {
-			{ "jpalardy/vim-slime", commit = "bb15285", lock = true },
+			{ "jpalardy/vim-slime", commit = "bb15285" },
 		},
 	},
 
@@ -106,10 +75,7 @@ require("lazy").setup({
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.4",
-		lock = true,
-		dependencies = {
-			{ "nvim-lua/plenary.nvim" },
-		},
+		dependencies = { { "nvim-lua/plenary.nvim" } },
 	},
 
 	-- AUTOCOMPLETE
