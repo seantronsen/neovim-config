@@ -1,7 +1,7 @@
 #!/bin/bash
 
-I_SCRIPT_DIR="$(dirname $(realpath ${BASH_SOURCE[0]}))"
 set -e -x
+I_SCRIPT_DIR="$(dirname $(realpath ${BASH_SOURCE[0]}))"
 (
 	cd "$I_SCRIPT_DIR"
 	git submodule init
@@ -17,7 +17,6 @@ rm -vrf "$USER_DOTCONFIG/nvim"
 rm -vrf "$HOME/.local/share/nvim"
 
 # ENSURE INSTALLATION IS NOT OCCURRING IN THE ROOT DIRECTORY
-DIR_START="$PWD"
 export PATH="$USER_BIN:$PATH"
 
 if [[ "$PWD" != "$HOME" ]]; then error "script must be run in the home directory: '$HOME'"; fi
@@ -172,8 +171,16 @@ fi
 )
 (
 	cd "$USER_BIN"
-	ln -sv "$DIR_START/sources/nvim-0.9.4/usr/bin/nvim"
+	ln -sv "$USER_SRC/nvim-0.9.4/usr/bin/nvim"
 )
+sleep 5
+echo "##################################################"
+echo "##################################################"
+echo "##################################################"
+ls -larth "$USER_BIN"
+echo "##################################################"
+echo "##################################################"
+echo "##################################################"
 nvim --version
 
 info "CHANGE THE TERMINAL FONT WITHIN THE PREFERENCES MENU."
