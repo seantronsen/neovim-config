@@ -28,8 +28,10 @@ dap.configurations.sh = {
 		request = "launch",
 		name = "Launch file",
 		showDebugOutput = true,
-		pathBashdb = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb",
-		pathBashdbLib = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter/extension/bashdb_dir",
+		pathBashdb = vim.fn.stdpath("data")
+			.. "/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb",
+		pathBashdbLib = vim.fn.stdpath("data")
+			.. "/mason/packages/bash-debug-adapter/extension/bashdb_dir",
 		trace = true,
 		file = "${file}",
 		program = "${file}",
@@ -66,6 +68,29 @@ dap.configurations.rust = {
 		program = "${workspaceFolder}/target/debug/${workspaceFolderBasename}",
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
+
+		-- ... the previous config goes here ...,
+		initCommands = function()
+			-- Find out where to look for the pretty printer Python module
+			local rustc_sysroot = vim.fn.trim(vim.fn.system("rustc --print sysroot"))
+
+			local script_import = 'command script import "'
+				.. rustc_sysroot
+				.. '/lib/rustlib/etc/lldb_lookup.py"'
+			local commands_file = rustc_sysroot .. "/lib/rustlib/etc/lldb_commands"
+
+			local commands = {}
+			local file = io.open(commands_file, "r")
+			if file then
+				for line in file:lines() do
+					table.insert(commands, line)
+				end
+				file:close()
+			end
+			table.insert(commands, 1, script_import)
+
+			return commands
+		end,
 	},
 }
 
