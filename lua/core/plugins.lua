@@ -74,6 +74,7 @@ require("lazy").setup({
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
 	"nvim-tree/nvim-tree.lua",
+	{ "stevearc/oil.nvim", tag = "v2.2.0" },
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.4",

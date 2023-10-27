@@ -12,3 +12,8 @@ require("nvim-tree").setup({
 })
 
 vim.keymap.set("n", "<leader>t", ":NvimTreeFindFileToggle<CR>", { desc = "[t]ree (File Tree)" })
+
+local oil = require("oil")
+oil.setup()
+
+vim.keymap.set("n", "<leader>de", "<CMD>Oil<CR>", { desc = "[d]irectory [e]dit" })
