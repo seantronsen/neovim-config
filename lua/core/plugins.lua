@@ -40,7 +40,7 @@ return require("packer").startup(function(use)
 
 	use({
 		"nvim-treesitter/nvim-treesitter",
-		tag = "v0.7.2",
+		tag = "v0.9.1",
 		run = function()
 			local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
 			ts_update()
@@ -98,7 +98,7 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.1",
+		tag = "0.1.4",
 		lock = true,
 		requires = {
 			{ "nvim-lua/plenary.nvim" },
