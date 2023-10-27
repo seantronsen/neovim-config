@@ -6,7 +6,12 @@ local function generate()
 	vim.cmd("DogeGenerate")
 end
 
-vim.keymap.set("n", "<leader>cf", generate, { desc = "[c]omment [f]unction autodoc", noremap = true, silent = true })
+vim.keymap.set(
+	"n",
+	"<leader>cf",
+	generate,
+	{ desc = "[c]omment [f]unction autodoc", noremap = true, silent = true }
+)
 
 -- NEOGEN MAPPINGS
 -----------------------
@@ -23,7 +28,7 @@ vim.keymap.set("n", "<leader>cf", generate, { desc = "[c]omment [f]unction autod
 -- 		},
 -- 	},
 -- })
-
+--
 -- local function generate_class_doc()
 -- 	ng.generate({ type = "class" })
 -- end
@@ -36,7 +41,12 @@ vim.keymap.set("n", "<leader>cf", generate, { desc = "[c]omment [f]unction autod
 -- 	ng.generate({ type = "file" })
 -- end
 --
--- vim.keymap.set("n", "<leader>cf", ng.generate, { desc = "[c]omment [f]unction autodoc", noremap = true, silent = true })
+-- vim.keymap.set(
+-- 	"n",
+-- 	"<leader>cf",
+-- 	ng.generate,
+-- 	{ desc = "[c]omment [f]unction autodoc", noremap = true, silent = true }
+-- )
 -- vim.keymap.set(
 -- 	"n",
 -- 	"<leader>cc",

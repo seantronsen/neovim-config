@@ -26,25 +26,23 @@ require("lazy").setup({
 	--------------------------------
 
 	"kyazdani42/nvim-web-devicons",
-	"nvim-lualine/lualine.nvim",
+	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
 	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach" },
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
 
-	"neovim/nvim-lspconfig",
-	"williamboman/mason.nvim",
-	"WhoIsSethDaniel/mason-tool-installer.nvim",
-	"williamboman/mason-lspconfig.nvim",
+	{ "neovim/nvim-lspconfig", commit = "cb49a4c" },
+	{ "williamboman/mason.nvim", tag = "v1.8.1" },
+	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "e4f3474" },
+	{ "williamboman/mason-lspconfig.nvim", tag = "v1.20.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
 	"simrat39/rust-tools.nvim",
 	"folke/neodev.nvim",
-	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v1.12.0" },
-	{ "lervag/vimtex", tag = "v2.13", ft = { "latex", "tex", "markdown" } },
+	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v1.15.0" },
+	{ "lervag/vimtex", tag = "v2.13", ft = { "tex", "markdown" } },
 
-	{
-		"nvimdev/lspsaga.nvim",
-	},
+	{ "nvimdev/lspsaga.nvim", commit = "199eb00" },
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
@@ -71,7 +69,7 @@ require("lazy").setup({
 
 	--DOCUMENT FORMATTING
 	--------------------------------
-	"mhartington/formatter.nvim",
+	{ "mhartington/formatter.nvim", commit = "34dcdfa" },
 
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
@@ -103,8 +101,8 @@ require("lazy").setup({
 	-- better rust documentation generation
 	{ "kkoomen/vim-doge", run = ":call doge#install()" },
 
-	-- too many issues as of 09172023. might try again in the future
-	-- use({ "danymat/neogen", tag = "2.14.1" })
+	-- better docs overall, but too many issues as of 10272023. might try again in the future
+	-- { "danymat/neogen", tag = "2.15.2" },
 
 	-- GIT
 	--------------------------------
