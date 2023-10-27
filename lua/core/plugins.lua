@@ -31,6 +31,7 @@ require("lazy").setup({
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
+
 	"neovim/nvim-lspconfig",
 	"williamboman/mason.nvim",
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -38,9 +39,12 @@ require("lazy").setup({
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
 	"simrat39/rust-tools.nvim",
 	"folke/neodev.nvim",
-	{ "weilbith/nvim-code-action-menu", cmd = "CodeActionMenu", commit = "e4399db" },
 	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v1.12.0" },
 	{ "lervag/vimtex", tag = "v2.13", ft = { "latex", "tex", "markdown" } },
+
+	{
+		"nvimdev/lspsaga.nvim",
+	},
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------

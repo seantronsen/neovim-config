@@ -2,14 +2,24 @@
 -- IDE-LIKE COMMANDS
 -- ------------------------------
 local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display error", noremap = true, silent = true })
+vim.keymap.set(
+	"n",
+	"<leader>e",
+	vim.diagnostic.open_float,
+	{ desc = "display error", noremap = true, silent = true }
+)
 vim.keymap.set(
 	"n",
 	"[d",
 	vim.diagnostic.goto_prev,
 	{ desc = "go to previous [d]iagnostic", noremap = true, silent = true }
 )
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "go to next [d]iagnostic", noremap = true, silent = true })
+vim.keymap.set(
+	"n",
+	"]d",
+	vim.diagnostic.goto_next,
+	{ desc = "go to next [d]iagnostic", noremap = true, silent = true }
+)
 -- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
 -- Use an on_attach function to only map the following keys
@@ -21,18 +31,51 @@ local on_attach = function(_, _)
 	-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
 	vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
 	vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
-	vim.keymap.set("n", "<leader>gt", vim.lsp.buf.type_definition, { desc = "[g]o to symbol [t]ype definition" })
-	vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, { desc = "[g]o to [i]mplementation" })
-	vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
-	vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
+	vim.keymap.set(
+		"n",
+		"<leader>gt",
+		vim.lsp.buf.type_definition,
+		{ desc = "[g]o to symbol [t]ype definition" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>gi",
+		vim.lsp.buf.implementation,
+		{ desc = "[g]o to [i]mplementation" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>h",
+		vim.lsp.buf.hover,
+		{ desc = "[h]elp (information for hovered item)" }
+	)
+	vim.keymap.set(
+		"n",
+		"<leader>fr",
+		require("telescope.builtin").lsp_references,
+		{ desc = "[f]ind [r]eferences" }
+	)
 
 	-- CODE ACTION
 	vim.keymap.set("n", "<leader>ca", function()
-		vim.api.nvim_command("CodeActionMenu")
+		vim.cmd([[Lspsaga code_action]])
 	end, { desc = "[c]ode [a]ction" })
 
 	-- REFACTORING
-	vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
+	vim.keymap.set("n", "<leader>rr", function()
+		vim.cmd([[Lspsaga rename]])
+	end, { desc = "[r]efactor [r]ename symbol and references" })
+
+	vim.keymap.set("n", "<leader>rp", function()
+		local name_old = vim.fn.input("old name: ")
+		local name_new = vim.fn.input("new name: ")
+
+		if vim.fn.empty(name_old) == 1 or vim.fn.empty(name_new) then
+			print("error: name cannot be empty")
+		else
+			vim.cmd([[Lspsaga project_replace ]] .. name_old .. " " .. name_new)
+		end
+	end, { desc = "[r]efactor rename project matches" })
 end
 
 local lsp_flags = { debounce_text_changes = 100 }
@@ -83,6 +126,17 @@ require("mason-tool-installer").setup({
 
 require("neodev").setup()
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+local lspsaga = require("lspsaga")
+lspsaga.setup({
+	lightbulb = {
+		sign = false,
+	},
+	implement = {
+		sign = false,
+	}
+})
+
 require("mason-lspconfig").setup_handlers({
 	--------------------------------
 	-- the default handler that's called for any installed server that
@@ -121,7 +175,10 @@ require("mason-lspconfig").setup_handlers({
 				on_attach = on_attach,
 			},
 			dap = {
-				adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+				adapter = require("rust-tools.dap").get_codelldb_adapter(
+					codelldb_path,
+					liblldb_path
+				),
 			},
 		})
 	end,
