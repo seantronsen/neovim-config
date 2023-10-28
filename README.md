@@ -4,7 +4,7 @@ Simple backup of the neovim config used for writing code within unix-like
 terminals. Currently using this toolset for writing source code based in Rust,
 C, C++, and Python. Requires a few items to be installed on the target system:
 
-- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.8.3
+- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.9.4
 - [sharkdp/fd -- find-fd](https://github.com/sharkdp/fd)
 - BurntSushi/ripgrep
 - luarocks -- see `:checkhealth` for more info
