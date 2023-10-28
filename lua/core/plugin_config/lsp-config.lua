@@ -137,6 +137,13 @@ lspsaga.setup({
 	},
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "bats",
+	callback = function()
+		vim.cmd([[set ft=bash]])
+	end,
+})
+
 require("mason-lspconfig").setup_handlers({
 	--------------------------------
 	-- the default handler that's called for any installed server that
@@ -153,6 +160,7 @@ require("mason-lspconfig").setup_handlers({
 			capabilities = capabilities,
 		})
 	end,
+
 	--------------------------------
 	-- Next, you can provide a dedicated handler for specific servers.
 	-- For example, a handler override for the `rust_analyzer`:
