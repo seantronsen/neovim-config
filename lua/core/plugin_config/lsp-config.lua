@@ -1,7 +1,6 @@
 -- ------------------------------
 -- IDE-LIKE COMMANDS
 -- ------------------------------
-local opts = { noremap = true, silent = true }
 vim.keymap.set(
 	"n",
 	"<leader>e",
@@ -182,12 +181,7 @@ require("mason-lspconfig").setup_handlers({
 				{ desc = "[h]elp (information for hovered item)" }
 			)
 
-			vim.keymap.set(
-				"n",
-				"<leader>ag",
-				rust_tools.code_action_group.code_action_group,
-				{ desc = "code [a]ction group" }
-			)
+			-- vim.keymap.set( "n", "<leader>ag", rust_tools.code_action_group.code_action_group, { desc = "code [a]ction group" })
 		end
 
 		-- Normal setup
@@ -221,9 +215,9 @@ require("mason-lspconfig").setup_handlers({
 			capabilities = capabilities,
 			settings = {
 				Lua = {
-					diagnostics = {
-						globals = { "vim" },
-					},
+					-- diagnostics = {
+					-- 	globals = { "vim" },
+					-- },
 					workspace = {
 						checkThirdParty = false,
 					},

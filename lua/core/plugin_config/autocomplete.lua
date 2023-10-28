@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 -- CONFIGURATION FOR AUTO-COMPLETE
 --------------------------------
 local cmp = require("cmp")
@@ -25,26 +26,34 @@ cmp.setup({
 			max_height = 80,
 			max_width = 80,
 		},
-		-- completion = cmp.config.window.bordered(),
-		-- documentation = cmp.config.window.bordered(),
 	},
 	mapping = cmp.mapping.preset.insert({
+		["<C-j>"] = cmp.mapping.select_next_item(),
+		["<C-k>"] = cmp.mapping.select_prev_item(),
 		["<C-u>"] = cmp.mapping.scroll_docs(-4),
 		["<C-d>"] = cmp.mapping.scroll_docs(4),
 		["<C-c>"] = cmp.mapping.complete(),
 		["<C-a>"] = cmp.mapping.abort(),
 		["<C-Space>"] = cmp.mapping.confirm({ select = true }),
-		-- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 	}),
-
 	sources = cmp.config.sources({
-		{ name = "nvim_lsp", max_item_count = 15 },
-		{ name = "nvim_lsp_signature_help" },
-		{ name = "luasnip" },
-		--	{ { name = "buffer" } }
+		{ name = "nvim_lsp", max_item_count = 50, priority = 100 },
+		{ name = "nvim_lsp_signature_help", priority = 100 },
+		{ name = "luasnip", priority = 0.001 },
 	}),
+	sorting = {
+		comparators = {
+			cmp.config.compare.offset,
+			cmp.config.compare.exact,
+			cmp.config.compare.score,
+			-- cmp.config.compare.kind,
+			cmp.config.compare.sort_text,
+			cmp.config.compare.length,
+			cmp.config.compare.order,
+		},
+	},
 	completion = {
-		keyword_length = 3,
+		keyword_length = 2,
 	},
 	performance = {
 		throttle = 0,
@@ -55,7 +64,6 @@ cmp.setup({
 cmp.setup.filetype("gitcommit", {
 	enabled = true,
 	sources = cmp.config.sources({ { name = "git" } }, { { name = "buffer" } }),
-	-- sources = cmp.config.sources({ { name = "cmp_git" } }, { { name = "buffer" } }),
 })
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).

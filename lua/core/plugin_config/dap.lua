@@ -60,39 +60,39 @@ dap.configurations.c = {
 }
 
 dap.configurations.cpp = dap.configurations.c
-dap.configurations.rust = {
-	{
-		name = "Launch default target (project binary: no args)",
-		type = "rt_lldb",
-		request = "launch",
-		program = "${workspaceFolder}/target/debug/${workspaceFolderBasename}",
-		cwd = "${workspaceFolder}",
-		stopOnEntry = false,
-
-		-- ... the previous config goes here ...,
-		initCommands = function()
-			-- Find out where to look for the pretty printer Python module
-			local rustc_sysroot = vim.fn.trim(vim.fn.system("rustc --print sysroot"))
-
-			local script_import = 'command script import "'
-				.. rustc_sysroot
-				.. '/lib/rustlib/etc/lldb_lookup.py"'
-			local commands_file = rustc_sysroot .. "/lib/rustlib/etc/lldb_commands"
-
-			local commands = {}
-			local file = io.open(commands_file, "r")
-			if file then
-				for line in file:lines() do
-					table.insert(commands, line)
-				end
-				file:close()
-			end
-			table.insert(commands, 1, script_import)
-
-			return commands
-		end,
-	},
-}
+-- dap.configurations.rust = {
+-- 	{
+-- 		name = "Launch default target (project binary: no args)",
+-- 		type = "rt_lldb",
+-- 		request = "launch",
+-- 		program = "${workspaceFolder}/target/debug/${workspaceFolderBasename}",
+-- 		cwd = "${workspaceFolder}",
+-- 		stopOnEntry = false,
+--
+-- 		-- ... the previous config goes here ...,
+-- 		initCommands = function()
+-- 			-- Find out where to look for the pretty printer Python module
+-- 			local rustc_sysroot = vim.fn.trim(vim.fn.system("rustc --print sysroot"))
+--
+-- 			local script_import = 'command script import "'
+-- 				.. rustc_sysroot
+-- 				.. '/lib/rustlib/etc/lldb_lookup.py"'
+-- 			local commands_file = rustc_sysroot .. "/lib/rustlib/etc/lldb_commands"
+--
+-- 			local commands = {}
+-- 			local file = io.open(commands_file, "r")
+-- 			if file then
+-- 				for line in file:lines() do
+-- 					table.insert(commands, line)
+-- 				end
+-- 				file:close()
+-- 			end
+-- 			table.insert(commands, 1, script_import)
+--
+-- 			return commands
+-- 		end,
+-- 	},
+-- }
 
 local path_debugpy = vim.fn.expand("$HOME/.virtualenvs/debugenv/bin/python")
 local dap_python = require("dap-python")
@@ -105,7 +105,7 @@ local launch = require("dap.ext.vscode")
 local launch_path = vim.loop.cwd() .. "/launch.json"
 local launch_filetype_maps = {
 	codelldb = { "c", "cpp" },
-	rt_lldb = { "rust" },
+	-- rt_lldb = { "rust" },
 	python = { "python" },
 	pdb = { "python" },
 	debugpy = { "python" },
