@@ -57,9 +57,9 @@ local on_attach = function(_, _)
 	)
 
 	-- CODE ACTION
-	vim.keymap.set("n", "<leader>ca", function()
+	vim.keymap.set("n", "<leader>a", function()
 		vim.cmd([[Lspsaga code_action]])
-	end, { desc = "[c]ode [a]ction" })
+	end, { desc = "code [a]ction" })
 
 	-- REFACTORING
 	vim.keymap.set("n", "<leader>rr", function()
@@ -134,7 +134,7 @@ lspsaga.setup({
 	},
 	implement = {
 		sign = false,
-	}
+	},
 })
 
 require("mason-lspconfig").setup_handlers({
@@ -161,18 +161,41 @@ require("mason-lspconfig").setup_handlers({
 		local extension_path = vim.env.HOME .. "/sources/codelldb-1.8.1/codelldb-x86_64-linux"
 		local codelldb_path = extension_path .. "/adapter/codelldb"
 		local liblldb_path = extension_path .. "/lldb/lib/liblldb.so"
+		local rust_tools = require("rust-tools")
+
+		local rust_on_attach = function(_, _)
+			on_attach()
+
+			-- rust unique
+			vim.keymap.set(
+				"n",
+				"<leader>h",
+				rust_tools.hover_actions.hover_actions,
+				{ desc = "[h]elp (information for hovered item)" }
+			)
+
+			vim.keymap.set(
+				"n",
+				"<leader>ag",
+				rust_tools.code_action_group.code_action_group,
+				{ desc = "code [a]ction group" }
+			)
+		end
 
 		-- Normal setup
-		require("rust-tools").setup({
+		rust_tools.setup({
 			flags = lsp_flags,
 			capabilities = capabilities,
 			tools = {
 				inlay_hints = {
 					enable = true,
 				},
+				hover_actions = {
+					auto_focus = true,
+				},
 			},
 			server = {
-				on_attach = on_attach,
+				on_attach = rust_on_attach,
 			},
 			dap = {
 				adapter = require("rust-tools.dap").get_codelldb_adapter(
