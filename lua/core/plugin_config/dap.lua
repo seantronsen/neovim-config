@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 ------------------------------------------
 -- CONFIGURATION FOR DAP
 ------------------------------------------
@@ -60,57 +61,25 @@ dap.configurations.c = {
 }
 
 dap.configurations.cpp = dap.configurations.c
--- dap.configurations.rust = {
--- 	{
--- 		name = "Launch default target (project binary: no args)",
--- 		type = "rt_lldb",
--- 		request = "launch",
--- 		program = "${workspaceFolder}/target/debug/${workspaceFolderBasename}",
--- 		cwd = "${workspaceFolder}",
--- 		stopOnEntry = false,
---
--- 		-- ... the previous config goes here ...,
--- 		initCommands = function()
--- 			-- Find out where to look for the pretty printer Python module
--- 			local rustc_sysroot = vim.fn.trim(vim.fn.system("rustc --print sysroot"))
---
--- 			local script_import = 'command script import "'
--- 				.. rustc_sysroot
--- 				.. '/lib/rustlib/etc/lldb_lookup.py"'
--- 			local commands_file = rustc_sysroot .. "/lib/rustlib/etc/lldb_commands"
---
--- 			local commands = {}
--- 			local file = io.open(commands_file, "r")
--- 			if file then
--- 				for line in file:lines() do
--- 					table.insert(commands, line)
--- 				end
--- 				file:close()
--- 			end
--- 			table.insert(commands, 1, script_import)
---
--- 			return commands
--- 		end,
--- 	},
--- }
 
-local path_debugpy = vim.fn.expand("$HOME/.virtualenvs/debugenv/bin/python")
+-- dap.configurations.rust = {}
+-- the dap configuration for rust is defined within the lsp configuration
+-- for better alignment with the features of `rust-tools.nvim`
+
 local dap_python = require("dap-python")
-dap_python.setup(path_debugpy)
+dap_python.setup(vim.env.HOME .. "/.virtualenvs/debugenv/bin/python")
 dap_python.test_runner = "pytest"
 
 -- SUPPORT LAUNCH.JSON FILES
 ------------------------------------------
-local launch = require("dap.ext.vscode")
 local launch_path = vim.loop.cwd() .. "/launch.json"
 local launch_filetype_maps = {
 	codelldb = { "c", "cpp" },
-	-- rt_lldb = { "rust" },
+	rt_lldb = { "rust" },
 	python = { "python" },
-	pdb = { "python" },
 	debugpy = { "python" },
 }
-launch.load_launchjs(launch_path, launch_filetype_maps)
+require("dap.ext.vscode").load_launchjs(launch_path, launch_filetype_maps)
 
 -- DAPUI SETUP
 ------------------------------------------
@@ -119,20 +88,27 @@ local dapui_config = {
 	layouts = {
 		{
 			elements = {
-				{ id = "scopes", size = 0.6 },
-				{ id = "breakpoints", size = 0.2 },
-				{ id = "stacks", size = 0.2 },
+				{ id = "scopes", size = 0.5 },
+				{ id = "watches", size = 0.2 },
+				{ id = "breakpoints", size = 0.15 },
+				{ id = "stacks", size = 0.15 },
 			},
 			position = "left",
-			size = 80,
+			size = 90,
 		},
 		{
 			elements = {
-				{ id = "repl", size = 0.5 },
-				{ id = "console", size = 0.5 },
+				{ id = "console", size = 1 },
 			},
 			position = "bottom",
-			size = 20,
+			size = 15,
+		},
+		{
+			elements = {
+				{ id = "repl", size = 1 },
+			},
+			position = "bottom",
+			size = 15,
 		},
 	},
 }
@@ -173,5 +149,4 @@ vim.keymap.set("n", "<leader>dr", open_dap_ui, { desc = "[d]ap [r]eset ui" })
 
 -- SETUP VIRTUAL TEXT
 ------------------------------------------
-local virtual_text = require("nvim-dap-virtual-text")
-virtual_text.setup({})
+require("nvim-dap-virtual-text").setup({})
