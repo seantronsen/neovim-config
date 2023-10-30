@@ -160,6 +160,8 @@ fi
 	git clone https://github.com/seantronsen/neovim-config.git nvim
 )
 (
+	# template for adding support for macos
+	# if uname -a | egrep -oi --quiet darwin; then echo "apple computer"; fi
 	cd "$USER_SRC"
 	wget --verbose https://github.com/neovim/neovim/releases/download/v0.9.4/nvim.appimage
 	wget --verbose https://github.com/neovim/neovim/releases/download/v0.9.4/nvim.appimage.sha256sum
