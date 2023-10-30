@@ -160,29 +160,40 @@ fi
 	git clone https://github.com/seantronsen/neovim-config.git nvim
 )
 (
-	# template for adding support for macos
-	# if uname -a | egrep -oi --quiet darwin; then echo "apple computer"; fi
+	NVIM_VERSION="0.9.4"
+	NVIM_NAME="nvim-$NVIM_VERSION"
+	NVIM_ARCHIVE="nvim.appimage"
+	if uname -a | egrep -oi --quiet darwin; then
+		NVIM_ARCHIVE="nvim-macos.tar.gz"
+	fi
+
 	cd "$USER_SRC"
-	wget --verbose https://github.com/neovim/neovim/releases/download/v0.9.4/nvim.appimage
-	wget --verbose https://github.com/neovim/neovim/releases/download/v0.9.4/nvim.appimage.sha256sum
-	if [[ ! -z "$(shasum -a 256 nvim.appimage | diff nvim.appimage.sha256sum -)" ]]; then error "sha256 checksums do not match" 1; fi
-	rm -v nvim.appimage.sha256sum
-	chmod -v u+x nvim.appimage
-	./nvim.appimage --appimage-extract
-	mv -v squashfs-root nvim-0.9.4
+	wget --verbose "https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/$NVIM_ARCHIVE"
+	wget --verbose "https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/$NVIM_ARCHIVE.sha256sum"
+
+	if [[ ! -z "$(shasum -a 256 "$NVIM_ARCHIVE" | diff "$NVIM_ARCHIVE.sha256sum" -)" ]]; then
+		error "sha256 checksums do not match" 1
+	fi
+
+	rm -v "$NVIM_ARCHIVE.sha256sum"
+
+	if uname -a | egrep -oi --quiet darwin; then
+		binary_dependency_check xattr
+		xattr -c "$NVIM_ARCHIVE"
+		tar xzvf "$NVIM_ARCHIVE"
+		mv -v nvim-macos "$NVIM_NAME"
+		ln -sv "$USER_SRC/nvim-0.9.4/bin/nvim"
+
+	else
+		chmod -v u+x "$NVIM_ARCHIVE"
+		"./$NVIM_ARCHIVE" --appimage-extract
+		mv -v squashfs-root "$NVIM_NAME"
+		cd "$USER_BIN"
+		ln -sv "$USER_SRC/nvim-0.9.4/usr/bin/nvim"
+
+	fi
+
 )
-(
-	cd "$USER_BIN"
-	ln -sv "$USER_SRC/nvim-0.9.4/usr/bin/nvim"
-)
-sleep 5
-echo "##################################################"
-echo "##################################################"
-echo "##################################################"
-ls -larth "$USER_BIN"
-echo "##################################################"
-echo "##################################################"
-echo "##################################################"
 nvim --version
 
 info "CHANGE THE TERMINAL FONT WITHIN THE PREFERENCES MENU."
