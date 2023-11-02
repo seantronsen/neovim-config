@@ -9,16 +9,16 @@ local fmta = require("luasnip.extras.fmt").fmta
 
 local snutils = require("core.snippetutils")
 
-return {
+return {}, {
 
 	s(
-		{ trig = "[%s]+imp ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "[%s]+imp ", wordTrig = false, regTrig = true },
 		t([[\implies]] .. snutils.postspace),
 		{ condition = snutils.in_mathzone }
 	),
 
 	s(
-		{ trig = "ifof ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "ifof ", wordTrig = false, regTrig = true },
 		t([[\iff]] .. snutils.postspace),
 		{ condition = snutils.in_mathzone }
 	),
@@ -44,7 +44,7 @@ return {
 	}, t([[\leq]] .. snutils.postspace), { condition = snutils.in_mathzone }),
 
 	s(
-		{ trig = "appr", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "appr", wordTrig = false, regTrig = true },
 		t([[\approx]] .. snutils.postspace),
 		{ condition = snutils.in_mathzone }
 	),

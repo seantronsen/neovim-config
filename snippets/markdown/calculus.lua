@@ -9,14 +9,13 @@ local fmta = require("luasnip.extras.fmt").fmta
 
 local snutils = require("core.snippetutils")
 
-return {
+return {}, {
 
 	s(
 		{
 			trig = snutils.nalphnum .. "df",
 			wordTrig = false,
 			regTrig = true,
-			snippetType = "autosnippet",
 		},
 		fmta(
 			[[\frac {d <>}{d <>}]] .. snutils.postspace,
@@ -30,7 +29,6 @@ return {
 			trig = snutils.nalphnum .. "pdf",
 			wordTrig = false,
 			regTrig = true,
-			snippetType = "autosnippet",
 		},
 		fmta(
 			[[\frac {\partial  <>}{\partial  <>}]] .. snutils.postspace,
@@ -43,11 +41,10 @@ return {
 		trig = snutils.nalphnum .. "pd" .. snutils.postspace,
 		wordTrig = false,
 		regTrig = true,
-		snippetType = "autosnippet",
 	}, t([[\partial]] .. snutils.postspace), { condition = snutils.in_mathzone }),
 
 	s(
-		{ trig = "mpro", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "mpro", wordTrig = false, regTrig = true },
 		fmta(
 			"\\prod_{<>}^{<>} <>" .. snutils.postspace,
 			{ i(1, "start"), i(2, "stop"), i(3, "equation") }
@@ -55,7 +52,7 @@ return {
 		{ condition = snutils.in_mathzone }
 	),
 	s(
-		{ trig = "msum", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "msum", wordTrig = false, regTrig = true },
 		fmta(
 			"\\sum_{<>}^{<>} <>" .. snutils.postspace,
 			{ i(1, "start"), i(2, "stop"), i(3, "equation") }
@@ -63,7 +60,7 @@ return {
 		{ condition = snutils.in_mathzone }
 	),
 	s(
-		{ trig = "mint", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "mint", wordTrig = false, regTrig = true },
 		fmta(
 			"\\int_{<>}^{<>} <>" .. snutils.postspace,
 			{ i(1, "start"), i(2, "stop"), i(3, "equation") }
@@ -76,7 +73,6 @@ return {
 			trig = snutils.nalphnum .. "lim",
 			wordTrig = false,
 			regTrig = true,
-			snippetType = "autosnippet",
 		},
 		fmta([[\lim_{<> \to <>}]] .. snutils.postspace, { i(1, "a"), i(2, "b") }),
 		{ condition = snutils.in_mathzone }
