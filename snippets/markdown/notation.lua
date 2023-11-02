@@ -7,17 +7,21 @@ local f = ls.function_node
 local d = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
-local snutils = require("core.snippetutils")
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local tchars = ut.capttchars
+local psp = ut.postspace
 
 return {
 	s(
 		{
-			trig = [[([%W]+)([p]+) ([%S]+) ]],
+			trig = schars .. [[([p]+) ]] .. tchars .. psp,
 			wordTrig = false,
 			regTrig = true,
 			snippetType = "autosnippet",
+			desc = "expr -> prime",
 		},
-		fmta([[<>{<>} <>]] .. snutils.postspace, {
+		fmta([[<>{<>} <>]] .. psp, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
@@ -26,32 +30,32 @@ return {
 				return snip.captures[3]
 			end),
 
-			f(snutils.charstackrep([[\prime]], 2)),
+			f(ut.charstackrep([[\prime]], 2)),
 		}),
-		{ condition = snutils.in_mathzone }
+		{ condition = ut.in_mathzone }
 	),
 	s(
 		{ trig = "[^%w]b ([%w]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\bar {<>}" .. snutils.postspace, {
+		fmta("\\bar {<>}" .. ut.postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
 		}),
-		{ condition = snutils.in_mathzone }
+		{ condition = ut.in_mathzone }
 	),
 	s(
 		{ trig = "[^%w]h ([%w]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\hat {<>}" .. snutils.postspace, {
+		fmta("\\hat {<>}" .. ut.postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
 		}),
-		{ condition = snutils.in_mathzone }
+		{ condition = ut.in_mathzone }
 	),
 
 	s(
 		{ trig = "([%a]+);([%d]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("{<>}_{<>}" .. snutils.postspace, {
+		fmta("{<>}_{<>}" .. ut.postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
@@ -59,12 +63,12 @@ return {
 				return snip.captures[2]
 			end),
 		}),
-		{ condition = snutils.in_mathzone }
+		{ condition = ut.in_mathzone }
 	),
 
 	s(
 		{ trig = "([%a]+)'([%d]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("{<>}^{<>}" .. snutils.postspace, {
+		fmta("{<>}^{<>}" .. ut.postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
@@ -72,18 +76,18 @@ return {
 				return snip.captures[2]
 			end),
 		}),
-		{ condition = snutils.in_mathzone }
+		{ condition = ut.in_mathzone }
 	),
 
 	s(
 		{ trig = "cc", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\cancel{<>}" .. snutils.postspace, { d(1, snutils.get_visual) }),
-		{ condition = snutils.in_mathzone }
+		fmta("\\cancel{<>}" .. ut.postspace, { d(1, ut.get_visual) }),
+		{ condition = ut.in_mathzone }
 	),
 
 	s(
 		{ trig = ";pl", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\mathcal{P}]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		t([[\mathcal{P}]] .. ut.postspace),
+		{ condition = ut.in_mathzone }
 	),
 }

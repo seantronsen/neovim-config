@@ -8,6 +8,7 @@ local d = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
 local snutils = require("core.snippetutils")
+local schars = snutils.captschars
 
 return {}, {
 
@@ -24,18 +25,18 @@ return {}, {
 	),
 
 	s({
-		trig = snutils.nalphnum .. "ne",
+		trig = schars .. "neq",
 		wordTrig = false,
 		regTrig = true,
 	}, t([[\ne]] .. snutils.postspace), { condition = snutils.in_mathzone }),
 	s({
-		trig = snutils.nalphnum .. "geq",
+		trig = schars .. "geq",
 		wordTrig = false,
 		regTrig = true,
 	}, t([[\geq]] .. snutils.postspace), { condition = snutils.in_mathzone }),
 
 	s({
-		trig = snutils.nalphnum .. "leq",
+		trig = schars .. "leq",
 		wordTrig = false,
 		regTrig = true,
 	}, t([[\leq]] .. snutils.postspace), { condition = snutils.in_mathzone }),

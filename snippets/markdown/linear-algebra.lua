@@ -10,11 +10,10 @@ local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 local nrep = require("luasnip.extras").rep
 
-
 return {
 
 	s(
-		{ trig = "vec ([^%s]+)[ ]+", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "vec ([%S]+)[%s]+", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta("\\vec{<>}" .. snutils.postspace, {
 			nfunc(function(_, snip)
 				return snip.captures[1]
