@@ -20,7 +20,16 @@ M.not_mathzone = function()
 	return not M.in_mathzone()
 end
 
-M.nalphnum = "([^%w])"
+M.nalphnum = "([%W])"
+M.nspacechar = "([%S]+)"
 M.postspace = " "
+
+M.charstackrep = function(base_str, capture_index)
+	local func = function(_, snip)
+		return string.rep(base_str, string.len(snip.captures[capture_index]))
+	end
+
+	return func
+end
 
 return M

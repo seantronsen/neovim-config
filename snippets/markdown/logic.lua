@@ -27,20 +27,17 @@ return {}, {
 		trig = snutils.nalphnum .. "ne",
 		wordTrig = false,
 		regTrig = true,
-		snippetType = "autosnippet",
 	}, t([[\ne]] .. snutils.postspace), { condition = snutils.in_mathzone }),
 	s({
 		trig = snutils.nalphnum .. "geq",
 		wordTrig = false,
 		regTrig = true,
-		snippetType = "autosnippet",
 	}, t([[\geq]] .. snutils.postspace), { condition = snutils.in_mathzone }),
 
 	s({
 		trig = snutils.nalphnum .. "leq",
 		wordTrig = false,
 		regTrig = true,
-		snippetType = "autosnippet",
 	}, t([[\leq]] .. snutils.postspace), { condition = snutils.in_mathzone }),
 
 	s(

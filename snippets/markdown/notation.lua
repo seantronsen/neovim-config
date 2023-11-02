@@ -11,11 +11,22 @@ local snutils = require("core.snippetutils")
 
 return {
 	s(
-		{ trig = "[^%w]p ([%w\\]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta([[{<>} \prime]] .. snutils.postspace, {
+		{
+			trig = [[([%W]+)([p]+) ([%S]+) ]],
+			wordTrig = false,
+			regTrig = true,
+			snippetType = "autosnippet",
+		},
+		fmta([[<>{<>} <>]] .. snutils.postspace, {
 			f(function(_, snip)
 				return snip.captures[1]
 			end),
+
+			f(function(_, snip)
+				return snip.captures[3]
+			end),
+
+			f(snutils.charstackrep([[\prime]], 2)),
 		}),
 		{ condition = snutils.in_mathzone }
 	),
