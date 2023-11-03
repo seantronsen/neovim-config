@@ -1,93 +1,60 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
 
-local f = ls.function_node
-local d = ls.dynamic_node
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
 local ut = require("core.snippetutils")
 local schars = ut.captschars
-local tchars = ut.capttchars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
 local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
 
-return {
-	s(
-		{
-			trig = schars .. [[([p]+) ]] .. tchars .. psp,
-			wordTrig = false,
-			regTrig = true,
-			snippetType = "autosnippet",
-			desc = "expr -> prime",
-		},
-		fmta([[<>{<>} <>]] .. psp, {
-			f(function(_, snip)
-				return snip.captures[1]
-			end),
+return {}, {
+	s({
+		trig = schars .. "([p]+) " .. tchars .. psp,
+		wordTrig = false,
+		regTrig = true,
+		desc = "expr -> prime",
+	}, fmta([[<>{<>}<>]] .. psp, { ncapture(1), ncapture(3), ncapturestack([[\prime]], 2) }), mopts),
 
-			f(function(_, snip)
-				return snip.captures[3]
-			end),
-
-			f(ut.charstackrep([[\prime]], 2)),
-		}),
-		{ condition = ut.in_mathzone }
-	),
 	s(
-		{ trig = "[^%w]b ([%w]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\bar {<>}" .. ut.postspace, {
-			f(function(_, snip)
-				return snip.captures[1]
-			end),
-		}),
-		{ condition = ut.in_mathzone }
-	),
-	s(
-		{ trig = "[^%w]h ([%w]) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\hat {<>}" .. ut.postspace, {
-			f(function(_, snip)
-				return snip.captures[1]
-			end),
-		}),
-		{ condition = ut.in_mathzone }
+		{ trig = schars .. "b " .. tchars .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\bar {<>}]] .. psp, { ncapture(1), ncapture(2) }),
+		mopts
 	),
 
 	s(
-		{ trig = "([%a]+);([%d]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("{<>}_{<>}" .. ut.postspace, {
-			f(function(_, snip)
-				return snip.captures[1]
-			end),
-			f(function(_, snip)
-				return snip.captures[2]
-			end),
-		}),
-		{ condition = ut.in_mathzone }
+		{ trig = schars .. "h " .. tchars .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\hat {<>}]] .. psp, { ncapture(1), ncapture(2) }),
+		mopts
 	),
 
-	s(
-		{ trig = "([%a]+)'([%d]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("{<>}^{<>}" .. ut.postspace, {
-			f(function(_, snip)
-				return snip.captures[1]
-			end),
-			f(function(_, snip)
-				return snip.captures[2]
-			end),
-		}),
-		{ condition = ut.in_mathzone }
-	),
+	s({
+		trig = tchars .. ";" .. tchars .. psp,
+		wordTrig = false,
+		regTrig = true,
+		desc = "suffix to subscript",
+	}, fmta("{<>}_{<>}" .. psp, { ncapture(1), ncapture(2) }), mopts),
+
+	s({
+		trig = tchars .. "'" .. tchars .. psp,
+		wordTrig = false,
+		regTrig = true,
+		desc = "suffix to superscript",
+	}, fmta([[{<>}^{<>}]] .. psp, { ncapture(1), ncapture(2) }), mopts),
 
 	s(
-		{ trig = "cc", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\cancel{<>}" .. ut.postspace, { d(1, ut.get_visual) }),
-		{ condition = ut.in_mathzone }
+		{ trig = "cc", wordTrig = false, regTrig = true },
+		fmta([[\cancel{<>}]] .. psp, { nvisual(1) }),
+		mopts
 	),
 
-	s(
-		{ trig = ";pl", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\mathcal{P}]] .. ut.postspace),
-		{ condition = ut.in_mathzone }
-	),
+	s({ trig = ";pl", wordTrig = false, regTrig = true }, ntext([[\mathcal{P}]]), mopts),
 }

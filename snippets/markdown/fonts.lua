@@ -1,46 +1,43 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local d = ls.dynamic_node
+local ntext = ls.text_node
+local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
-local snutils = require("core.snippetutils")
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
+local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
 
-return {
-	s(
-		{
-			trig = "tfi",
-			dscr = "Expands 'tfi' into LaTeX's textit{} command.",
-			snippetType = "autosnippet",
-		},
-		fmta("\\textit{<>}" .. snutils.postspace, {
-			d(1, snutils.get_visual),
-		})
-	),
-	s(
-		{
-			trig = "tfb",
-			dscr = "Expands 'tfb' into LaTeX's textbf{} command.",
-			snippetType = "autosnippet",
-		},
-		fmta("\\textbf{<>}" .. snutils.postspace, {
-			d(1, snutils.get_visual),
-		})
-	),
-	s(
-		{
-			trig = "tfn",
-			dscr = "Expands 'tfn' into LaTeX's text{} command.",
-			snippetType = "autosnippet",
-		},
-		fmta("\\text{<>}" .. snutils.postspace, {
-			d(1, snutils.get_visual),
-		})
-	),
+return {}, {
+	s({
+		trig = schars .. "?i",
+		wordTrig = false,
+		regTrig = true,
+		dscr = "equation italic text",
+	}, fmta([[<>\textit{ <> }]] .. psp, { ncapture(1), nvisual(1) }), mopts),
+
+	s({
+		trig = schars .. "?b",
+		wordTrig = false,
+		regTrig = true,
+		dscr = "equation bold text",
+	}, fmta([[<>\textbf{ <> }]] .. psp, { ncapture(1), nvisual(1) }, mopts)),
+
+	s({
+		trig = schars .. "?n",
+		wordTrig = false,
+		regTrig = true,
+		dscr = "equation normal text",
+	}, fmta([[<>\text{ <> }]] .. psp, { ncapture(1), nvisual(1) }), mopts),
 
 	s(
-		{ trig = "nl", dscr = "latex math newline", snippetType = "autosnippet" },
-		t([[\\]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "nl", dscr = "equation newline", regTrig = true, wordTrig = false },
+		fmta([[<>\\]] .. psp, { ncapture(1) }),
+		mopts
 	),
 }

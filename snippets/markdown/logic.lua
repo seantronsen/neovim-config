@@ -1,49 +1,52 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
 
-local f = ls.function_node
-local d = ls.dynamic_node
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
-local snutils = require("core.snippetutils")
-local schars = snutils.captschars
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local psp = ut.postspace
+local mopts = ut.math_opts
 
 return {}, {
-
 	s(
-		{ trig = "[%s]+imp ", wordTrig = false, regTrig = true },
-		t([[\implies]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "imp ", wordTrig = false, regTrig = true },
+		fmta([[<>\implies]] .. psp, { ncapture(1) }),
+		mopts
 	),
 
 	s(
-		{ trig = "ifof ", wordTrig = false, regTrig = true },
-		t([[\iff]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. [[ifof]], wordTrig = false, regTrig = true },
+		fmta([[<>\iff]] .. psp, { ncapture(1) }),
+		mopts
 	),
 
-	s({
-		trig = schars .. "neq",
-		wordTrig = false,
-		regTrig = true,
-	}, t([[\ne]] .. snutils.postspace), { condition = snutils.in_mathzone }),
-	s({
-		trig = schars .. "geq",
-		wordTrig = false,
-		regTrig = true,
-	}, t([[\geq]] .. snutils.postspace), { condition = snutils.in_mathzone }),
+	s(
+		{ trig = schars .. "neq", wordTrig = false, regTrig = true },
+		fmta([[<>\ne]] .. psp, { ncapture(1) }),
+		mopts
+	),
 
-	s({
-		trig = schars .. "leq",
-		wordTrig = false,
-		regTrig = true,
-	}, t([[\leq]] .. snutils.postspace), { condition = snutils.in_mathzone }),
+	s(
+		{ trig = schars .. "geq", wordTrig = false, regTrig = true },
+		fmta([[<>\geq]] .. psp, { ncapture(1) }),
+		mopts
+	),
+
+	s(
+		{ trig = schars .. "leq", wordTrig = false, regTrig = true },
+		fmta([[\leq]] .. psp, { ncapture(1) }),
+		mopts
+	),
 
 	s(
 		{ trig = "appr", wordTrig = false, regTrig = true },
-		t([[\approx]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		fmta([[\approx]] .. psp, { ncapture(1) }),
+		mopts
 	),
 }
