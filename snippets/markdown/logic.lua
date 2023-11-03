@@ -40,13 +40,13 @@ return {}, {
 
 	s(
 		{ trig = schars .. "leq", wordTrig = false, regTrig = true },
-		fmta([[\leq]] .. psp, { ncapture(1) }),
+		fmta([[<>\leq]] .. psp, { ncapture(1) }),
 		mopts
 	),
 
 	s(
-		{ trig = "appr", wordTrig = false, regTrig = true },
-		fmta([[\approx]] .. psp, { ncapture(1) }),
+		{ trig = schars .. "appr", wordTrig = false, regTrig = true },
+		fmta([[<>\approx]] .. psp, { ncapture(1) }),
 		mopts
 	),
 }

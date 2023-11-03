@@ -35,9 +35,10 @@ return {}, {
 		dscr = "equation normal text",
 	}, fmta([[<>\text{ <> }]] .. psp, { ncapture(1), nvisual(1) }), mopts),
 
-	s(
-		{ trig = schars .. "nl", dscr = "equation newline", regTrig = true, wordTrig = false },
-		fmta([[<>\\]] .. psp, { ncapture(1) }),
-		mopts
-	),
+	s({
+		trig = schars .. "n([l]+) ",
+		dscr = "equation newline(s)",
+		regTrig = true,
+		wordTrig = false,
+	}, fmta([[<><>]] .. psp, { ncapture(1), ncapturestack([[\\ ]], 2) }), mopts),
 }
