@@ -1,6 +1,7 @@
 -- DOGE MAPPINGS
 -----------------------
 vim.g.doge_enable_mappings = 0
+vim.g.doge_doc_standard_python = "numpy"
 
 local function generate()
 	vim.cmd("DogeGenerate")
