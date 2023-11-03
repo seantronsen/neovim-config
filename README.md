@@ -2,20 +2,13 @@
 
 Simple backup of the neovim config used for writing code within unix-like
 terminals. Currently using this toolset for writing source code based in Rust,
-C, C++, and Python. Requires a few items to be installed on the target system:
-
-- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.9.4
-- [sharkdp/fd -- find-fd](https://github.com/sharkdp/fd)
-- BurntSushi/ripgrep
-- luarocks -- see `:checkhealth` for more info
-- nodejs $\geq$ v18
-- python $\geq$ v3
+C, C++, and Python.
 
 As for how to actually use the tooling, view a list of currently installed
 plugins within `plugins.lua` and visit the docs of the associated projects. It
 should be possible to find most of that information using nvims `:help
 [item-name]` command. More detailed information can also be found within the
-'LOCAL ADDITIONS' section after executing `:help` at the bottom of the buffer.
+'LOCAL ADDITIONS' section at the bottom of the buffer after executing `:help`.
 
 ## Syntax Highlighting and Code Editing
 
@@ -50,3 +43,12 @@ directory. Find and delete any conflicting directories via the command:
 
 Typically, this only occurs if more than a single installation exists globally
 on all user `$PATH`'s (via `apt`, `snap`, etc.).
+
+## Dependencies
+
+- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.9.4
+- [find-fd](https://github.com/sharkdp/fd)
+- [ripgrep](https://github.com/BurntSushi/ripgrep)
+- luarocks -- see `:checkhealth` for more info
+- python v3.*
+- nodejs $\geq$ v18
