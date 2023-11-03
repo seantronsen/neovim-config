@@ -1,81 +1,75 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
 
-local f = ls.function_node
-local d = ls.dynamic_node
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
-local snutils = require("core.snippetutils")
-local schars = snutils.captschars
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
+local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
 
 return {}, {
 
 	s(
-		{
-			trig = schars .. "df",
-			wordTrig = false,
-			regTrig = true,
-		},
+		{ trig = schars .. "df" .. psp, wordTrig = false, regTrig = true },
 		fmta(
-			[[\frac {d <>}{d <>}]] .. snutils.postspace,
-			{ i(1, "numerator"), i(2, "denominator") }
+			[[<>\frac {d <>}{d <>}]] .. psp,
+			{ ncapture(1), ninsert(1, "numerator"), ninsert(2, "denominator") }
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{
-			trig = schars .. "pdf",
-			wordTrig = false,
-			regTrig = true,
-		},
+		{ trig = schars .. "pdf" .. psp, wordTrig = false, regTrig = true },
 		fmta(
-			[[\frac {\partial  <>}{\partial  <>}]] .. snutils.postspace,
-			{ i(1, "numerator"), i(2, "denominator") }
+			[[<>\frac {\partial  <>}{\partial  <>}]] .. psp,
+			{ ncapture(1), ninsert(1, "numerator"), ninsert(2, "denominator") }
 		),
-		{ condition = snutils.in_mathzone }
-	),
-
-	s({
-		trig = schars .. "pd" .. snutils.postspace,
-		wordTrig = false,
-		regTrig = true,
-	}, t([[\partial]] .. snutils.postspace), { condition = snutils.in_mathzone }),
-
-	s(
-		{ trig = "mpro", wordTrig = false, regTrig = true },
-		fmta(
-			"\\prod_{<>}^{<>} <>" .. snutils.postspace,
-			{ i(1, "start"), i(2, "stop"), i(3, "equation") }
-		),
-		{ condition = snutils.in_mathzone }
-	),
-	s(
-		{ trig = "msum", wordTrig = false, regTrig = true },
-		fmta(
-			"\\sum_{<>}^{<>} <>" .. snutils.postspace,
-			{ i(1, "start"), i(2, "stop"), i(3, "equation") }
-		),
-		{ condition = snutils.in_mathzone }
-	),
-	s(
-		{ trig = "mint", wordTrig = false, regTrig = true },
-		fmta(
-			"\\int_{<>}^{<>} <>" .. snutils.postspace,
-			{ i(1, "start"), i(2, "stop"), i(3, "equation") }
-		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{
-			trig = schars .. "lim",
-			wordTrig = false,
-			regTrig = true,
-		},
-		fmta([[\lim_{<> \to <>}]] .. snutils.postspace, { i(1, "a"), i(2, "b") }),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "pd" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\partial]] .. psp, { ncapture(1) }),
+		mopts
+	),
+
+	s(
+		{ trig = schars .. "mpro" .. psp, wordTrig = false, regTrig = true },
+		fmta(
+			[[<>\prod_{<>}^{<>} { <> }]] .. psp,
+			{ ncapture(1), ninsert(1, "start"), ninsert(2, "stop"), ninsert(3, "equation") }
+		),
+		mopts
+	),
+	s(
+		{ trig = schars .. "msum" .. psp, wordTrig = false, regTrig = true },
+		fmta(
+			[[<>\sum_{<>}^{<>} { <> }]] .. psp,
+			{ ncapture(1), ninsert(1, "start"), ninsert(2, "stop"), ninsert(3, "equation") }
+		),
+		mopts
+	),
+	s(
+		{ trig = schars .. "mint" .. psp, wordTrig = false, regTrig = true },
+		fmta(
+			[[<>\int_{<>}^{<>} { <> }]] .. psp,
+			{ ncapture(1), ninsert(1, "start"), ninsert(2, "stop"), ninsert(3, "equation") }
+		),
+		mopts
+	),
+
+	s(
+		{ trig = schars .. "lim" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\lim_{<> \to <>}]] .. psp, { ncapture(1), ninsert(1, "a"), ninsert(2, "b") }),
+		mopts
 	),
 }

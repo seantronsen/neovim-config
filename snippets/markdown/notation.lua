@@ -2,7 +2,6 @@ local ls = require("luasnip")
 local s = ls.snippet
 local ntext = ls.text_node
 local ninsert = ls.insert_node
-
 local nfunc = ls.function_node
 local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
@@ -56,5 +55,5 @@ return {}, {
 		mopts
 	),
 
-	s({ trig = ";pl", wordTrig = false, regTrig = true }, ntext([[\mathcal{P}]]), mopts),
+	s({ trig = ".pl", wordTrig = false, regTrig = true }, ntext([[\mathcal{P}]]), mopts),
 }

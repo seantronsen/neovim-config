@@ -1,5 +1,4 @@
 local ls = require("luasnip")
-local snutils = require("core.snippetutils")
 local s = ls.snippet
 local nsnippet = ls.snippet_node
 local ntext = ls.text_node
@@ -10,20 +9,27 @@ local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 local nrep = require("luasnip.extras").rep
 
-return {
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
+local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
+
+return {}, {
 
 	s(
-		{ trig = "vec ([%S]+)[%s]+", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\vec{<>}" .. snutils.postspace, {
-			nfunc(function(_, snip)
-				return snip.captures[1]
-			end),
+		{ trig = "vec " .. tchars .. psp, wordTrig = false, regTrig = true },
+		fmta([[\vec{<>}]] .. psp, {
+			ncapture(1),
 		}),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{ trig = "vec2", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^vec2", wordTrig = false, regTrig = true },
 		fmta(
 			[[
 	\begin{bmatrix}
@@ -33,11 +39,11 @@ return {
 	]],
 			{ ninsert(1, "a"), ninsert(2, "b") }
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{ trig = "vec3", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^vec3", wordTrig = false, regTrig = true },
 		fmta(
 			[[
 	\begin{bmatrix}
@@ -48,29 +54,29 @@ return {
 	]],
 			{ ninsert(1, "a"), ninsert(2, "b"), ninsert(3, "c") }
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{ trig = "vd ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		ntext("\\cdot" .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "vd" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\cdot]] .. psp, { ncapture(1) }),
+		mopts
 	),
 
 	s(
-		{ trig = "mdet", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\det{(<>)}" .. snutils.postspace, { ninsert(1, "elements") }),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "mdet", wordTrig = false, regTrig = true },
+		fmta([[<>\det{(<>)}]] .. psp, { ncapture(1), ninsert(1, "elements") }),
+		mopts
 	),
 
 	s(
-		{ trig = "mmag", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("|<>|" .. snutils.postspace, { ndynamic(1, snutils.get_visual) }),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "mmag", wordTrig = false, regTrig = true },
+		fmta("<>|<>|" .. psp, { ncapture(1), nvisual(1) }),
+		mopts
 	),
 
 	s(
-		{ trig = "imat9", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^imat9", wordTrig = false, regTrig = true },
 		ntext([[
 	\begin{bmatrix}
 	1 & 0 & 0 \\
@@ -78,11 +84,11 @@ return {
 	0 & 0 & 1 \\
 	\end{bmatrix}
 	]]),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{ trig = "bmat9", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^bmat9", wordTrig = false, regTrig = true },
 		fmta(
 			[[
 	\begin{bmatrix}
@@ -103,26 +109,25 @@ return {
 				ninsert(9, "i"),
 			}
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{ trig = "imat4", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^imat4", wordTrig = false, regTrig = true },
 		ntext([[
 	\begin{bmatrix}
 	1 & 0  \\
 	0 & 1  \\
 	\end{bmatrix}
 	]]),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
 		{
-			trig = "bmat4",
+			trig = "^bmat4",
 			wordTrig = false,
 			regTrig = true,
-			snippetType = "autosnippet",
 		},
 		fmta(
 			[[
@@ -133,11 +138,11 @@ return {
 	]],
 			{ ninsert(1, "a"), ninsert(2, "b"), ninsert(3, "c"), ninsert(4, "d") }
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{ trig = "bdet9", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^bdet9", wordTrig = false, regTrig = true },
 		fmta(
 			[[
 	\begin{vmatrix}
@@ -158,15 +163,14 @@ return {
 				ninsert(9, "i"),
 			}
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
 		{
-			trig = "bdet4",
+			trig = "^bdet4",
 			wordTrig = false,
 			regTrig = true,
-			snippetType = "autosnippet",
 		},
 		fmta(
 			[[
@@ -177,6 +181,6 @@ return {
 	]],
 			{ ninsert(1, "a"), ninsert(2, "b"), ninsert(3, "c"), ninsert(4, "d") }
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 }

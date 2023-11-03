@@ -1,40 +1,41 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
 
-local f = ls.function_node
-local d = ls.dynamic_node
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
-local snutils = require("core.snippetutils")
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
+local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
 
-return {
-
+return {}, {
 	s(
-		{ trig = "inv ([%a]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("{<>}^{-1}" .. snutils.postspace, {
-			f(function(_, snip)
-				return snip.captures[1]
-			end),
-		}),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "mr" .. psp, wordTrig = false, regTrig = true },
+		fmta(
+			[[<>\sqrt[<>]{ <> }]] .. psp,
+			{ ncapture(1), ninsert(1, "degree"), ninsert(2, "component") }
+		),
+		mopts
 	),
-
 	s(
-		{ trig = "mr", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\sqrt[<>]{<>}" .. snutils.postspace, { i(1, "degree"), i(2, "component") }),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "mt" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\times]] .. psp, { ncapture(1) }),
+		mopts
 	),
 	s(
-		{ trig = "mt ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t("\\times" .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
-	),
-
-	s(
-		{ trig = "ff", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("\\frac {<>}{<>}" .. snutils.postspace, { i(1, "numerator"), i(2, "denominator") }),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "ff" .. psp, wordTrig = false, regTrig = true },
+		fmta(
+			[[<>\frac { <> }{ <> }]] .. psp,
+			{ ncapture(1), ninsert(1, "numerator"), ninsert(2, "denominator") }
+		),
+		mopts
 	),
 }

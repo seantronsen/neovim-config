@@ -1,24 +1,24 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
 
-local f = ls.function_node
-local d = ls.dynamic_node
-local rep = require("luasnip.extras").rep
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
+local nrep = require("luasnip.extras").rep
 local fmta = require("luasnip.extras.fmt").fmta
 
 local snutils = require("core.snippetutils")
 
-return {
+return {}, {
 	s(
-		{ trig = "sthe ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[> Theorem: ]]),
+		{ trig = "^sthe", wordTrig = false, regTrig = true },
+		ntext([[> Theorem: ]]),
 		{ condition = snutils.not_mathzone }
 	),
 	s(
-		{ trig = "sdef ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[> Definition: ]]),
+		{ trig = "^sdef", wordTrig = false, regTrig = true },
+		ntext([[> Definition: ]]),
 		{ condition = snutils.not_mathzone }
 	),
 }

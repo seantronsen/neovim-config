@@ -1,19 +1,26 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
 
-local f = ls.function_node
-local d = ls.dynamic_node
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
 local rep = require("luasnip.extras").rep
 local fmta = require("luasnip.extras.fmt").fmta
 
-local snutils = require("core.snippetutils")
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
+local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
 
-return {
+return {}, {
 
 	s(
-		{ trig = "bpe ([%w]+) ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^bpe " .. tchars .. psp, wordTrig = false, regTrig = true },
 		fmta(
 			[[
 			```<>
@@ -22,39 +29,32 @@ return {
 
 			```
 	]],
-			{
-
-				f(function(_, snip)
-					return snip.captures[1]
-				end),
-
-				i(1, "code content"),
-			}
+			{ ncapture(1), ninsert(1, "code content") }
 		),
-		{ condition = snutils.not_mathzone }
+		{ condition = ut.not_mathzone }
 	),
 
 	s(
-		{ trig = "bme", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^bme", wordTrig = false, regTrig = true },
 		fmta(
 			[[
 	$$
 	<>
 	$$
 	]],
-			{ i(1, "content") }
+			{ ninsert(1, "content") }
 		),
-		{ condition = snutils.not_mathzone }
+		{ condition = ut.not_mathzone }
 	),
 
 	s(
-		{ trig = "bmi", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		fmta("$<>$" .. snutils.postspace, { i(1, "content") }),
-		{ condition = snutils.not_mathzone }
+		{ trig = schars .. "bmi", wordTrig = false, regTrig = true },
+		fmta([[<>$<>$]] .. psp, { ncapture(1), ninsert(1, "content") }),
+		{ condition = ut.not_mathzone }
 	),
 
 	s(
-		{ trig = "benv", snippetType = "autosnippet" },
+		{ trig = "^benv", wordTrig = false, regTrig = true },
 		fmta(
 			[[
 	\begin{<>}
@@ -63,13 +63,13 @@ return {
 
 	\end{<>}
 	]],
-			{ i(1, "section-type"), i(2, "content"), rep(1) }
+			{ ninsert(1, "section-type"), ninsert(2, "content"), rep(1) }
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
 	),
 
 	s(
-		{ trig = "beq", snippetType = "autosnippet" },
+		{ trig = "^beq", wordTrig = false, regTrig = true },
 		fmta(
 			[[
 	\begin{equation}
@@ -78,9 +78,38 @@ return {
 
 	\end{equation}
 	]],
-			{ i(1, "content") }
+			{ ninsert(1, "content") }
 		),
-		{ condition = snutils.in_mathzone }
+		mopts
+	),
+
+	s(
+		{ trig = "^bali", wordTrig = false, regTrig = true },
+		fmta(
+			[[
+	\begin{align}
+
+	<>
+
+	\end{align}
+	]],
+			{ ninsert(1, "content") }
+		),
+		mopts
+	),
+	s(
+		{ trig = "^bcas", wordTrig = false, regTrig = true },
+		fmta(
+			[[
+	\begin{cases}
+
+	<>
+
+	\end{cases}
+	]],
+			{ ninsert(1, "content") }
+		),
+		mopts
 	),
 }
 

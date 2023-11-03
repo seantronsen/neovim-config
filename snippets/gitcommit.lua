@@ -11,9 +11,8 @@ local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
 return {
-
 	s(
-		{ trig = "^gcm ", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
+		{ trig = "^gcm", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
 		fmta([[[<>] -- ]], {
 			f(function(_, _)
 				return vim.fn.system("git branch --show-current"):gsub("^%s*(.-)%s*$", "%1")

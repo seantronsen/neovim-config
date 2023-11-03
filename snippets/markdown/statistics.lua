@@ -1,25 +1,31 @@
 local ls = require("luasnip")
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
-
-local f = ls.function_node
-local d = ls.dynamic_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
-local snutils = require("core.snippetutils")
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
+local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
 
-return {
+return {}, {
 
 	s(
-		{ trig = "cap", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\cap]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "cap" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\cap]] .. psp, { ncapture(1) }),
+		mopts
 	),
 
 	s(
-		{ trig = "cup", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\cap]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. "cup" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\cup]] .. psp, { ncapture(1) }),
+		mopts
 	),
 }

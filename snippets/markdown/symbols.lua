@@ -1,38 +1,42 @@
 local ls = require("luasnip")
-local snutils = require("core.snippetutils")
-local schars = snutils.captschars
 local s = ls.snippet
-local t = ls.text_node
-local i = ls.insert_node
-local f = ls.function_node
-local d = ls.dynamic_node
+local ntext = ls.text_node
+local ninsert = ls.insert_node
+local nfunc = ls.function_node
+local ndynamic = ls.dynamic_node
 local fmta = require("luasnip.extras.fmt").fmta
 
-return {
+local ut = require("core.snippetutils")
+local schars = ut.captschars
+local ncapture = ut.ncapture
+local ncapturestack = ut.ncapturestack
+local nvisual = ut.nvisual
+local psp = ut.postspace
+local mopts = ut.math_opts
+local tchars = ut.capttchars
+
+return {}, {
+	s({
+		trig = schars .. ".([tT])h" .. psp,
+		wordTrig = false,
+		regTrig = true,
+	}, fmta([[<>\<>heta]] .. psp, { ncapture(1), ncapture(2) }), mopts),
+
 	s(
-		{ trig = ";th", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\theta]]),
-		{ condition = snutils.in_mathzone }
-	),
-	s(
-		{ trig = ";Del", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\Delta]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
-	),
-	s(
-		{ trig = ";del", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\delta]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
-	),
-	s(
-		{ trig = ";phi", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\phi]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. ".([dD])e" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\<>elta]] .. psp, { ncapture(1), ncapture(2) }),
+		mopts
 	),
 
 	s(
-		{ trig = "inf", wordTrig = false, regTrig = true, snippetType = "autosnippet" },
-		t([[\infty]] .. snutils.postspace),
-		{ condition = snutils.in_mathzone }
+		{ trig = schars .. ".([pP])h" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\<>hi]] .. psp, { ncapture(1), ncapture(2) }),
+		mopts
+	),
+
+	s(
+		{ trig = schars .. "inf", wordTrig = false, regTrig = true },
+		fmta([[<>\infty]] .. psp, { ncapture(1) }),
+		mopts
 	),
 }
