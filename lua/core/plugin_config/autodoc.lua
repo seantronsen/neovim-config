@@ -1,7 +1,10 @@
 -- DOGE MAPPINGS
 -----------------------
 vim.g.doge_enable_mappings = 0
-vim.g.doge_doc_standard_python = "numpy"
+vim.g.doge_doc_standard_python = "reST"
+vim.g.doge_doc_standard_rust = "rustdoc"
+vim.g.doge_doc_standard_sh = "google"
+vim.g.doge_doc_standard_lua = "ldoc"
 
 local function generate()
 	vim.cmd("DogeGenerate")

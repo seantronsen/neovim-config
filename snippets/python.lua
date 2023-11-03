@@ -10,6 +10,6 @@ local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
-return {
+return {}, {
 	s("pyig", t("# pyright: ignore")),
 }
