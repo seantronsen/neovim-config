@@ -39,4 +39,10 @@ return {}, {
 		fmta([[<>\infty]] .. psp, { ncapture(1) }),
 		mopts
 	),
+
+	s(
+		{ trig = schars .. "nab" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\nabla]] .. psp, { ncapture(1) }),
+		mopts
+	),
 }

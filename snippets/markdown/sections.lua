@@ -21,4 +21,15 @@ return {}, {
 		ntext([[> Definition: ]]),
 		{ condition = snutils.not_mathzone }
 	),
+	s(
+		{ trig = "^snot", wordTrig = false, regTrig = true },
+		ntext([[> Note: ]]),
+		{ condition = snutils.not_mathzone }
+	),
+
+	s(
+		{ trig = "^spro", wordTrig = false, regTrig = true },
+		ntext([[### Proof: ]]),
+		{ condition = snutils.not_mathzone }
+	),
 }
