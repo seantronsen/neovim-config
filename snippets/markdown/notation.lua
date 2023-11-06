@@ -51,7 +51,7 @@ return {}, {
 
 	s(
 		{ trig = "cc", wordTrig = false, regTrig = true },
-		fmta([[\cancel{<>}]] .. psp, { nvisual(1) }),
+		fmta([[\cancel{ <> }]] .. psp, { nvisual(1) }),
 		mopts
 	),
 

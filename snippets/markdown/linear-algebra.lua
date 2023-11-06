@@ -22,7 +22,15 @@ return {}, {
 
 	s(
 		{ trig = "vec " .. tchars .. psp, wordTrig = false, regTrig = true },
-		fmta([[\vec{<>}]] .. psp, {
+		fmta([[\vec{ <> }]] .. psp, {
+			ncapture(1),
+		}),
+		mopts
+	),
+
+	s(
+		{ trig = "vecu " .. tchars .. psp, wordTrig = false, regTrig = true },
+		fmta([[\hat {\vec{ <> }}]] .. psp, {
 			ncapture(1),
 		}),
 		mopts
@@ -65,13 +73,13 @@ return {}, {
 
 	s(
 		{ trig = schars .. "mdet", wordTrig = false, regTrig = true },
-		fmta([[<>\det{(<>)}]] .. psp, { ncapture(1), ninsert(1, "elements") }),
+		fmta([[<>\det{( <> )}]] .. psp, { ncapture(1), ninsert(1, "elements") }),
 		mopts
 	),
 
 	s(
 		{ trig = schars .. "mmag", wordTrig = false, regTrig = true },
-		fmta("<>|<>|" .. psp, { ncapture(1), nvisual(1) }),
+		fmta("<>| <> |" .. psp, { ncapture(1), nvisual(1) }),
 		mopts
 	),
 

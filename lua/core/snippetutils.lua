@@ -26,7 +26,8 @@ M.not_mathzone = function()
 	return not M.in_mathzone()
 end
 
-M.captschars = "([%s]+)"
+M.captschars = "([$%s]+)"
+-- M.captschars = "([%s]+)"
 M.capttchars = "([%S]+)"
 M.postspace = " "
 

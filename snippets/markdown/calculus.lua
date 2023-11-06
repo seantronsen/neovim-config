@@ -21,8 +21,22 @@ return {}, {
 	s(
 		{ trig = schars .. "df" .. psp, wordTrig = false, regTrig = true },
 		fmta(
-			[[<>\frac {d <>}{d <>}]] .. psp,
+			[[<>\frac {d <> }{d <> }]] .. psp,
 			{ ncapture(1), ninsert(1, "numerator"), ninsert(2, "denominator") }
+		),
+		mopts
+	),
+
+	s(
+		{ trig = schars .. "ddf" .. psp, wordTrig = false, regTrig = true },
+		fmta(
+			[[<>{\frac {d <> }{d <> }}_{ <> }]] .. psp,
+			{
+				ncapture(1),
+				ninsert(1, "numerator"),
+				ninsert(2, "denominator"),
+				ninsert(3, "direction"),
+			}
 		),
 		mopts
 	),
@@ -30,7 +44,7 @@ return {}, {
 	s(
 		{ trig = schars .. "pdf" .. psp, wordTrig = false, regTrig = true },
 		fmta(
-			[[<>\frac {\partial  <>}{\partial  <>}]] .. psp,
+			[[<>\frac {\partial  <> }{\partial  <> }]] .. psp,
 			{ ncapture(1), ninsert(1, "numerator"), ninsert(2, "denominator") }
 		),
 		mopts
@@ -45,7 +59,7 @@ return {}, {
 	s(
 		{ trig = schars .. "mpro" .. psp, wordTrig = false, regTrig = true },
 		fmta(
-			[[<>\prod_{<>}^{<>} { <> }]] .. psp,
+			[[<>\prod_{ <> }^{ <> } { <> }]] .. psp,
 			{ ncapture(1), ninsert(1, "start"), ninsert(2, "stop"), ninsert(3, "equation") }
 		),
 		mopts
@@ -53,7 +67,7 @@ return {}, {
 	s(
 		{ trig = schars .. "msum" .. psp, wordTrig = false, regTrig = true },
 		fmta(
-			[[<>\sum_{<>}^{<>} { <> }]] .. psp,
+			[[<>\sum_{ <> }^{ <> } { <> }]] .. psp,
 			{ ncapture(1), ninsert(1, "start"), ninsert(2, "stop"), ninsert(3, "equation") }
 		),
 		mopts
@@ -61,7 +75,7 @@ return {}, {
 	s(
 		{ trig = schars .. "mint" .. psp, wordTrig = false, regTrig = true },
 		fmta(
-			[[<>\int_{<>}^{<>} { <> }]] .. psp,
+			[[<>\int_{ <> }^{ <> } { <> }]] .. psp,
 			{ ncapture(1), ninsert(1, "start"), ninsert(2, "stop"), ninsert(3, "equation") }
 		),
 		mopts
@@ -69,7 +83,7 @@ return {}, {
 
 	s(
 		{ trig = schars .. "lim" .. psp, wordTrig = false, regTrig = true },
-		fmta([[<>\lim_{<> \to <>}]] .. psp, { ncapture(1), ninsert(1, "a"), ninsert(2, "b") }),
+		fmta([[<>\lim_{ <> \to <> }]] .. psp, { ncapture(1), ninsert(1, "a"), ninsert(2, "b") }),
 		mopts
 	),
 }
