@@ -19,6 +19,12 @@ local tchars = ut.capttchars
 
 return {}, {
 
+	s({
+		trig = schars .. "tag" .. psp,
+		wordTrig = false,
+		regTrig = true,
+	}, fmta([[<>\tag{ <> }]] .. psp, { ncapture(1), ninsert(1) }), mopts),
+
 	s(
 		{ trig = "^bpe " .. tchars .. psp, wordTrig = false, regTrig = true },
 		fmta(

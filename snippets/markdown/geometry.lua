@@ -22,4 +22,10 @@ return {}, {
 		wordTrig = false,
 		regTrig = true,
 	}, fmta([[<>\perp]] .. psp, { ncapture(1) }), mopts),
+
+	s({
+		trig = schars .. "para" .. psp,
+		wordTrig = false,
+		regTrig = true,
+	}, fmta([[<>\parallel]] .. psp, { ncapture(1) }), mopts),
 }

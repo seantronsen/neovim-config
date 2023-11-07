@@ -27,7 +27,8 @@ M.not_mathzone = function()
 end
 
 M.captschars = "([$%s]+)"
--- M.captschars = "([%s]+)"
+-- need to update so that way patterns aren't considering the initial mathzone character for consumption.
+-- M.captschars = "([$]?)([%s]+)"
 M.capttchars = "([%S]+)"
 M.postspace = " "
 
