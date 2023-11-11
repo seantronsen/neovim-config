@@ -1,26 +1,22 @@
 #!/bin/bash
 
 set -e -x
-I_SCRIPT_DIR="$(dirname $(realpath ${BASH_SOURCE[0]}))"
-(
-	cd "$I_SCRIPT_DIR"
-	git submodule init
-	git submodule update
-)
 
-source "$I_SCRIPT_DIR/bash-common-lib/lib.bash"
+if [[ "$PWD" != "$(dirname $(realpath ${BASH_SOURCE[0]}))" ]]; then
+	echo "error: installer must be run from source directory."
+fi
+
+git submodule init
+git submodule update
+
+source bash-common-lib/lib.bash
 binary_dependency_check git wget xz unxz zip gcc g++ file python3 pip
 python_dependency_check virtualenv
 
-# ENSURE INSTALLATION IS NOT OCCURRING IN THE ROOT DIRECTORY
-export PATH="$USER_BIN:$PATH"
-
-if [[ "$PWD" != "$HOME" ]]; then error "script must be run in the home directory: '$HOME'"; fi
-
 # MAKE INITIAL DIRECTORY TARGETS
 cd $HOME
-mkdir -vp bin sources .config .fonts
-export PATH="$(realpath bin):$PATH"
+mkdir -vp "$USER_BIN" "$USER_SRC" "$USER_DOTCONFIG" "$USER_FONTS"
+export PATH="$USER_BIN:$PATH"
 
 # DOWNLOAD DEPENDENCIES
 # NODEJS
@@ -166,7 +162,7 @@ fi
 	NVIM_BINARY="$USER_SRC/$NVIM_NAME/usr/bin/nvim"
 	if uname -a | egrep -oi --quiet darwin; then
 		NVIM_ARCHIVE="nvim-macos.tar.gz"
-		ln -sv "$USER_SRC/$NVIM_NAME/bin/nvim"
+		NVIM_BINARY="$USER_SRC/$NVIM_NAME/bin/nvim"
 	fi
 
 	(
@@ -194,7 +190,7 @@ fi
 	)
 	(
 		cd "$USER_BIN"
-		ln -sv "$USER_SRC/$NVIM_NAME/bin/nvim"
+		ln -sv "$NVIM_BINARY"
 	)
 
 )
