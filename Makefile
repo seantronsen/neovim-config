@@ -10,7 +10,7 @@ ACOMMON=${B_DEPENDENCIES} ${P_DEPENDENCIES} ${SUBMODULES}
 OBJS=${D_BUILD}
 
 
-all: ${ACOMMON}
+all:: ${ACOMMON}
 
 ${B_DEPENDENCIES}: ${DCOMMON}
 	source bash-common-lib/lib.bash; binary_dependency_check ${B_DEPENDENCIES_LIST};
