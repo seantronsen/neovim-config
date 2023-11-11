@@ -26,12 +26,6 @@ obs.setup({
 			end,
 		},
 
-		["gf"] = {
-			action = function()
-				return require("obsidian").util.gf_passthrough()
-			end,
-			opts = { noremap = false, expr = true, buffer = true },
-		},
 	},
 	note_id_func = function(title)
 		-- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
