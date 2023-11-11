@@ -163,35 +163,39 @@ fi
 	NVIM_VERSION="0.9.4"
 	NVIM_NAME="nvim-$NVIM_VERSION"
 	NVIM_ARCHIVE="nvim.appimage"
+	NVIM_BINARY="$USER_SRC/$NVIM_NAME/usr/bin/nvim"
 	if uname -a | egrep -oi --quiet darwin; then
 		NVIM_ARCHIVE="nvim-macos.tar.gz"
+		ln -sv "$USER_SRC/$NVIM_NAME/bin/nvim"
 	fi
 
-	cd "$USER_SRC"
-	wget --verbose "https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/$NVIM_ARCHIVE"
-	wget --verbose "https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/$NVIM_ARCHIVE.sha256sum"
+	(
+		cd "$USER_SRC"
+		wget --verbose "https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/$NVIM_ARCHIVE"
+		wget --verbose "https://github.com/neovim/neovim/releases/download/v$NVIM_VERSION/$NVIM_ARCHIVE.sha256sum"
 
-	if [[ ! -z "$(shasum -a 256 "$NVIM_ARCHIVE" | diff "$NVIM_ARCHIVE.sha256sum" -)" ]]; then
-		error "sha256 checksums do not match" 1
-	fi
+		if [[ ! -z "$(shasum -a 256 "$NVIM_ARCHIVE" | diff "$NVIM_ARCHIVE.sha256sum" -)" ]]; then
+			error "sha256 checksums do not match" 1
+		fi
 
-	rm -v "$NVIM_ARCHIVE.sha256sum"
+		rm -v "$NVIM_ARCHIVE.sha256sum"
 
-	if uname -a | egrep -oi --quiet darwin; then
-		binary_dependency_check xattr
-		xattr -c "$NVIM_ARCHIVE"
-		tar xzvf "$NVIM_ARCHIVE"
-		mv -v nvim-macos "$NVIM_NAME"
-		ln -sv "$USER_SRC/nvim-0.9.4/bin/nvim"
+		if uname -a | egrep -oi --quiet darwin; then
+			binary_dependency_check xattr
+			xattr -c "$NVIM_ARCHIVE"
+			tar xzvf "$NVIM_ARCHIVE"
+			mv -v nvim-macos "$NVIM_NAME"
 
-	else
-		chmod -v u+x "$NVIM_ARCHIVE"
-		"./$NVIM_ARCHIVE" --appimage-extract
-		mv -v squashfs-root "$NVIM_NAME"
+		else
+			chmod -v u+x "$NVIM_ARCHIVE"
+			"./$NVIM_ARCHIVE" --appimage-extract
+			mv -v squashfs-root "$NVIM_NAME"
+		fi
+	)
+	(
 		cd "$USER_BIN"
-		ln -sv "$USER_SRC/nvim-0.9.4/usr/bin/nvim"
-
-	fi
+		ln -sv "$USER_SRC/$NVIM_NAME/bin/nvim"
+	)
 
 )
 nvim --version
