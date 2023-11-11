@@ -17,11 +17,20 @@ obs.setup({
 	-- 	substitutions = {},
 	-- },
 
+	open_app_foreground = false,
+
 	mappings = {
 		["<leader>gl"] = {
 			action = function()
 				vim.cmd("ObsidianFollowLink")
 			end,
+		},
+
+		["gf"] = {
+			action = function()
+				return require("obsidian").util.gf_passthrough()
+			end,
+			opts = { noremap = false, expr = true, buffer = true },
 		},
 	},
 	note_id_func = function(title)
