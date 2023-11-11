@@ -12,16 +12,13 @@ source "$I_SCRIPT_DIR/bash-common-lib/lib.bash"
 binary_dependency_check git wget xz unxz zip gcc g++ file python3 pip
 python_dependency_check virtualenv
 
-# REMOVE EXISTING CONFIGURATIONS TO AVOID CONFLICTS
-rm -vrf "$USER_DOTCONFIG/nvim"
-rm -vrf "$HOME/.local/share/nvim"
-
 # ENSURE INSTALLATION IS NOT OCCURRING IN THE ROOT DIRECTORY
 export PATH="$USER_BIN:$PATH"
 
 if [[ "$PWD" != "$HOME" ]]; then error "script must be run in the home directory: '$HOME'"; fi
 
 # MAKE INITIAL DIRECTORY TARGETS
+cd $HOME
 mkdir -vp bin sources .config .fonts
 export PATH="$(realpath bin):$PATH"
 
@@ -156,6 +153,9 @@ fi
 
 # DOWNLOAD / CONFIGURE NVIM
 (
+	# REMOVE EXISTING CONFIGURATION
+	rm -vrf "$USER_DOTCONFIG/nvim"
+	rm -vrf "$HOME/.local/share/nvim"
 	cd "$USER_DOTCONFIG"
 	git clone https://github.com/seantronsen/neovim-config.git nvim
 )
