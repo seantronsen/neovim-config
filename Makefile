@@ -30,10 +30,10 @@ ${D_BUILD}:
 
 
 .PHONY: list
-list:
+list::
 	ls -lath ${D_BUILD}
 
 
 .PHONY: clean
-clean:
+clean::
 	rm -vrf ${D_BUILD}
