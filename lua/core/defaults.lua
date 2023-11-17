@@ -32,3 +32,10 @@ vim.g.slime_no_mappings = 1
 vim.g.slime_python_ipython = 1
 vim.g.slime_cell_delimiter = "^\\s*# %%"
 vim.g.slime_cells_no_highlight = 1
+
+
+------------------------
+--  VIMTEX
+------------------------
+vim.g.vimtex_view_method = 'zathura'
+vim.g.vimtex_quickfix_open_on_warning = 0
