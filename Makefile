@@ -1,5 +1,5 @@
 SHELL ::= /bin/bash
-BUILD ?= $(shell mkdir build && echo "build")
+BUILD ?= $(shell mkdir -p build && echo "build")
 NVIMB_DEPENDENCIES=${BUILD}/neovim-bpackages
 
 # assuming the user has `git` (required binary dependency)
