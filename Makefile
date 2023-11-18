@@ -15,8 +15,6 @@ export PATH="$$USER_BIN:$$PATH"
 export PATH="$$HOME/.cargo/bin:$$PATH"
 endef
 
-$(shell echo ${.VARIABLES})
-
 .ONESHELL:
 ${BUILD}/neovim: ${NVIMB_DEPENDENCIES} ${NVIM_PREREQ_PATHS}
 	$(shell-prep)
