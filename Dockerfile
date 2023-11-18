@@ -8,5 +8,5 @@ RUN apt-get install -y git make wget xz-utils zip gcc g++ file python3 python3-p
 RUN pip install virtualenv
 COPY . ${DIR_PROJECT}
 WORKDIR ${DIR_PROJECT}
-RUN make --dry-run 
+RUN make -d --dry-run
 RUN make 
