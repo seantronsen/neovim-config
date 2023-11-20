@@ -138,7 +138,7 @@ ${BUILD}/nodejs: ${NVIMB_DEPENDENCIES}
 
 
 clean::
-	rm -vrf $${OBJS}
+	rm -vrf ${OBJS}
 
 
 ${BUILD}/ripgrep: ${NVIMB_DEPENDENCIES}
