@@ -52,3 +52,13 @@ on all user `$PATH`'s (via `apt`, `snap`, etc.).
 - luarocks -- see `:checkhealth` for more info
 - python v3.*
 - nodejs $\geq$ v18
+
+## Build Dependencies
+
+- [make](https://www.gnu.org/software/make/manual/make.html) $\geq$ v4
+- [gcc](https://gcc.gnu.org/)
+- [xzutils](https://tukaani.org/xz/)
+- [zip](https://infozip.sourceforge.net/Zip.html)
+- [python3](https://github.com/python/cpython)
+- [wget](https://www.gnu.org/software/wget/)
+- [git](https://git-scm.com/) $\geq$ v2
