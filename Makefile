@@ -32,11 +32,15 @@ ${BUILD}/neovim: ${NVIMB_DEPENDENCIES} ${NVIM_PREREQ_PATHS}
 	# DOWNLOAD NVIM BINARIES
 	NVIM_VERSION="0.9.4"
 	NVIM_NAME="nvim-$$NVIM_VERSION"
-	NVIM_ARCHIVE="nvim.appimage"
-	NVIM_BINARY="$$USER_SRC/$$NVIM_NAME/usr/bin/nvim"
-	if uname -a | egrep -oi --quiet darwin; then
+	if uname -a | egrep -oi --quiet linux; then
+		NVIM_ARCHIVE="nvim.appimage"
+		NVIM_BINARY="$$USER_SRC/$$NVIM_NAME/usr/bin/nvim"
+	elif uname -a | egrep -oi --quiet darwin; then
 		NVIM_ARCHIVE="nvim-macos.tar.gz"
 		NVIM_BINARY="$$USER_SRC/$$NVIM_NAME/bin/nvim"
+	else
+		uname -a
+		error "host operating system is not supported"
 	fi
 	(
 		cd "$$USER_SRC"
@@ -50,16 +54,15 @@ ${BUILD}/neovim: ${NVIMB_DEPENDENCIES} ${NVIM_PREREQ_PATHS}
 		rm -v "$$NVIM_ARCHIVE.sha256sum"
 
 		# CREATE SYMLINKS
-		if uname -a | egrep -oi --quiet darwin; then
+		if uname -a | egrep -oi --quiet linux; then
+			chmod -v u+x "$$NVIM_ARCHIVE"
+			"./$$NVIM_ARCHIVE" --appimage-extract
+			mv -v squashfs-root "$$NVIM_NAME"
+		elif uname -a | egrep -oi --quiet darwin; then
 			binary_dependency_check xattr
 			xattr -c "$$NVIM_ARCHIVE"
 			tar xzvf "$$NVIM_ARCHIVE"
 			mv -v nvim-macos "$$NVIM_NAME"
-		else
-			chmod -v u+x "$$NVIM_ARCHIVE"
-			"./$$NVIM_ARCHIVE" --appimage-extract
-			mv -v squashfs-root "$$NVIM_NAME"
-		fi
 	)
 	(
 		cd "$$USER_BIN"
