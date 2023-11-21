@@ -63,10 +63,12 @@ ${BUILD}/neovim: ${NVIMB_DEPENDENCIES} ${NVIM_PREREQ_PATHS}
 			xattr -c "$$NVIM_ARCHIVE"
 			tar xzvf "$$NVIM_ARCHIVE"
 			mv -v nvim-macos "$$NVIM_NAME"
+		fi
 	)
 	(
 		cd "$$USER_BIN"
-		ln -sv "$$NVIM_BINARY"
+		rm -vf nvim
+		ln -sv "$$NVIM_BINARY" nvim
 	)
 	nvim --version
 
