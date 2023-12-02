@@ -120,15 +120,26 @@ ${BUILD}/nodejs: ${NVIMB_DEPENDENCIES}
 	$(shell-prep)
 	if ! which node; then
 		DEP_NODEJS_VERSION="v20.5.1"
-		DEP_NODEJS="node-$$DEP_NODEJS_VERSION-linux-x64"
-		DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.xz"
+		if uname -a | egrep -oi --quiet linux; then
+			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-linux-x64"
+			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.xz"
+		elif uname -a | egrep -oi --quiet darwin; then
+			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-darwin-arm64
+			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.gz"
+		else
+			uname -a
+			error "host operating system is not supported"
+		fi
+
+
+
+
 		DEP_NODEJS_BINPATH="$$USER_SRC/$$DEP_NODEJS/bin"
 		(
 			cd "$$USER_SRC"
 			wget -v "$$DEP_NODEJS_URL"
-			unxz -v "$$DEP_NODEJS.tar.xz"
-			tar -xvf "$$DEP_NODEJS.tar"
-			rm -v "$$DEP_NODEJS.tar"
+			tar xzvf "$$DEP_NODEJS.tar.*"
+			rm -v "$$DEP_NODEJS.tar.*"
 		)
 		(
 			cd "$$USER_BIN"
@@ -146,39 +157,27 @@ clean::
 	rm -vrf ${OBJS}
 
 
-${BUILD}/ripgrep: ${NVIMB_DEPENDENCIES}
+${BUILD}/ripgrep: ${BUILD}/cargo
 	$(shell-prep)
 	if ! which rg; then
-		DIR_RIPGREP="ripgrep-13.0.0-x86_64-unknown-linux-musl"
-		(
-			cd "$$USER_SRC"
-			wget https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/$$DIR_RIPGREP.tar.gz
-			tar xzvf $$DIR_RIPGREP.tar.gz
-			rm $$DIR_RIPGREP.tar*
-		)
+		cargo install ripgrep
 		(
 			cd "$$USER_BIN"
-			ln -sv "$$USER_SRC/$$DIR_RIPGREP/rg"
-			rg --version
+			ln -sv "$$HOME/.cargo/bin/rg" "rg"
 		)
+		ripgrep --version
 	fi
 	touch $@
 
 ${BUILD}/fdfind: ${NVIMB_DEPENDENCIES}
 	$(shell-prep)
 	if ! which fd; then
-		DIR_FD="fd-v8.7.0-x86_64-unknown-linux-musl"
-		(
-			cd "$$USER_SRC"
-			wget https://github.com/sharkdp/fd/releases/download/v8.7.0/$$DIR_FD.tar.gz
-			tar xzvf $$DIR_FD.tar.gz
-			rm $$DIR_FD.tar*
-		)
+		cargo install fd-find
 		(
 			cd "$$USER_BIN"
-			ln -sv "$$USER_SRC/$$DIR_FD/fd"
-			fd --version
+			ln -sv "$$HOME/.cargo/bin/fd" "fd"
 		)
+		fd --version
 	fi
 	touch $@
 
@@ -198,16 +197,31 @@ ${BUILD}/py-virtualenv: ${NVIMB_DEPENDENCIES}
 	touch $@
 
 ${BUILD}/codelldb: ${NVIMB_DEPENDENCIES}
+
+
+
+
 	$(shell-prep)
 	if ! which codelldb; then
-		DEP_CODELLDB="codelldb-x86_64-linux"
+
+		if uname -a | egrep -oi --quiet linux; then
+			DEP_CODELLDB="codelldb-x86_64-linux"
+		elif uname -a | egrep -oi --quiet darwin; then
+			DEP_CODELLDB="codelldb-aarch64-darwin"
+		else
+			uname -a
+			error "host operating system is not supported"
+		fi
+
+
+
 		DEP_CODELLDB_INFLATED_DIRNAME="extension"
-		DEP_CODELLDB_URL="https://github.com/vadimcn/vscode-lldb/releases/download/v1.8.1/$$DEP_CODELLDB.vsix"
-		CODELLDB_PATH="$$USER_SRC/codelldb-1.8.1/$$DEP_CODELLDB"
+		DEP_CODELLDB_URL="https://github.com/vadimcn/vscode-lldb/releases/download/v1.10.0/$$DEP_CODELLDB.vsix"
+		CODELLDB_PATH="$$USER_SRC/codelldb-1.10.0/$$DEP_CODELLDB"
 		(
 			cd "$$USER_SRC"
-			mkdir codelldb-1.8.1
-			cd codelldb-1.8.1
+			mkdir codelldb-1.10.0
+			cd codelldb-1.10.0
 			wget -v "$$DEP_CODELLDB_URL"
 			unzip "$$DEP_CODELLDB.vsix"
 			mv -v "$$DEP_CODELLDB_INFLATED_DIRNAME" "$$DEP_CODELLDB"
