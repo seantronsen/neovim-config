@@ -124,7 +124,7 @@ ${BUILD}/nodejs: ${NVIMB_DEPENDENCIES}
 			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-linux-x64"
 			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.xz"
 		elif uname -a | egrep -oi --quiet darwin; then
-			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-darwin-arm64
+			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-darwin-arm64"
 			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.gz"
 		else
 			uname -a
