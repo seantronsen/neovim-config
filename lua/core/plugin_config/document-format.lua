@@ -3,6 +3,7 @@
 -----------------------------
 
 -- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
+local util = require("formatter.util")
 require("formatter").setup({
 	-- Enable or disable logging
 	logging = true,
@@ -23,8 +24,9 @@ require("formatter").setup({
 		-- data languages
 		sql = {
 			function()
-				local current_filename = vim.fn.bufname()
-				return { exe = "sqlfmt", args = {"" .. " " .. "-"} , stdin=true}
+				local current_filename = util.get_current_buffer_file_path()
+				local args = { "" .. " " .. "-" }
+				return { exe = "sqlfmt", args = args, stdin = true }
 			end,
 		},
 
@@ -35,6 +37,14 @@ require("formatter").setup({
 		json = { require("formatter.filetypes.json").prettier },
 
 		-- markup languages
+		bib = {
+			function()
+				local current_filename = util.get_current_buffer_file_path()
+				local args = { "--v2", current_filename }
+				print("those args over there" .. vim.inspect(args))
+				return { exe = "bibtex-tidy", args = args, stdin = true }
+			end,
+		},
 		html = { require("formatter.filetypes.html").prettier },
 		latex = { require("formatter.filetypes.latex").latexindent },
 		markdown = { require("formatter.filetypes.markdown").prettier },

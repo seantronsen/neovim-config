@@ -112,6 +112,7 @@ require("mason-lspconfig").setup({
 require("mason-tool-installer").setup({
 	ensure_installed = {
 		"black",
+		"bibtex-tidy",
 		"debugpy",
 		"bash-debug-adapter",
 		"prettier",
