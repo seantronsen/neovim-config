@@ -68,7 +68,7 @@ ${BUILD}/neovim: ${NVIMB_DEPENDENCIES} ${NVIM_PREREQ_PATHS}
 	(
 		cd "$$USER_BIN"
 		rm -vf nvim
-		ln -sv "$$NVIM_BINARY" nvim
+		ln -svf "$$NVIM_BINARY" nvim
 	)
 	nvim --version
 
@@ -109,7 +109,7 @@ ${BUILD}/tree-sitter: ${BUILD}/cargo
 		cargo install tree-sitter-cli
 		(
 			cd "$$USER_BIN"
-			ln -sv "$$HOME/.cargo/bin/tree-sitter" "tree-sitter-cli"
+			ln -svf "$$HOME/.cargo/bin/tree-sitter" "tree-sitter-cli"
 		)
 		tree-sitter-cli --version
 	fi
@@ -143,8 +143,8 @@ ${BUILD}/nodejs: ${NVIMB_DEPENDENCIES}
 		)
 		(
 			cd "$$USER_BIN"
-			ln -sv "$$DEP_NODEJS_BINPATH/node" "node"
-			ln -sv "$$DEP_NODEJS_BINPATH/npm" "npm"
+			ln -svf "$$DEP_NODEJS_BINPATH/node" "node"
+			ln -svf "$$DEP_NODEJS_BINPATH/npm" "npm"
 		)
 		node --version
 		npm --version
@@ -163,7 +163,7 @@ ${BUILD}/ripgrep: ${BUILD}/cargo
 		cargo install ripgrep
 		(
 			cd "$$USER_BIN"
-			ln -sv "$$HOME/.cargo/bin/rg" "rg"
+			ln -svf "$$HOME/.cargo/bin/rg" "rg"
 		)
 		ripgrep --version
 	fi
@@ -175,7 +175,7 @@ ${BUILD}/fdfind: ${NVIMB_DEPENDENCIES}
 		cargo install fd-find
 		(
 			cd "$$USER_BIN"
-			ln -sv "$$HOME/.cargo/bin/fd" "fd"
+			ln -svf "$$HOME/.cargo/bin/fd" "fd"
 		)
 		fd --version
 	fi
@@ -228,10 +228,10 @@ ${BUILD}/codelldb: ${NVIMB_DEPENDENCIES}
 		)
 		(
 			cd "$$USER_BIN"
-			ln -vs "$$CODELLDB_PATH/adapter/codelldb"
-			ln -vs "$$CODELLDB_PATH/lldb/bin/lldb"
-			ln -vs "$$CODELLDB_PATH/lldb/bin/lldb-argdumper"
-			ln -vs "$$CODELLDB_PATH/lldb/bin/lldb-server"
+			ln -svf "$$CODELLDB_PATH/adapter/codelldb"
+			ln -svf "$$CODELLDB_PATH/lldb/bin/lldb"
+			ln -svf "$$CODELLDB_PATH/lldb/bin/lldb-argdumper"
+			ln -svf "$$CODELLDB_PATH/lldb/bin/lldb-server"
 		)
 		lldb --version
 		codelldb --version
