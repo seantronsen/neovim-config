@@ -27,7 +27,7 @@ require("lazy").setup({
 
 	"kyazdani42/nvim-web-devicons",
 	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
-	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach" },
+	{ "j-hui/fidget.nvim", tag = "v1.4.0", event = "LspAttach" },
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
