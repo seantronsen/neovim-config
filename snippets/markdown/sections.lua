@@ -7,29 +7,50 @@ local nfunc = ls.function_node
 local ndynamic = ls.dynamic_node
 local nrep = require("luasnip.extras").rep
 local fmta = require("luasnip.extras.fmt").fmta
+local fmt = require("luasnip.extras.fmt").fmt
 
 local snutils = require("core.snippetutils")
+local obsidian_header = [[> [!{}] {}
+>]]
 
 return {}, {
 	s(
 		{ trig = "^sthe", wordTrig = false, regTrig = true },
-		ntext([[> Theorem: ]]),
+		fmt(obsidian_header, { ntext("important"), ntext("Theorem") }),
 		{ condition = snutils.not_mathzone }
 	),
 	s(
 		{ trig = "^sdef", wordTrig = false, regTrig = true },
-		ntext([[> Definition: ]]),
+		fmt(obsidian_header, { ntext("important"), ntext("Definition") }),
 		{ condition = snutils.not_mathzone }
 	),
 	s(
 		{ trig = "^snot", wordTrig = false, regTrig = true },
-		ntext([[> Note: ]]),
+		fmt(obsidian_header, { ntext("info"), ntext("Note") }),
 		{ condition = snutils.not_mathzone }
 	),
 
 	s(
-		{ trig = "^spro", wordTrig = false, regTrig = true },
-		ntext([[### Proof: ]]),
+		{ trig = "^s!", wordTrig = false, regTrig = true },
+		fmt(obsidian_header, { ntext("important"), ntext("") }),
 		{ condition = snutils.not_mathzone }
 	),
+
+	s(
+		{ trig = "^s%?", wordTrig = false, regTrig = true },
+		fmt(obsidian_header, { ntext("faq"), ntext("Common Questions") }),
+		{ condition = snutils.not_mathzone }
+	),
+
+	s(
+		{ trig = "^serr", wordTrig = false, regTrig = true },
+		fmt(obsidian_header, { ntext("fail"), ntext("") }),
+		{ condition = snutils.not_mathzone }
+	),
+
+	--  s(
+	--  	{ trig = "^spro", wordTrig = false, regTrig = true },
+	--  	ntext([[### Proof: ]]),
+	--  	{ condition = snutils.not_mathzone }
+	--  ),
 }
