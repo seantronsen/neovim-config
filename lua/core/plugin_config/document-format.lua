@@ -4,11 +4,23 @@
 
 -- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
 local util = require("formatter.util")
+local get_current_filename = function()
+	return util.get_current_buffer_file_path()
+end
+local latexfmt = function()
+	local args = { "-g", "/dev/null", "-m" }
+	return { exe = "latexindent", args = args, stdin = true }
+end
+
+local sqlfmt = function()
+	local args = { " ", "-" }
+	return { exe = "sqlfmt", args = args, stdin = true }
+end
+
 require("formatter").setup({
-	-- Enable or disable logging
-	logging = true,
-	-- Set the log level
-	log_level = vim.log.levels.WARN,
+	logging = true, -- Enable or disable logging
+	log_level = vim.log.levels.WARN, -- Set the log level
+
 	-- All formatter configurations are opt-in
 	filetype = {
 		-- programming languages
@@ -21,14 +33,8 @@ require("formatter").setup({
 		rust = { require("formatter.filetypes.rust").rustfmt },
 		typescript = { require("formatter.filetypes.javascript").prettier },
 
-		-- data languages
-		sql = {
-			function()
-				local current_filename = util.get_current_buffer_file_path()
-				local args = { "" .. " " .. "-" }
-				return { exe = "sqlfmt", args = args, stdin = true }
-			end,
-		},
+		-- data manipulation languages
+		sql = { sqlfmt },
 
 		-- scripting languages
 		sh = { require("formatter.filetypes.sh").shfmt },
@@ -39,14 +45,15 @@ require("formatter").setup({
 		-- markup languages
 		bib = {
 			function()
-				local current_filename = util.get_current_buffer_file_path()
+				local current_filename = get_current_filename()
 				local args = { "--v2", current_filename }
 				print("those args over there" .. vim.inspect(args))
 				return { exe = "bibtex-tidy", args = args, stdin = true }
 			end,
 		},
 		html = { require("formatter.filetypes.html").prettier },
-		latex = { require("formatter.filetypes.latex").latexindent },
+		latex = { latexfmt },
+		tex = { latexfmt },
 		markdown = { require("formatter.filetypes.markdown").prettier },
 		toml = { require("formatter.filetypes.toml").taplo },
 		yaml = { require("formatter.filetypes.yaml").yamlfmt },
