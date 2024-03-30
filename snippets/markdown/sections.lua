@@ -11,7 +11,7 @@ local fmt = require("luasnip.extras.fmt").fmt
 
 local snutils = require("core.snippetutils")
 local obsidian_header = [[> [!{}] {}
->]]
+> ]]
 
 return {}, {
 	s(
@@ -29,6 +29,14 @@ return {}, {
 		fmt(obsidian_header, { ntext("info"), ntext("Note") }),
 		{ condition = snutils.not_mathzone }
 	),
+
+
+	s(
+		{ trig = "^swar", wordTrig = false, regTrig = true },
+		fmt(obsidian_header, { ntext("warning"), ntext("") }),
+		{ condition = snutils.not_mathzone }
+	),
+
 
 	s(
 		{ trig = "^s!", wordTrig = false, regTrig = true },
