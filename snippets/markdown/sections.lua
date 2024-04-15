@@ -30,13 +30,11 @@ return {}, {
 		{ condition = snutils.not_mathzone }
 	),
 
-
 	s(
 		{ trig = "^swar", wordTrig = false, regTrig = true },
 		fmt(obsidian_header, { ntext("warning"), ntext("") }),
 		{ condition = snutils.not_mathzone }
 	),
-
 
 	s(
 		{ trig = "^s!", wordTrig = false, regTrig = true },
@@ -55,10 +53,4 @@ return {}, {
 		fmt(obsidian_header, { ntext("fail"), ntext("") }),
 		{ condition = snutils.not_mathzone }
 	),
-
-	--  s(
-	--  	{ trig = "^spro", wordTrig = false, regTrig = true },
-	--  	ntext([[### Proof: ]]),
-	--  	{ condition = snutils.not_mathzone }
-	--  ),
 }
