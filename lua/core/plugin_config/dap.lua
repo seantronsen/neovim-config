@@ -72,7 +72,7 @@ dap_python.test_runner = "pytest"
 
 -- SUPPORT LAUNCH.JSON FILES
 ------------------------------------------
-local launch_path = vim.loop.cwd() .. "/launch.json"
+local launch_path = vim.loop.cwd() .. "/.launch.json" -- hidden on *nix
 local launch_filetype_maps = {
 	codelldb = { "c", "cpp" },
 	rt_lldb = { "rust" },
