@@ -38,10 +38,14 @@ require("lazy").setup({
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
 	"simrat39/rust-tools.nvim",
 	"folke/neodev.nvim",
-	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v1.15.0" },
-	{ "lervag/vimtex", tag = "v2.13", ft = { "tex", "markdown" } },
 
 	{ "nvimdev/lspsaga.nvim", commit = "199eb00" },
+
+	-- note taking
+	--------------------------------
+	{ "lervag/vimtex", tag = "v2.13", ft = { "tex", "markdown" } },
+	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v1.15.0" },
+	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy" },
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
