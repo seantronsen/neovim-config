@@ -20,7 +20,6 @@ require("lazy").setup({
 	--THEMES
 	--------------------------------
 	"EdenEast/nightfox.nvim",
-	-- "water-sucks/darkrose.nvim",
 
 	--STATUS LINE
 	--------------------------------
@@ -100,14 +99,10 @@ require("lazy").setup({
 	--------------------------------
 
 	-- better rust documentation generation
-	{ "kkoomen/vim-doge", build = ":call doge#install()" },
+	-- { "kkoomen/vim-doge", build = ":call doge#install()" },
 
 	-- better docs overall, but too many issues as of 10272023. might try again in the future
-	-- { "danymat/neogen", tag = "2.15.2" },
-
-	-- GIT
-	--------------------------------
-	{ "sindrets/diffview.nvim", commit = "a111d19" },
+	{ "danymat/neogen", tag = "2.17.1" },
 
 	--TMUX COMPATIBILITY
 	--------------------------------
