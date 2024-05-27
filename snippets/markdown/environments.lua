@@ -20,6 +20,12 @@ local tchars = ut.capttchars
 return {}, {
 
 	s({
+		trig = "^cb",
+		wordTrig = false,
+		regTrig = true,
+	}, fmta("- [ ] <>", { ninsert(1) }), { condition = ut.not_mathzone }),
+
+	s({
 		trig = schars .. "tag" .. psp,
 		wordTrig = false,
 		regTrig = true,
