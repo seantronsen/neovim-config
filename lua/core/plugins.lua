@@ -26,13 +26,13 @@ require("lazy").setup({
 
 	"kyazdani42/nvim-web-devicons",
 	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
-	{ "j-hui/fidget.nvim", tag = "v1.4.0", event = "LspAttach" },
+	{ "j-hui/fidget.nvim", tag = "v1.4.5", event = "LspAttach" },
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
 
 	{ "neovim/nvim-lspconfig", commit = "cb49a4c" },
-	{ "williamboman/mason.nvim", tag = "v1.8.1" },
+	{ "williamboman/mason.nvim", tag = "v1.10.0" },
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "e4f3474" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v1.20.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
@@ -44,7 +44,7 @@ require("lazy").setup({
 	-- note taking
 	--------------------------------
 	{ "lervag/vimtex", tag = "v2.13", ft = { "tex", "markdown" } },
-	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v1.15.0" },
+	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v3.9.0" },
 	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy" },
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL

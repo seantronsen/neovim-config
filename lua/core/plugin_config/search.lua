@@ -7,6 +7,9 @@ require("telescope").setup({
 	defaults = {
 		mappings = {
 			i = {
+				-- disable tab select without allowing tab char input
+				["<Tab>"] = function() end,
+				["<S-Tab>"] = function() end,
 				["?"] = action_layout.toggle_preview,
 			},
 		},
