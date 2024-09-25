@@ -35,6 +35,18 @@ return {}, {
 	),
 
 	s(
+		{ trig = schars .. ".([mM])u" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\<>u]] .. psp, { ncapture(1), ncapture(2) }),
+		mopts
+	),
+
+	s(
+		{ trig = schars .. ".([sS])i" .. psp, wordTrig = false, regTrig = true },
+		fmta([[<>\<>igma]] .. psp, { ncapture(1), ncapture(2) }),
+		mopts
+	),
+
+	s(
 		{ trig = schars .. ".([lL])a" .. psp, wordTrig = false, regTrig = true },
 		fmta([[<>\<>ambda]] .. psp, { ncapture(1), ncapture(2) }),
 		mopts

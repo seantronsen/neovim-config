@@ -66,6 +66,26 @@ dap.configurations.cpp = dap.configurations.c
 -- the dap configuration for rust is defined within the lsp configuration
 -- for better alignment with the features of `rust-tools.nvim`
 
+-- old pytest debug stuff. works, but not the expected result. debugs pytest itself.
+-- dap.configurations.python = {
+-- 	{
+-- 		type = "python",
+-- 		request = "launch",
+-- 		name = "Debug pytest",
+-- 		module = "pytest",
+-- 		args = { "-s" }, -- Ensure pytest doesn't capture output
+-- 		justMyCode = false,
+-- 		stopOnEntry = false,
+-- 		showReturnValue = true,
+-- 		console = "integratedTerminal",
+-- 		exceptionBreakpointFilters = {
+-- 			{ filter = "raised", label = "Raised Exceptions" },
+-- 			{ filter = "uncaught", label = "Uncaught Exceptions" },
+-- 		},
+-- 	},
+-- }
+
+-- dap.defaults.fallback.exception_breakpoints = {'raised', 'uncaught'}
 local dap_python = require("dap-python")
 dap_python.setup(vim.env.HOME .. "/.virtualenvs/debugenv/bin/python")
 dap_python.test_runner = "pytest"
@@ -80,6 +100,7 @@ local launch_filetype_maps = {
 	debugpy = { "python" },
 }
 require("dap.ext.vscode").load_launchjs(launch_path, launch_filetype_maps)
+dap.set_exception_breakpoints({ "raised", "uncaught" })
 
 -- DAPUI SETUP
 ------------------------------------------

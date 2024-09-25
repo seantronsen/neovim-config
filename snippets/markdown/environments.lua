@@ -77,6 +77,7 @@ return {}, {
 	]],
 			{ ninsert(1, "section-type"), ninsert(2, "content"), rep(1) }
 		),
+		-- {} -- remove while writing tex paper
 		mopts
 	),
 

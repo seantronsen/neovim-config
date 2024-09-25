@@ -226,4 +226,23 @@ require("mason-lspconfig").setup_handlers({
 			},
 		})
 	end,
+
+	-- todo: possibly unnecessary
+	["pyright"] = function()
+		require("lspconfig").pyright.setup({
+			on_attach = on_attach,
+			flags = lsp_flags,
+			capabilities = capabilities,
+			settings = {
+				python = {
+					analysis = {
+						diagnosticMode = "workspace",
+						useLibraryCodeForTypes = true,
+						typeCheckingMode = "strict",
+						stubPath = "typings",
+					},
+				},
+			},
+		})
+	end,
 })
