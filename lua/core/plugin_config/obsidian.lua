@@ -39,7 +39,9 @@ obs.setup({
 				suffix = suffix .. string.char(math.random(65, 90))
 			end
 		end
-		return suffix .. "-" .. tostring(os.time())
+		-- return suffix .. "-" .. tostring(os.time())
+		-- switch to org by date string for easier chrono sorting. especially for recurring meeting notes.
+		return suffix .. "-" .. tostring(os.date("%Y%m%d%H%M%S"))
 	end,
 	picker = {
 		name = "telescope.nvim",
