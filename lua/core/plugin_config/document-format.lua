@@ -17,6 +17,8 @@ local sqlfmt = function()
 	return { exe = "sqlfmt", args = args, stdin = true }
 end
 
+local max_line_chars = 120
+
 require("formatter").setup({
 	logging = true, -- Enable or disable logging
 	log_level = vim.log.levels.WARN, -- Set the log level
@@ -54,7 +56,48 @@ require("formatter").setup({
 		html = { require("formatter.filetypes.html").prettier },
 		latex = { latexfmt },
 		tex = { latexfmt },
-		markdown = { require("formatter.filetypes.markdown").prettier },
+		-- markdown = { require("formatter.filetypes.markdown").prettier },
+
+		-- a "more custom" definition to enforce auto line wrapping in markdown docs.
+		markdown = {
+
+			function(parser)
+				---@diagnostic disable-next-line: redefined-local
+				local max_line_chars = 80
+				if not parser then
+					return {
+						exe = "prettier",
+						args = {
+							"--stdin-filepath",
+							vim.api.nvim_buf_get_name(0),
+							"--print-width",
+							tostring(max_line_chars),
+							"--prose-wrap",
+							"always",
+						},
+						stdin = true,
+						try_node_modules = true,
+					}
+				end
+
+				return {
+					exe = "prettier",
+					args = {
+						"--stdin-filepath",
+						vim.api.nvim_buf_get_name(0),
+						"--print-width",
+						tostring(max_line_chars),
+						"--prose-wrap",
+						"always",
+						"--parser",
+						parser,
+					},
+					stdin = true,
+					try_node_modules = true,
+				}
+			end,
+		},
+
 		toml = { require("formatter.filetypes.toml").taplo },
 		yaml = { require("formatter.filetypes.yaml").yamlfmt },
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
