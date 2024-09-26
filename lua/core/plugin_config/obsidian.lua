@@ -108,10 +108,23 @@ end, { desc = "[o]bsidian note table of [c]ontents" })
 -- - obsidian extract note (visual select text, extract to note, replace with link)
 
 vim.keymap.set("n", "<leader>on", function()
-	local result = vim.fn.input("Note name: ")
-	if vim.fn.empty(result) == 1 then
-		print("warning: base filename is a required argument")
-	else
-		vim.cmd("ObsidianNew " .. result)
+	-- todo: the conditional clause below is a spot fix for https://github.com/epwalsh/obsidian.nvim/issues/546
+	-- periodically review that issue until a patch is released, fixing the problem.
+	if vim.bo.filetype == "oil" then
+		local message = "illegal action: cannot create notes while inside an oil.nvim buffer"
+		vim.notify(message, vim.log.levels.WARN)
+		return
 	end
+
+	-- process user input for the name of the new note.
+	-- todo: need to add a check for my occasional dumbass moment where I enter only whitespace
+	local result = vim.fn.input("note name: ")
+	if vim.fn.empty(result) == 1 then
+		local message = "illegal action: base filename is a required argument"
+		vim.notify(message, vim.log.levels.WARN)
+		return
+	end
+
+	-- leverage existing obsidian nvim command to create the notefile
+	vim.cmd("ObsidianNew " .. result)
 end, { desc = "[o]bsidian create [n]ew note" })
