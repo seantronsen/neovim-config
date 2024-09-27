@@ -31,10 +31,10 @@ require("lazy").setup({
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
 
-	{ "neovim/nvim-lspconfig", commit = "cb49a4c" },
+	{ "neovim/nvim-lspconfig", tag = "v1.0.0" },
 	{ "williamboman/mason.nvim", tag = "v1.10.0" },
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "e4f3474" },
-	{ "williamboman/mason-lspconfig.nvim", tag = "v1.20.0" },
+	{ "williamboman/mason-lspconfig.nvim", tag = "v1.31.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
 	"simrat39/rust-tools.nvim",
 	"folke/neodev.nvim",
