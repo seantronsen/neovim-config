@@ -62,13 +62,13 @@ require("lazy").setup({
 
 	-- VIM SLIME
 	--------------------------------
-	{
-		"klafyvel/vim-slime-cells",
-		commit = "2252bc8",
-		dependencies = {
-			{ "jpalardy/vim-slime", commit = "bb15285" },
-		},
-	},
+	-- {
+	-- 	"klafyvel/vim-slime-cells",
+	-- 	commit = "2252bc8",
+	-- 	dependencies = {
+	-- 		{ "jpalardy/vim-slime", commit = "bb15285" },
+	-- 	},
+	-- },
 
 	--DOCUMENT FORMATTING
 	--------------------------------
@@ -76,7 +76,7 @@ require("lazy").setup({
 
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
-	"nvim-tree/nvim-tree.lua",
+	-- "nvim-tree/nvim-tree.lua",
 	{ "stevearc/oil.nvim", tag = "v2.2.0" },
 	{
 		"nvim-telescope/telescope.nvim",
