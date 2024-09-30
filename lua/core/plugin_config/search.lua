@@ -12,6 +12,11 @@ require("telescope").setup({
 				["<S-Tab>"] = function() end,
 				["?"] = action_layout.toggle_preview,
 			},
+			n = {
+				-- disable tab select without allowing tab char input
+				["<Tab>"] = function() end,
+				["<S-Tab>"] = function() end,
+			},
 		},
 		preview = {
 			hide_on_startup = true,
@@ -21,7 +26,8 @@ require("telescope").setup({
 local builtin = require("telescope.builtin")
 
 vim.keymap.set("n", "<leader>ff", function()
-	builtin.find_files({ hidden = true })
+	builtin.find_files()
+	-- builtin.find_files({ hidden = true })
 end, { desc = "[f]ind [f]iles" })
 
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[f]ind with live [g]rep" })
