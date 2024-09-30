@@ -101,8 +101,8 @@ require("mason-lspconfig").setup({
 		"jsonls",
 		"lua_ls",
 		"marksman",
-		"basedpyright",
-		-- "pyright",
+		-- "basedpyright",
+		"pyright",
 		"rust_analyzer",
 		"taplo",
 		"yamlls",
@@ -229,10 +229,10 @@ require("mason-lspconfig").setup_handlers({
 	end,
 
 	-- todo: possibly unnecessary
-	-- ["pyright"] = function()
-	["basedpyright"] = function()
-		--require("lspconfig").pyright.setup({
-		require("lspconfig").basedpyright.setup({
+	-- ["basedpyright"] = function()
+	-- require("lspconfig").basedpyright.setup({
+	["pyright"] = function()
+		require("lspconfig").pyright.setup({
 			on_attach = on_attach,
 			flags = lsp_flags,
 			capabilities = capabilities,
