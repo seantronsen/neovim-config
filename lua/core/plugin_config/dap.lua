@@ -1,51 +1,78 @@
 ---@diagnostic disable: missing-fields
+
 ------------------------------------------
 -- CONFIGURATION FOR DAP
 ------------------------------------------
+local registry = require("mason-registry")
 local dap = require("dap")
+dap.defaults.fallback.exception_breakpoints = { "raised", "uncaught" }
 
--- DEFINE DEBUG ADAPTERS FOR DAP
 ------------------------------------------
-dap.adapters.codelldb = {
-	type = "server",
-	port = "${port}",
-	executable = {
-		command = "codelldb",
-		args = { "--port", "${port}" },
-	},
-}
-
-dap.adapters.bashdb = {
-	type = "executable",
-	command = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter/bash-debug-adapter",
-	name = "bashdb",
-}
-
--- DEFINE DEBUG CONFIGURATIONS FOR DAP
+-- CONFIGURATION FOR DAP ADAPTERS (DEBUGGERS)
 ------------------------------------------
-dap.configurations.sh = {
-	{
-		type = "bashdb",
-		request = "launch",
-		name = "Launch file",
-		showDebugOutput = true,
-		pathBashdb = vim.fn.stdpath("data")
-			.. "/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb",
-		pathBashdbLib = vim.fn.stdpath("data")
-			.. "/mason/packages/bash-debug-adapter/extension/bashdb_dir",
-		trace = true,
-		file = "${file}",
-		program = "${file}",
-		cwd = "${workspaceFolder}",
-		pathCat = "cat",
-		pathBash = "/bin/bash",
-		pathMkfifo = "mkfifo",
-		pathPkill = "pkill",
-		args = {},
-		env = {},
-		terminalKind = "integrated",
-	},
-}
+
+local target = "codelldb"
+if registry.has_package(target) then
+	dap.adapters.codelldb = {
+		type = "server",
+		port = "${port}",
+		executable = {
+			command = vim.fn.exepath(target),
+			args = { "--port", "${port}" },
+		},
+	}
+else
+	local message = "missing dependency: '" .. target .. "' could not be found."
+	vim.notify(message, vim.log.levels.WARN)
+end
+
+---@diagnostic disable-next-line: redefined-local
+local target = "bash-debug-adapter"
+if registry.has_package(target) then
+	local target_path = vim.fn.exepath(target)
+	dap.adapters.bashdb = {
+		type = "executable",
+		command = target_path,
+		name = "bashdb",
+	}
+else
+	local message = "missing dependency: '" .. target .. "' could not be found."
+	vim.notify(message, vim.log.levels.WARN)
+end
+
+-- DEBUGGING CONFIGURATION SPECIFIC TO FILETYPE
+------------------------------------------
+---@diagnostic disable-next-line: redefined-local
+local target = "bash-debug-adapter"
+if registry.has_package(target) then
+	local path_executable = vim.fn.exepath(target)
+	local package = registry.get_package(target)
+	local path_library = package:get_install_path()
+	dap.configurations.sh = {
+		{
+			type = "bashdb",
+			request = "launch",
+			name = "Launch file",
+			showDebugOutput = true,
+			pathBashdb = path_executable,
+			pathBashdbLib = path_library,
+			trace = true,
+			file = "${file}",
+			program = "${file}",
+			cwd = "${workspaceFolder}",
+			pathCat = "cat",
+			pathBash = "/bin/bash",
+			pathMkfifo = "mkfifo",
+			pathPkill = "pkill",
+			args = {},
+			env = {},
+			terminalKind = "integrated",
+		},
+	}
+else
+	local message = "missing debug adapter: '" .. target .. "' could not be found."
+	vim.notify(message, vim.log.levels.WARN)
+end
 
 dap.configurations.c = {
 	{
@@ -53,6 +80,7 @@ dap.configurations.c = {
 		type = "codelldb",
 		request = "launch",
 		program = function()
+			-- todo: fix function call to use proper signature
 			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
 		end,
 		cwd = "${workspaceFolder}",
@@ -62,33 +90,23 @@ dap.configurations.c = {
 
 dap.configurations.cpp = dap.configurations.c
 
--- dap.configurations.rust = {}
 -- the dap configuration for rust is defined within the lsp configuration
 -- for better alignment with the features of `rust-tools.nvim`
+dap.configurations.rust = {}
 
--- old pytest debug stuff. works, but not the expected result. debugs pytest itself.
--- dap.configurations.python = {
--- 	{
--- 		type = "python",
--- 		request = "launch",
--- 		name = "Debug pytest",
--- 		module = "pytest",
--- 		args = { "-s" }, -- Ensure pytest doesn't capture output
--- 		justMyCode = false,
--- 		stopOnEntry = false,
--- 		showReturnValue = true,
--- 		console = "integratedTerminal",
--- 		exceptionBreakpointFilters = {
--- 			{ filter = "raised", label = "Raised Exceptions" },
--- 			{ filter = "uncaught", label = "Uncaught Exceptions" },
--- 		},
--- 	},
--- }
-
--- dap.defaults.fallback.exception_breakpoints = {'raised', 'uncaught'}
-local dap_python = require("dap-python")
-dap_python.setup(vim.env.HOME .. "/.virtualenvs/debugenv/bin/python")
-dap_python.test_runner = "pytest"
+---@diagnostic disable-next-line: redefined-local
+local target = "debugpy"
+if registry.has_package(target) then
+	local package = registry.get_package(target)
+	local path_install = package:get_install_path()
+	local path_python = path_install .. "/venv/bin/python"
+	local dap_python = require("dap-python")
+	dap_python.setup(path_python)
+	dap_python.test_runner = "pytest"
+else
+	local message = "missing debug adapter: '" .. target .. "' could not be found."
+	vim.notify(message, vim.log.levels.WARN)
+end
 
 -- SUPPORT LAUNCH.JSON FILES
 ------------------------------------------
@@ -96,8 +114,9 @@ local launch_path = vim.loop.cwd() .. "/.launch.json" -- hidden on *nix
 local launch_filetype_maps = {
 	codelldb = { "c", "cpp" },
 	rt_lldb = { "rust" },
-	python = { "python" },
 	debugpy = { "python" },
+	-- todo: this seems incorrect. there isn't an adapter named `python`
+	python = { "python" },
 }
 require("dap.ext.vscode").load_launchjs(launch_path, launch_filetype_maps)
 dap.set_exception_breakpoints({ "raised", "uncaught" })
@@ -142,14 +161,18 @@ local function open_dap_ui()
 	dapui.open(dapui_open_args)
 end
 
-local function close_dap_ui()
-	dapui.close()
-end
-
 dap.listeners.after.event_initialized["dapui_config"] = open_dap_ui
 dap.listeners.after.event_breakpoint["dapui_config"] = open_dap_ui
-dap.listeners.before.event_terminated["dapui_config"] = close_dap_ui
-dap.listeners.before.event_exited["dapui_config"] = close_dap_ui
+-- note: disabling this due to previous annoyances. for instance, if debugging
+-- qt and it crashes (which occurs more frequently than I care for), this exits
+-- the UI like it's supposed to and I have to re-open it to try and determine
+-- what happened.
+--
+-- local function close_dap_ui()
+-- 	dapui.close()
+-- end
+-- dap.listeners.before.event_terminated["dapui_config"] = close_dap_ui
+-- dap.listeners.before.event_exited["dapui_config"] = close_dap_ui
 
 -- KEYBINDINGS DAP
 ------------------------------------------

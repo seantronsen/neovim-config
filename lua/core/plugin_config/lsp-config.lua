@@ -104,21 +104,21 @@ require("mason-lspconfig").setup({
 		"jsonls",
 		"lua_ls",
 		"marksman",
-		-- "basedpyright",
 		"pyright",
 		"rust_analyzer",
 		"taplo",
 		"yamlls",
 	},
-	automatic_installation = false,
+	automatic_installation = false, -- todo: why is this false? but the other one is true?
 })
 
 require("mason-tool-installer").setup({
 	ensure_installed = {
-		"black",
-		"bibtex-tidy",
-		"debugpy",
 		"bash-debug-adapter",
+		"bibtex-tidy",
+		"black",
+		"codelldb",
+		"debugpy",
 		"prettier",
 		"shfmt",
 		"sqlfmt",
@@ -133,6 +133,10 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 local lspsaga = require("lspsaga")
 lspsaga.setup({
+
+	ui = {
+		code_action = "A",
+	},
 	lightbulb = {
 		sign = false,
 	},
@@ -165,54 +169,6 @@ require("mason-lspconfig").setup_handlers({
 		})
 	end,
 
-	--------------------------------
-	-- Next, you can provide a dedicated handler for specific servers.
-	-- For example, a handler override for the `rust_analyzer`:
-	--------------------------------
-	["rust_analyzer"] = function()
-		local extension_path = vim.env.HOME .. "/sources/codelldb-1.8.1/codelldb-x86_64-linux"
-		local codelldb_path = extension_path .. "/adapter/codelldb"
-		local liblldb_path = extension_path .. "/lldb/lib/liblldb.so"
-		local rust_tools = require("rust-tools")
-
-		local rust_on_attach = function(_, _)
-			on_attach()
-
-			-- rust unique
-			vim.keymap.set(
-				"n",
-				"<leader>h",
-				rust_tools.hover_actions.hover_actions,
-				{ desc = "[h]elp (information for hovered item)" }
-			)
-
-			-- vim.keymap.set( "n", "<leader>ag", rust_tools.code_action_group.code_action_group, { desc = "code [a]ction group" })
-		end
-
-		-- Normal setup
-		rust_tools.setup({
-			flags = lsp_flags,
-			capabilities = capabilities,
-			tools = {
-				inlay_hints = {
-					enable = true,
-				},
-				hover_actions = {
-					auto_focus = true,
-				},
-			},
-			server = {
-				on_attach = rust_on_attach,
-			},
-			dap = {
-				adapter = require("rust-tools.dap").get_codelldb_adapter(
-					codelldb_path,
-					liblldb_path
-				),
-			},
-		})
-	end,
-
 	["lua_ls"] = function()
 		require("lspconfig").lua_ls.setup({
 			on_attach = on_attach,
@@ -232,8 +188,6 @@ require("mason-lspconfig").setup_handlers({
 	end,
 
 	-- todo: possibly unnecessary
-	-- ["basedpyright"] = function()
-	-- require("lspconfig").basedpyright.setup({
 	["pyright"] = function()
 		require("lspconfig").pyright.setup({
 			on_attach = on_attach,

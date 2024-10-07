@@ -40,6 +40,7 @@ require("formatter").setup({
 
 		-- scripting languages
 		sh = { require("formatter.filetypes.sh").shfmt },
+		bash = { require("formatter.filetypes.sh").shfmt },
 
 		-- object documents
 		json = { require("formatter.filetypes.json").prettier },
