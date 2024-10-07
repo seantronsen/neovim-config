@@ -1,12 +1,10 @@
 SHELL ::= /bin/bash
 BUILD ?= $(shell mkdir -p build && echo "build")
-NVIMB_DEPENDENCIES=${BUILD}/neovim-bpackages
+NVIM_DEPENDENCIES=${BUILD}/neovim-packages
 
 # assuming the user has `git` (required binary dependency)
-NVIMB_DEPENDENCIES_LIST=wget xz unxz zip gcc g++ file python3 pip
-NVIM_SUBMODULES=${BUILD}/neovim-submodules
-NVIM_PREREQS = locals cargo tree-sitter nodejs ripgrep fdfind py-virtualenv codelldb dotfonts
-NVIM_PREREQ_PATHS = $(foreach ARG, ${NVIM_PREREQS}, ${BUILD}/${ARG})
+NVIM_DEPENDENCIES_LIST=wget xz unxz zip gcc g++ file python3 pip
+NVIM_PREREQS = nodejs ripgrep fdfind submodules
 OBJS ?= ${BUILD}
 
 define shell-prep
@@ -15,8 +13,26 @@ export PATH="$$USER_BIN:$$PATH"
 export PATH="$$HOME/.cargo/bin:$$PATH"
 endef
 
+
+# load bash library to initialize several directory target variables
+USER_BIN := $(shell source bash-common-lib/lib.bash && echo $$USER_BIN)
+USER_SRC := $(shell source bash-common-lib/lib.bash && echo $$USER_SRC)
+USER_DOTCONFIG := $(shell source bash-common-lib/lib.bash && echo $$USER_DOTCONFIG)
+
+${USER_BIN}:
+	mkdir -vp $@
+
+${USER_SRC}:
+	mkdir -vp $@
+
+${USER_DOTCONFIG}:
+	mkdir -vp $@
+
+
+
+
 .ONESHELL:
-${BUILD}/neovim: ${NVIMB_DEPENDENCIES} ${NVIM_PREREQ_PATHS}
+${BUILD}/neovim: ${NVIM_DEPENDENCIES}
 	$(shell-prep)
 
 	# REMOVE EXISTING CONFIGURATION
@@ -73,66 +89,60 @@ ${BUILD}/neovim: ${NVIMB_DEPENDENCIES} ${NVIM_PREREQ_PATHS}
 	nvim --version
 
 
-.PHONY: all clean
-${NVIM_SUBMODULES}:
-	git submodule init
-	git submodule update
-	touch $@
+submodules:
+	git submodule update --init --recursive
+	@echo "repository submodules initialized and ready for use."
 
 
 
-${NVIMB_DEPENDENCIES}: ${NVIM_SUBMODULES}
+${NVIM_DEPENDENCIES}: ${NVIM_SUBMODULES}
 	$(shell-prep)
-	binary_dependency_check ${NVIMB_DEPENDENCIES_LIST}
-	touch ${NVIMB_DEPENDENCIES}
+	binary_dependency_check ${NVIM_DEPENDENCIES_LIST}
+	touch ${NVIM_DEPENDENCIES}
 
-${BUILD}/locals:
-	$(shell-prep)
-	mkdir -vp $$USER_BIN $$USER_SRC $$USER_DOTCONFIG $$USER_FONTS
-	touch $@
 
-${BUILD}/cargo: ${NVIMB_DEPENDENCIES}
+.PHONY: node npm fd rg
+fd: uname ln rm wget tar grep ${USER_SRC} ${USER_BIN}
 	$(shell-prep)
-	if ! which cargo; then
-		SCRIPT_RUSTUP="rustup.sh"
-		wget https://sh.rustup.rs
-		mv index.html $$SCRIPT_RUSTUP
-		sh $$SCRIPT_RUSTUP -y --profile default
-		rm $$SCRIPT_RUSTUP
-		cargo --version
+	if ! command -v fd &> /dev/null; then
+		URL_TARGET=""
+		if uname -s | grep -i "Darwin"; then
+			URL_TARGET="https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-aarch64-apple-darwin.tar.gz"
+		elif uname -s | grep -i "Linux"; then
+			URL_TARGET="https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz"
+		else
+			@echo "target operating system $$(uname -s) not supported."
+			exit 1
+		fi
+
+		mkdir -v "STAGING"
+		wget -O "fd.tar.gz" $URL_TARGET
+		tar -xzvf "fd.tar.gz" -C "STAGING"
+		DIR_TARGET=$$(ls "STAGING")
+		rm -v "fd.tar.gz"
+		mv -v "STAGING"/$$DIR_TARGET ${USER_SRC}/
+		rmdir -v "STAGING"
+		cd ${USER_BIN} && ln -s $$USER_SRC/$$DIR_TARGET/fd .
+
+
+
 	fi
-	touch $@
+	fd --version
 
-${BUILD}/tree-sitter: ${BUILD}/cargo
-	$(shell-prep)
-	if ! which tree-sitter; then
-		cargo install tree-sitter-cli
-		(
-			cd "$$USER_BIN"
-			ln -svf "$$HOME/.cargo/bin/tree-sitter" "tree-sitter-cli"
-		)
-		tree-sitter-cli --version
-	fi
-	touch $@
-
-
-${BUILD}/nodejs: ${NVIMB_DEPENDENCIES}
+${BUILD}/nodejs: ${NVIM_DEPENDENCIES}
 	$(shell-prep)
 	if ! which node; then
 		DEP_NODEJS_VERSION="v20.5.1"
-		if uname -a | egrep -oi --quiet linux; then
+		if uname | egrep -oi --quiet linux; then
 			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-linux-x64"
 			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.xz"
-		elif uname -a | egrep -oi --quiet darwin; then
+		elif uname | egrep -oi --quiet darwin; then
 			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-darwin-arm64"
 			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.gz"
 		else
 			uname -a
 			error "host operating system is not supported"
 		fi
-
-
-
 
 		DEP_NODEJS_BINPATH="$$USER_SRC/$$DEP_NODEJS/bin"
 		(
@@ -151,12 +161,6 @@ ${BUILD}/nodejs: ${NVIMB_DEPENDENCIES}
 	fi
 	touch $@
 
-
-
-clean::
-	rm -vrf ${OBJS}
-
-
 ${BUILD}/ripgrep: ${BUILD}/cargo
 	$(shell-prep)
 	if ! which rg; then
@@ -169,7 +173,7 @@ ${BUILD}/ripgrep: ${BUILD}/cargo
 	fi
 	touch $@
 
-${BUILD}/fdfind: ${NVIMB_DEPENDENCIES}
+${BUILD}/fdfind: ${NVIM_DEPENDENCIES}
 	$(shell-prep)
 	if ! which fd; then
 		cargo install fd-find
@@ -181,74 +185,108 @@ ${BUILD}/fdfind: ${NVIMB_DEPENDENCIES}
 	fi
 	touch $@
 
-${BUILD}/py-virtualenv: ${NVIMB_DEPENDENCIES}
-	$(shell-prep)
-	PATH_PDB_ENV="$$HOME/.virtualenvs/debugenv"
-	if ! python3 -m pip show --quiet virtualenv; then
-		python3 -m pip install virtualenv
-	fi
-	if [[ ! -d "$$PATH_PDB_ENV" ]]; then
-		python3 -m virtualenv "$$PATH_PDB_ENV"
-		source "$$PATH_PDB_ENV/bin/activate"
-		pip install debugpy
-		python3 -m debugpy --version
-		deactivate
-	fi
-	touch $@
 
-${BUILD}/codelldb: ${NVIMB_DEPENDENCIES}
+# fdfind target: Depends on wget being available
+fdfind: wget
+	@command -v fd &> /dev/null || { echo "info: no installation found for 'fd'. attempting installation."; }
+	@echo "Building fdfind..."
+	# TODO: Add real build commands here
+	@exit 1  # Placeholder for further steps
 
 
+.PHONY: wget xz unxz zip gcc g++ file python3 pip xattr git rm ln uname grep
+
+# wget target: Ensures wget is installed
+wget:
+	@command -v wget &> /dev/null || { echo "Error: could not find 'wget'."; exit 1; }
+	@echo "Found 'wget' binary."
+	@wget --version
+
+# xz target: Ensures xz is installed
+xz:
+	@command -v xz >/dev/null 2>&1 || { echo "Error: could not find 'xz'."; exit 1; }
+	@echo "Found 'xz' binary."
+	@xz --version
+
+# unxz target: Ensures unxz is installed
+unxz:
+	@command -v unxz >/dev/null 2>&1 || { echo "Error: could not find 'unxz'."; exit 1; }
+	@echo "Found 'unxz' binary."
+	@unxz --version
+
+# zip target: Ensures zip is installed
+zip:
+	@command -v zip >/dev/null 2>&1 || { echo "Error: could not find 'zip'."; exit 1; }
+	@echo "Found 'zip' binary."
+	@zip --version
+
+# gcc target: Ensures gcc is installed
+gcc:
+	@command -v gcc >/dev/null 2>&1 || { echo "Error: could not find 'gcc'."; exit 1; }
+	@echo "Found 'gcc' binary."
+	@gcc --version
+
+# g++ target: Ensures g++ is installed
+g++:
+	@command -v g++ >/dev/null 2>&1 || { echo "Error: could not find 'g++'."; exit 1; }
+	@echo "Found 'g++' binary."
+	@g++ --version
+
+# file target: Ensures file is installed
+file:
+	@command -v file >/dev/null 2>&1 || { echo "Error: could not find 'file'."; exit 1; }
+	@echo "Found 'file' binary."
+	@file --version
+
+# python3 target: Ensures python3 is installed
+python3:
+	@command -v python3 >/dev/null 2>&1 || { echo "Error: could not find 'python3'."; exit 1; }
+	@echo "Found 'python3' binary."
+	@python3 --version
+
+# pip target: Ensures pip is installed
+pip:
+	@command -v pip >/dev/null 2>&1 || { echo "Error: could not find 'pip'."; exit 1; }
+	@echo "Found 'pip' binary."
+	@pip --version
+
+# xattr target: Ensures xattr is installed
+xattr:
+	@command -v xattr >/dev/null 2>&1 || { echo "Error: could not find 'xattr'."; exit 1; }
+	@echo "Found 'xattr' binary."
+	@xattr --version || echo "'xattr' version information not available."
+
+# ln target: Ensures ln is available (part of core utilities, should always be available)
+ln:
+	@command -v ln >/dev/null 2>&1 || { echo "Error: could not find 'ln'."; exit 1; }
+	@echo "Found 'ln' binary."
+
+# rm target: Ensures rm is available (part of core utilities, should always be available)
+rm:
+	@command -v rm >/dev/null 2>&1 || { echo "Error: could not find 'rm'."; exit 1; }
+	@echo "Found 'rm' binary."
+
+# uname target: Ensures uname is available (part of core utilities, should always be available)
+uname:
+	@command -v uname >/dev/null 2>&1 || { echo "Error: could not find 'uname'."; exit 1; }
+	@echo "Found 'uname' binary."
+	@uname --version || uname
+
+# git target: Ensures git is installed
+git:
+	@command -v git >/dev/null 2>&1 || { echo "Error: could not find 'git'."; exit 1; }
+	@echo "Found 'git' binary."
+	@git --version
+
+# grep target: Ensures grep is installed
+grep:
+	@command -v grep >/dev/null 2>&1 || { echo "Error: could not find 'grep'."; exit 1; }
+	@echo "Found 'grep' binary."
+	@grep --version
 
 
-	$(shell-prep)
-	if ! which codelldb; then
 
-		if uname -a | egrep -oi --quiet linux; then
-			DEP_CODELLDB="codelldb-x86_64-linux"
-		elif uname -a | egrep -oi --quiet darwin; then
-			DEP_CODELLDB="codelldb-aarch64-darwin"
-		else
-			uname -a
-			error "host operating system is not supported"
-		fi
+.PHONY: clean
 
-
-
-		DEP_CODELLDB_INFLATED_DIRNAME="extension"
-		DEP_CODELLDB_URL="https://github.com/vadimcn/vscode-lldb/releases/download/v1.10.0/$$DEP_CODELLDB.vsix"
-		CODELLDB_PATH="$$USER_SRC/codelldb-1.10.0/$$DEP_CODELLDB"
-		(
-			cd "$$USER_SRC"
-			mkdir codelldb-1.10.0
-			cd codelldb-1.10.0
-			wget -v "$$DEP_CODELLDB_URL"
-			unzip "$$DEP_CODELLDB.vsix"
-			mv -v "$$DEP_CODELLDB_INFLATED_DIRNAME" "$$DEP_CODELLDB"
-		)
-		(
-			cd "$$USER_BIN"
-			ln -svf "$$CODELLDB_PATH/adapter/codelldb"
-			ln -svf "$$CODELLDB_PATH/lldb/bin/lldb"
-			ln -svf "$$CODELLDB_PATH/lldb/bin/lldb-argdumper"
-			ln -svf "$$CODELLDB_PATH/lldb/bin/lldb-server"
-		)
-		lldb --version
-		codelldb --version
-		lldb-server --version
-		lldb-argdumper --version
-	fi
-	touch $@
-
-# INSTALL FAVORITE EDITOR FONTS
-${BUILD}/dotfonts: ${NVIMB_DEPENDENCIES}
-	$(shell-prep)
-	(
-		cd "$$USER_FONTS"
-		DEP_FIRACODE="FiraCode"
-		DEP_FIRACODE_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/$$DEP_FIRACODE.zip"
-		wget -v "$$DEP_FIRACODE_URL"
-		unzip -o "$$DEP_FIRACODE.zip"
-		rm "$$DEP_FIRACODE.zip"
-	)
-	touch $@
+clean:
+	rm -vrf ${OBJS}
