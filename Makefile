@@ -1,38 +1,24 @@
 SHELL ::= /bin/bash
-BUILD ?= $(shell mkdir -p build && echo "build")
-NVIM_DEPENDENCIES=${BUILD}/neovim-packages
-
-# assuming the user has `git` (required binary dependency)
-NVIM_DEPENDENCIES_LIST=wget xz unxz zip gcc g++ file python3 pip
-NVIM_PREREQS = nodejs ripgrep fdfind submodules
-OBJS ?= ${BUILD}
-
-define shell-prep
-source bash-common-lib/lib.bash
-export PATH="$$USER_BIN:$$PATH"
-export PATH="$$HOME/.cargo/bin:$$PATH"
-endef
-
 
 # load bash library to initialize several directory target variables
 USER_BIN := $(shell source bash-common-lib/lib.bash && echo $$USER_BIN)
 USER_SRC := $(shell source bash-common-lib/lib.bash && echo $$USER_SRC)
 USER_DOTCONFIG := $(shell source bash-common-lib/lib.bash && echo $$USER_DOTCONFIG)
 
-${USER_BIN}:
-	mkdir -vp $@
+define shell-prep
+set -e
+@source bash-common-lib/lib.bash
+@export PATH="$$USER_BIN:$$PATH"
+endef
 
-${USER_SRC}:
-	mkdir -vp $@
-
-${USER_DOTCONFIG}:
-	mkdir -vp $@
-
+install: fd rg node npm submodules nvim-config nvim
+	echo "installer source code incomplete"
+	exit 1
 
 
 
 .ONESHELL:
-${BUILD}/neovim: ${NVIM_DEPENDENCIES}
+${BUILD}/neovim: fd rg node npm submodules
 	$(shell-prep)
 
 	# REMOVE EXISTING CONFIGURATION
@@ -88,23 +74,11 @@ ${BUILD}/neovim: ${NVIM_DEPENDENCIES}
 	)
 	nvim --version
 
-
-submodules:
-	git submodule update --init --recursive
-	@echo "repository submodules initialized and ready for use."
-
-
-
-${NVIM_DEPENDENCIES}: ${NVIM_SUBMODULES}
-	$(shell-prep)
-	binary_dependency_check ${NVIM_DEPENDENCIES_LIST}
-	touch ${NVIM_DEPENDENCIES}
-
-
 .PHONY: node npm fd rg
-fd: uname ln rm wget tar grep ${USER_SRC} ${USER_BIN}
+fd: uname wget xz ${USER_SRC} ${USER_BIN}
 	$(shell-prep)
-	if ! command -v fd &> /dev/null; then
+	if ! command -v $@ &>/dev/null; then
+		echo "$@ not found"
 		URL_TARGET=""
 		if uname -s | grep -i "Darwin"; then
 			URL_TARGET="https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-aarch64-apple-darwin.tar.gz"
@@ -114,87 +88,103 @@ fd: uname ln rm wget tar grep ${USER_SRC} ${USER_BIN}
 			@echo "target operating system $$(uname -s) not supported."
 			exit 1
 		fi
-
-		mkdir -v "STAGING"
-		wget -O "fd.tar.gz" $URL_TARGET
-		tar -xzvf "fd.tar.gz" -C "STAGING"
-		DIR_TARGET=$$(ls "STAGING")
-		rm -v "fd.tar.gz"
-		mv -v "STAGING"/$$DIR_TARGET ${USER_SRC}/
-		rmdir -v "STAGING"
-		cd ${USER_BIN} && ln -s $$USER_SRC/$$DIR_TARGET/fd .
-
-
+		wget -O "$@.tar.gz" $$URL_TARGET
+		mkdir -v "STAGING-$@"
+		tar -xzvf "$@.tar.gz" -C "STAGING-$@"
+		DIR_TARGET=$$(ls "STAGING-$@")
+		rm -v "$@.tar.gz"
+		mv -v "STAGING-$@"/$$DIR_TARGET ${USER_SRC}/
+		rmdir -v "STAGING-$@"
+		cd ${USER_BIN} && ln -s $$USER_SRC/$$DIR_TARGET/$@ .
 
 	fi
-	fd --version
+	echo "$@ binary located at $$(command -v $@)"
+	$@ --version
 
-${BUILD}/nodejs: ${NVIM_DEPENDENCIES}
+
+# todo: abstract out a common routine for this and fd
+rg: uname wget xz ${USER_SRC} ${USER_BIN}
 	$(shell-prep)
-	if ! which node; then
-		DEP_NODEJS_VERSION="v20.5.1"
-		if uname | egrep -oi --quiet linux; then
-			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-linux-x64"
-			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.xz"
-		elif uname | egrep -oi --quiet darwin; then
-			DEP_NODEJS="node-$$DEP_NODEJS_VERSION-darwin-arm64"
-			DEP_NODEJS_URL="https://nodejs.org/dist/$$DEP_NODEJS_VERSION/$$DEP_NODEJS.tar.gz"
+	if ! command -v $@ &> /dev/null; then
+		echo "$@ not found"
+		URL_TARGET=""
+		if uname -s | grep -i "Darwin"; then
+			URL_TARGET="https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-apple-darwin.tar.gz"
+		elif uname -s | grep -i "Linux"; then
+			URL_TARGET="https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz"
 		else
-			uname -a
-			error "host operating system is not supported"
+			@echo "target operating system $$(uname -s) not supported."
+			exit 1
 		fi
-
-		DEP_NODEJS_BINPATH="$$USER_SRC/$$DEP_NODEJS/bin"
-		(
-			cd "$$USER_SRC"
-			wget -v "$$DEP_NODEJS_URL"
-			tar xzvf "$$DEP_NODEJS.tar.*"
-			rm -v "$$DEP_NODEJS.tar.*"
-		)
-		(
-			cd "$$USER_BIN"
-			ln -svf "$$DEP_NODEJS_BINPATH/node" "node"
-			ln -svf "$$DEP_NODEJS_BINPATH/npm" "npm"
-		)
-		node --version
-		npm --version
+		wget -O "$@.tar.gz" $$URL_TARGET
+		mkdir -v "STAGING-$@"
+		tar -xzvf "$@.tar.gz" -C "STAGING-$@"
+		DIR_TARGET=$$(ls "STAGING-$@")
+		rm -v "$@.tar.gz"
+		mv -v "STAGING-$@"/$$DIR_TARGET ${USER_SRC}/
+		rmdir -v "STAGING-$@"
+		cd ${USER_BIN} && ln -s $$USER_SRC/$$DIR_TARGET/$@ .
 	fi
-	touch $@
+	echo "$@ binary located at $$(command -v $@)"
+	$@ --version
 
-${BUILD}/ripgrep: ${BUILD}/cargo
+
+node: uname wget xz ${USER_SRC} ${USER_BIN}
 	$(shell-prep)
-	if ! which rg; then
-		cargo install ripgrep
-		(
-			cd "$$USER_BIN"
-			ln -svf "$$HOME/.cargo/bin/rg" "rg"
-		)
-		ripgrep --version
+	if ! command -v $@ &> /dev/null; then
+		echo "$@ not found"
+		URL_TARGET=""
+		if uname -s | grep -i "Darwin"; then
+			URL_TARGET="https://nodejs.org/dist/v20.18.0/node-v20.18.0-darwin-arm64.tar.gz"
+		elif uname -s | grep -i "Linux"; then
+			URL_TARGET="https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz"
+		else
+			@echo "target operating system $$(uname -s) not supported."
+			exit 1
+		fi
+		wget -O "$@.tar.gz" $$URL_TARGET
+		mkdir -v "STAGING-$@"
+		tar -xzvf "$@.tar.gz" -C "STAGING-$@"
+		DIR_TARGET=$$(ls "STAGING-$@")
+		rm -v "$@.tar.gz"
+		mv -v "STAGING-$@"/$$DIR_TARGET ${USER_SRC}/
+		rmdir -v "STAGING-$@"
+		cd ${USER_BIN} && ln -s $$USER_SRC/$$DIR_TARGET/bin/$@ .
 	fi
-	touch $@
+	echo "$@ binary located at $$(command -v $@)"
+	$@ --version
 
-${BUILD}/fdfind: ${NVIM_DEPENDENCIES}
-	$(shell-prep)
-	if ! which fd; then
-		cargo install fd-find
-		(
-			cd "$$USER_BIN"
-			ln -svf "$$HOME/.cargo/bin/fd" "fd"
-		)
-		fd --version
+
+npm: node ${USER_SRC} ${USER_BIN}
+	if ! command -v $@ &> /dev/null; then
+		echo "$@ not found"
+		NODE_PATH=$$(dirname $(readlink $(command -v node)))
+		if [ ! -f "$$NODE_PATH/npm" ]; then
+				echo "$@ installation could not be found at $$NODE_PATH"
+				exit 1
+		fi
+		cd ${USER_SRC} && ln -s $$NODE_PATH/npm .
 	fi
-	touch $@
+	echo "$@ binary located at $$(command -v $@)"
+	$@ --version
 
 
-# fdfind target: Depends on wget being available
-fdfind: wget
-	@command -v fd &> /dev/null || { echo "info: no installation found for 'fd'. attempting installation."; }
-	@echo "Building fdfind..."
-	# TODO: Add real build commands here
-	@exit 1  # Placeholder for further steps
+${USER_BIN}:
+	mkdir -vp $@
+
+${USER_SRC}:
+	mkdir -vp $@
+
+${USER_DOTCONFIG}:
+	mkdir -vp $@
 
 
-.PHONY: wget xz unxz zip gcc g++ file python3 pip xattr git rm ln uname grep
+submodules: git
+	git submodule update --init --recursive
+	@echo "repository submodules initialized and ready for use."
+
+
+.PHONY: wget xz unxz zip gcc g++ file python3 pip xattr git uname
 
 # wget target: Ensures wget is installed
 wget:
@@ -256,16 +246,6 @@ xattr:
 	@echo "Found 'xattr' binary."
 	@xattr --version || echo "'xattr' version information not available."
 
-# ln target: Ensures ln is available (part of core utilities, should always be available)
-ln:
-	@command -v ln >/dev/null 2>&1 || { echo "Error: could not find 'ln'."; exit 1; }
-	@echo "Found 'ln' binary."
-
-# rm target: Ensures rm is available (part of core utilities, should always be available)
-rm:
-	@command -v rm >/dev/null 2>&1 || { echo "Error: could not find 'rm'."; exit 1; }
-	@echo "Found 'rm' binary."
-
 # uname target: Ensures uname is available (part of core utilities, should always be available)
 uname:
 	@command -v uname >/dev/null 2>&1 || { echo "Error: could not find 'uname'."; exit 1; }
@@ -277,16 +257,3 @@ git:
 	@command -v git >/dev/null 2>&1 || { echo "Error: could not find 'git'."; exit 1; }
 	@echo "Found 'git' binary."
 	@git --version
-
-# grep target: Ensures grep is installed
-grep:
-	@command -v grep >/dev/null 2>&1 || { echo "Error: could not find 'grep'."; exit 1; }
-	@echo "Found 'grep' binary."
-	@grep --version
-
-
-
-.PHONY: clean
-
-clean:
-	rm -vrf ${OBJS}
