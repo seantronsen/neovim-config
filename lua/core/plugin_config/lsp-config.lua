@@ -88,9 +88,9 @@ local lsp_flags = { debounce_text_changes = 100 }
 require("mason").setup({
 	ui = {
 		icons = {
-			package_installed = "✓",
-			package_pending = "➜",
-			package_uninstalled = "✗",
+			package_installed = "I",
+			package_pending = "->",
+			package_uninstalled = "X",
 		},
 	},
 })
