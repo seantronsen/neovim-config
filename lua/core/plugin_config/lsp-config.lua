@@ -94,14 +94,18 @@ require("mason").setup({
 		},
 	},
 })
+
+local is_headless = require("core.utils").is_running_in_headless_mode()
 require("mason-lspconfig").setup({
-	ensure_installed = require("core.plugin_config.mason.mason-installs"),
-	automatic_installation = false, -- todo: why is this false? but the other one is true?
+	-- ensure_installed = is_headless and {} or require("core.plugin_config.mason.mason-installs"),
+	ensure_installed = {}, -- is_headless and {} or require("core.plugin_config.mason.mason-installs"),
+	automatic_installation = false,
 })
 
 require("mason-tool-installer").setup({
-	ensure_installed = require("core.plugin_config.mason.mason-tool-installs"),
-	auto_update = true,
+	ensure_installed = is_headless and {}
+		or require("core.plugin_config.mason.mason-tool-installs"),
+	auto_update = false,
 })
 
 require("neodev").setup()
