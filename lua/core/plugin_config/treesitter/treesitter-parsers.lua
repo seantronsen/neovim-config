@@ -1,4 +1,4 @@
-installs = {
+local installs = {
 	"bash",
 	"c",
 	"cpp",

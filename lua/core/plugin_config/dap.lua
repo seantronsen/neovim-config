@@ -163,6 +163,7 @@ end
 
 dap.listeners.after.event_initialized["dapui_config"] = open_dap_ui
 dap.listeners.after.event_breakpoint["dapui_config"] = open_dap_ui
+
 -- note: disabling this due to previous annoyances. for instance, if debugging
 -- qt and it crashes (which occurs more frequently than I care for), this exits
 -- the UI like it's supposed to and I have to re-open it to try and determine
