@@ -94,29 +94,32 @@ install: submodules fd rg node npm nvim nvim-config
 	echo "installer source code incomplete"
 	exit 1
 
-initialize-plugins: nvim nvim-config node fd
-	$(shell-prep-macro)
+.PHONY: nvim-setup nvim-install-plugins nvim-install-treesitter-parsers nvim-install-mason-tools
+nvim-setup: nvim-install-plugins nvim-install-treesitter-parsers nvim-install-mason-tools
+	echo "nvim setup complete"
 
-	# ensure plugins are installed
-	# todo: needs to point to the installation in the build directory (once we get there)
+# todo: needs to point to the installation in the build directory (once we get there)
+nvim-install-plugins: nvim nvim-config
+	$(shell-prep-macro)
 	nvim --headless "+Lazy! sync" +qa
 
-	# ensure the mason tools are installed
-	# todo: needs to use the downloaded configs plugins
-	
+# todo: revise for build directory
+nvim-install-treesitter-parsers: nvim nvim-config nvim-install-plugins fd
+	$(shell-prep-macro)
+	TARGET=$$(fd --type f treesitter-parsers.lua .)
+	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$$d' | sed 's/[",]//g' | xargs echo)
+	nvim --headless "+TSInstallSync $$CONTENTS" +qa
+
+# todo: needs to use the downloaded configs plugins
+nvim-install-mason-tools: nvim nvim-config nvim-install-plugins node fd
+	$(shell-prep-macro)
+
 	nvim --headless "+MasonUpdate" +qa
 	TARGET=$$(fd --type f mason-installs.lua .)
 	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$$d' | sed 's/[",]//g' | xargs echo)
 	echo "mason install features '$$CONTENTS'"
 	nvim --headless "+LspInstall $$CONTENTS" +qa
 	nvim --headless "+MasonToolsInstall" +qa
-
-	# todo: revise for build directory
-	TARGET=$$(fd --type f treesitter-parsers.lua .)
-	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$$d' | sed 's/[",]//g' | xargs echo)
-	nvim --headless "+TSInstallSync $$CONTENTS" +qa
-
-
 
 ################################################################################
 ################################################################################
@@ -215,7 +218,7 @@ submodules: git
 	@echo "repository submodules initialized and ready for use."
 
 # todo: add this as a requirement to anything that calls the web
-internet: 
+internet:
 	@ping -c 1 -w 5 1.1.1.1
 
 ################################################################################
