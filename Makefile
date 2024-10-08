@@ -29,6 +29,7 @@ endef
 
 # NOTE: for editing from within an instance of this editor, I recommend tossing
 # this under a temporary makefile recipe so the syntax highlights appear properly
+# TODO: SWITCH TO AN EXTERNAL SCRIPT (IN PROGRESS)
 define download-tool-macro
 	$(shell-prep-macro)
 	if ! command -v $@ &> /dev/null; then
@@ -72,16 +73,6 @@ define download-tool-macro
 endef
 
 
-define ensure-cli-feature-macro
-	@if ! command -v $@ &> /dev/null; then
-		@echo "error: could not find '$@' on PATH"
-		@exit 1
-	@fi
-
-	@echo "Found '$@' binary."
-	@$@ --version
-endef
-
 
 ###############################################################################
 ###############################################################################
@@ -93,33 +84,6 @@ endef
 install: submodules fd rg node npm nvim nvim-config
 	echo "installer source code incomplete"
 	exit 1
-
-.PHONY: nvim-setup nvim-install-plugins nvim-install-treesitter-parsers nvim-install-mason-tools
-nvim-setup: nvim-install-plugins nvim-install-treesitter-parsers nvim-install-mason-tools
-	echo "nvim setup complete"
-
-# todo: needs to point to the installation in the build directory (once we get there)
-nvim-install-plugins: nvim nvim-config
-	$(shell-prep-macro)
-	nvim --headless "+Lazy! sync" +qa
-
-# todo: revise for build directory
-nvim-install-treesitter-parsers: nvim nvim-config nvim-install-plugins fd
-	$(shell-prep-macro)
-	TARGET=$$(fd --type f treesitter-parsers.lua .)
-	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$$d' | sed 's/[",]//g' | xargs echo)
-	nvim --headless "+TSInstallSync $$CONTENTS" +qa
-
-# todo: needs to use the downloaded configs plugins
-nvim-install-mason-tools: nvim nvim-config nvim-install-plugins node fd
-	$(shell-prep-macro)
-
-	nvim --headless "+MasonUpdate" +qa
-	TARGET=$$(fd --type f mason-installs.lua .)
-	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$$d' | sed 's/[",]//g' | xargs echo)
-	echo "mason install features '$$CONTENTS'"
-	nvim --headless "+LspInstall $$CONTENTS" +qa
-	nvim --headless "+MasonToolsInstall" +qa
 
 ################################################################################
 ################################################################################
@@ -217,39 +181,43 @@ submodules: git
 	git submodule update --init --recursive
 	@echo "repository submodules initialized and ready for use."
 
-# todo: add this as a requirement to anything that calls the web
-internet:
-	@ping -c 1 -w 5 1.1.1.1
-
 ################################################################################
 ################################################################################
 # ASSUMED CLI BINARY FEATURES
 ################################################################################
 ################################################################################
 
+define verify-command-installation-macro
+	@if ! command -v $@ &> /dev/null; then
+		@echo "error: could not find '$@' on PATH"
+		@exit 1
+	@fi
+
+	@echo "Found '$@' binary."
+	@$@ --version
+endef
+
 .PHONY: wget xz zip gcc g++ file xattr git
-
-
 wget:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
 
 xz:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
 
 zip:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
 
 gcc:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
 
 g++:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
 
 file:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
 
 xattr:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
 
 git:
-	$(ensure-cli-feature-macro)
+	$(verify-command-installation-macro)
