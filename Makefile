@@ -94,6 +94,26 @@ install: submodules fd rg node npm nvim nvim-config
 	echo "installer source code incomplete"
 	exit 1
 
+initialize-plugins: nvim nvim-config node fd
+	$(shell-prep-macro)
+
+	# ensure plugins are installed
+	# todo: needs to point to the installation in the build directory (once we get there)
+	nvim --headless "+Lazy! sync" +qa
+
+	# ensure the mason tools are installed
+	# todo: needs to use the downloaded configs plugins
+	TARGET=$$(fd --type f mason-installs.lua .)
+	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$d' | sed 's/[",]//g' | xargs echo)
+	nvim --headless "+MasonInstall $$CONTENTS" +qa
+	nvim --headless "+MasonToolsInstall" +qa
+
+	# todo: revise for build directory
+	TARGET=$$(fd --type f treesitter-parsers.lua .)
+	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$d' | sed 's/[",]//g' | xargs echo)
+	nvim --headless "+TSInstallSync $$CONTENTS" +qa
+
+
 
 ################################################################################
 ################################################################################
@@ -190,6 +210,9 @@ submodules: git
 	git submodule update --init --recursive
 	@echo "repository submodules initialized and ready for use."
 
+# todo: add this as a requirement to anything that calls the web
+internet: 
+	@ping -c 1 -w 5 1.1.1.1
 
 ################################################################################
 ################################################################################
