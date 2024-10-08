@@ -95,36 +95,12 @@ require("mason").setup({
 	},
 })
 require("mason-lspconfig").setup({
-	ensure_installed = {
-		"bashls",
-		"clangd",
-		"cmake",
-		"dockerls",
-		"html",
-		"jsonls",
-		"lua_ls",
-		"marksman",
-		"pyright",
-		"rust_analyzer",
-		"taplo",
-		"yamlls",
-	},
+	ensure_installed = require("core.plugin_config.mason.mason-installs"),
 	automatic_installation = false, -- todo: why is this false? but the other one is true?
 })
 
 require("mason-tool-installer").setup({
-	ensure_installed = {
-		"bash-debug-adapter",
-		"bibtex-tidy",
-		"black",
-		"codelldb",
-		"debugpy",
-		"prettier",
-		"shfmt",
-		"sqlfmt",
-		"stylua",
-		"yamlfmt",
-	},
+	ensure_installed = require("core.plugin_config.mason.mason-tool-installs"),
 	auto_update = true,
 })
 

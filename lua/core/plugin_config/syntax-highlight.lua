@@ -3,24 +3,7 @@
 -- fix the tree sitter install and runtime path directories
 vim.opt.runtimepath:append("~/.local/share/nvim/packed/nvim-treesitter")
 require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"bash",
-		"c",
-		"cpp",
-		"dockerfile",
-		"html",
-		"json",
-		"jsonc",
-		"lua",
-		"make",
-		"markdown",
-		"markdown_inline",
-		"python",
-		"rust",
-		"toml",
-		"vim",
-		"yaml",
-	},
+	ensure_installed = require("core.plugin_config.treesitter.treesitter-parsers"),
 	sync_install = false,
 	-- auto_install = true,
 	highlight = {
@@ -31,5 +14,6 @@ require("nvim-treesitter.configs").setup({
 	-- disable = {"latex", "markdown"},
 	--ignore_install = {"latex", "markdown"},
 
-	parser_install_dir = "~/.local/share/nvim/packed/nvim-treesitter",
+	-- todo: this should use the nvim vars like mason does
+	parser_install_dir = "~/.local/share/nvim/parsers/nvim-treesitter",
 })
