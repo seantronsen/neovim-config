@@ -48,14 +48,17 @@ define download-tool-macro
 		wget -O "$$TARBALL_FILENAME" "$$URL_TARGET"
 		if [ "$$EXTENSION" == "gz" ]; then
 			@echo "info: artifact compressed with gzip"
+			gunzip "$$TARBALL_FILENAME"
 		elif [ "$$EXTENSION" == "xz" ]; then
 			@echo "info: artifact compressed with xz"
+			unxz "$$TARBALL_FILENAME"
 		else
 			@echo "error: artifact compressed in unsupported format '$$EXTENSION'"
 			exit 1
 		fi
+		TARBALL_FILENAME="$@.tar"
 		mkdir -v "$$DIRNAME_STAGING"
-		tar -xzvf "$$TARBALL_FILENAME" -C "$$DIRNAME_STAGING"
+		tar -xvf "$$TARBALL_FILENAME" -C "$$DIRNAME_STAGING"
 		DIR_TARGET=$$(ls "$$DIRNAME_STAGING")
 		mv -v "$$DIRNAME_STAGING/$$DIR_TARGET" "${USER_SRC}/"
 		(
