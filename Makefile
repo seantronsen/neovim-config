@@ -34,15 +34,26 @@ define download-tool-macro
 	if ! command -v $@ &> /dev/null; then
 		echo "$@ not found"
 		URL_TARGET="${$@_${HOST_DIST}_${HOST_ARCH}_url}"
-		if [ -z "$URL_TARGET" ]; then
+		if [ -z "$$URL_TARGET" ]; then
 			@echo "error: explicit support for '$HOST_ARCH' on '$HOST_DIST' has not been configured."
 			exit 1
 		fi
+		EXTENSION=$${URL_TARGET##*.}
+
+
 		# todo: add vars for TARBALL and STAGING_DIR to increase readability
-		TARBALL_FILENAME="$@.tar.gz"
 		DIRNAME_STAGING="${DIRNAME_BASE_STAGING}-$@"
 		INTERNAL_BIN_DIR="${$@_internal_bin_dir}"
+		TARBALL_FILENAME="$@.tar.$$EXTENSION"
 		wget -O "$$TARBALL_FILENAME" "$$URL_TARGET"
+		if [ "$$EXTENSION" == "gz" ]; then
+			@echo "info: artifact compressed with gzip"
+		elif [ "$$EXTENSION" == "xz" ]; then
+			@echo "info: artifact compressed with xz"
+		else
+			@echo "error: artifact compressed in unsupported format '$$EXTENSION'"
+			exit 1
+		fi
 		mkdir -v "$$DIRNAME_STAGING"
 		tar -xzvf "$$TARBALL_FILENAME" -C "$$DIRNAME_STAGING"
 		DIR_TARGET=$$(ls "$$DIRNAME_STAGING")
