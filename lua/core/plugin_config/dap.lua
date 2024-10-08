@@ -5,7 +5,8 @@
 ------------------------------------------
 local registry = require("mason-registry")
 local dap = require("dap")
-dap.defaults.fallback.exception_breakpoints = { "raised", "uncaught" }
+-- dap.set_exception_breakpoints({ "raised", "uncaught" })
+-- dap.defaults.fallback.exception_breakpoints = { "raised", "uncaught" }
 
 ------------------------------------------
 -- CONFIGURATION FOR DAP ADAPTERS (DEBUGGERS)
@@ -119,7 +120,6 @@ local launch_filetype_maps = {
 	python = { "python" },
 }
 require("dap.ext.vscode").load_launchjs(launch_path, launch_filetype_maps)
-dap.set_exception_breakpoints({ "raised", "uncaught" })
 
 -- DAPUI SETUP
 ------------------------------------------
