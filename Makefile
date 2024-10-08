@@ -103,6 +103,8 @@ initialize-plugins: nvim nvim-config node fd
 
 	# ensure the mason tools are installed
 	# todo: needs to use the downloaded configs plugins
+	
+	nvim --headless "+MasonUpdate" +qa
 	TARGET=$$(fd --type f mason-installs.lua .)
 	CONTENTS=$$(sed -n '/local installs = {/,/}/p' "$$TARGET" | sed '1d;$$d' | sed 's/[",]//g' | xargs echo)
 	echo "mason install features '$$CONTENTS'"
@@ -135,6 +137,7 @@ nvim-config: git submodules
 	# REMOVE EXISTING CONFIGURATION
 	rm -vrf "$$CONFIG_DIR"
 	rm -vrf "$$HOME/.local/share/nvim"
+	rm -vrf "$$HOME/.local/state/nvim" # logs dir
 
 	# CLONE CURRENT CONFIGURATION
 	cd "$$USER_DOTCONFIG" && git clone https://github.com/seantronsen/neovim-config.git nvim
