@@ -1,7 +1,8 @@
 -- CONFIGURATION FOR SYNTAX HIGHLIGHTING
 --------------------------------
 -- fix the tree sitter install and runtime path directories
-vim.opt.runtimepath:append("~/.local/share/nvim/packed/nvim-treesitter")
+local path_parser = vim.env.HOME .. "/.local/share/nvim/parsers/nvim-treesitter"
+vim.opt.runtimepath:append(path_parser)
 require("nvim-treesitter.configs").setup({
 	ensure_installed = require("core.plugin_config.treesitter.treesitter-parsers"),
 	sync_install = false,
@@ -15,5 +16,5 @@ require("nvim-treesitter.configs").setup({
 	--ignore_install = {"latex", "markdown"},
 
 	-- todo: this should use the nvim vars like mason does
-	parser_install_dir = "~/.local/share/nvim/parsers/nvim-treesitter",
+	parser_install_dir = path_parser,
 })
