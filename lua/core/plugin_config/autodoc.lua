@@ -1,30 +1,9 @@
--- DOGE MAPPINGS
------------------------
--- vim.g.doge_enable_mappings = 0
--- vim.g.doge_doc_standard_python = "reST"
--- vim.g.doge_doc_standard_rust = "rustdoc"
--- vim.g.doge_doc_standard_sh = "google"
--- vim.g.doge_doc_standard_lua = "ldoc"
---
--- local function generate()
--- 	vim.cmd("DogeGenerate")
--- end
---
--- vim.keymap.set(
--- 	"n",
--- 	"<leader>cf",
--- 	generate,
--- 	{ desc = "[c]omment [f]unction autodoc", noremap = true, silent = true }
--- )
---
--- -- NEOGEN MAPPINGS
--- -----------------------
-local ng = require("neogen")
+local neogen = require("neogen")
 
-ng.setup({
+neogen.setup({
 	enabled = true,
 	-- todo: need to fix this at some point.
-	-- snippet_engine = "luasnip", -- this breaks tree-sitter highlighting 
+	-- snippet_engine = "luasnip", -- this breaks tree-sitter highlighting
 	languages = {
 		rust = {
 			template = {
@@ -39,22 +18,47 @@ ng.setup({
 	},
 })
 
+local function doge_generate()
+	vim.cmd("DogeGenerate")
+end
+
+local function should_use_doge()
+	local filetype = vim.bo.filetype
+	return filetype == "bash" or filetype == "sh"
+end
+
+local function generate_func_doc()
+	if should_use_doge() then
+		return doge_generate()
+	end
+	return neogen.generate({})
+end
+
 local function generate_class_doc()
-	ng.generate({ type = "class" })
+	if should_use_doge() then
+		return doge_generate()
+	end
+	return neogen.generate({ type = "class" })
 end
 
 local function generate_type_doc()
-	ng.generate({ type = "type" })
+	if should_use_doge() then
+		return doge_generate()
+	end
+	return neogen.generate({ type = "type" })
 end
 
 local function generate_file_doc()
-	ng.generate({ type = "file" })
+	if should_use_doge() then
+		return doge_generate()
+	end
+	return neogen.generate({ type = "file" })
 end
 
 vim.keymap.set(
 	"n",
 	"<leader>cf",
-	ng.generate,
+	generate_func_doc,
 	{ desc = "[c]omment [f]unction autodoc", noremap = true, silent = true }
 )
 vim.keymap.set(

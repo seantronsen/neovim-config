@@ -91,7 +91,7 @@ require("lazy").setup({
 
 	-- AUTODOCUMENTATION
 	--------------------------------
-
+	{ "kkoomen/vim-doge", build = ":call doge#install()" },
 	{ "danymat/neogen", tag = "2.17.1" },
 
 	--TMUX COMPATIBILITY

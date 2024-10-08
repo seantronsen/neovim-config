@@ -38,3 +38,13 @@ vim.g.loaded_julia_provider = 0
 ------------------------
 vim.g.vimtex_view_method = "zathura"
 vim.g.vimtex_quickfix_open_on_warning = 0
+
+------------------------
+--  VIM-DOGE
+------------------------
+vim.g.doge_enable_mappings = 0
+vim.g.doge_doc_standard_python = "reST"
+vim.g.doge_doc_standard_rust = "rustdoc"
+vim.g.doge_doc_standard_sh = "google"
+vim.g.doge_doc_standard_lua = "ldoc"
+vim.g.doge_install_path = vim.fn.stdpath("data") .. "/autodoc/doge"
