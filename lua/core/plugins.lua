@@ -5,7 +5,7 @@ if not vim.loop.fs_stat(lazypath) then
 		"clone",
 		"--filter=blob:none",
 		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
+		"--branch=stable",
 		lazypath,
 	})
 end
@@ -25,12 +25,7 @@ require("lazy").setup({
 	--STATUS LINE
 	--------------------------------
 
-	-- todo: let's try to remove devicons as a dependency. I don't care all that
-	-- much about fancy glyphs. we will likely need to update lualine to work
-	-- with this properly (remove os symbol, file type symbol, and git branch
-	-- symbols)
-	-- need to also consider telescope and oil in this discussion
-	"kyazdani42/nvim-web-devicons",
+	-- "kyazdani42/nvim-web-devicons",
 	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
 	{ "j-hui/fidget.nvim", tag = "v1.4.5", event = "LspAttach" },
 
@@ -41,8 +36,6 @@ require("lazy").setup({
 	{ "williamboman/mason.nvim", tag = "v1.10.0" },
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "e4f3474" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v1.31.0" },
-	-- is it possible to use the built in treesitter to reduce this dependency?
-	-- also do we still need the treesitter cli?
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
 	"simrat39/rust-tools.nvim",
 	"folke/neodev.nvim",
@@ -68,23 +61,12 @@ require("lazy").setup({
 		},
 	},
 
-	-- VIM SLIME
-	--------------------------------
-	-- {
-	-- 	"klafyvel/vim-slime-cells",
-	-- 	commit = "2252bc8",
-	-- 	dependencies = {
-	-- 		{ "jpalardy/vim-slime", commit = "bb15285" },
-	-- 	},
-	-- },
-
 	--DOCUMENT FORMATTING
 	--------------------------------
 	{ "mhartington/formatter.nvim", commit = "34dcdfa" },
 
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
-	-- "nvim-tree/nvim-tree.lua",
 	{ "stevearc/oil.nvim", tag = "v2.2.0" },
 	{
 		"nvim-telescope/telescope.nvim",
@@ -110,10 +92,6 @@ require("lazy").setup({
 	-- AUTODOCUMENTATION
 	--------------------------------
 
-	-- better rust documentation generation
-	-- { "kkoomen/vim-doge", build = ":call doge#install()" },
-
-	-- better docs overall, but too many issues as of 10272023. might try again in the future
 	{ "danymat/neogen", tag = "2.17.1" },
 
 	--TMUX COMPATIBILITY
