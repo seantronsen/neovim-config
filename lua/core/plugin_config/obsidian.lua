@@ -1,8 +1,15 @@
 ---@diagnostic disable: missing-fields
 local obs = require("obsidian")
 
+local path_notes = vim.env.HOME .. "/notes"
+if not vim.loop.fs_stat(path_notes) then
+	local mode = tonumber("0755", 8) -- convert permissions to octal
+	vim.loop.fs_mkdir(path_notes, mode)
+	vim.notify("configured notes directory did not exist, so it was created", vim.log.levels.INFO)
+end
+
 obs.setup({
-	dir = "~/notes",
+	dir = path_notes,
 	new_notes_location = "current_dir",
 	completion = {
 		nvim_cmp = true,
