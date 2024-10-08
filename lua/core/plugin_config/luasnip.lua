@@ -33,5 +33,5 @@ vim.keymap.set("n", "<leader>lsa", function()
 	vim.notify(message .. vim.inspect(luasnip.available()))
 end, { desc = "[l]ua[s]nip [a]vailable snippets" })
 
-require("luasnip.loaders.from_lua").lazy_load({ paths = "~/.config/nvim/snippets" })
-require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip.loaders.from_lua").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+require("luasnip.loaders.from_vscode").lazy_load() -- do I even need this line...?

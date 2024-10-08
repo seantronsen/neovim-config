@@ -4,7 +4,7 @@
 
 local is_headless = require("core.utils").is_running_in_headless_mode()
 
-local path_parser = vim.env.HOME .. "/.local/share/nvim/parsers/nvim-treesitter"
+local path_parser = vim.fn.stdpath("data") .. "/parsers"
 vim.opt.runtimepath:append(path_parser)
 
 require("nvim-treesitter.configs").setup({
