@@ -1,8 +1,13 @@
 SHELL ::= /bin/bash
 .ONESHELL:
 
+
 # CONFIGURATION VARIABLES
 DIRNAME_BASE_STAGING:="STAGING"
+PATH_BUILD:=build
+PATH_STAGE:=${PATH_BUILD}/staging
+PATH_ARTIFACTS:=${PATH_BUILD}/artifacts
+
 
 # DETERMINE HOST PROPERTIES
 HOST_DIST := $(shell uname -s)
@@ -13,6 +18,22 @@ USER_BIN := $(shell source bash-common-lib/lib.bash && echo $$USER_BIN)
 USER_SRC := $(shell source bash-common-lib/lib.bash && echo $$USER_SRC)
 USER_DOTCONFIG := $(shell source bash-common-lib/lib.bash && echo $$USER_DOTCONFIG)
 
+# GENERAL SCRIPTING
+OBJS:=${PATH_BUILD}
+
+################################################################################
+################################################################################
+# work items: over goal is to switch this to something that can either install
+# immediately, or defer installment until the payload is received by the target
+# host.
+# - change all downloadables to be unpackaged in the build directory
+# - convert to: build first to local dir, archive or install now, and install
+#   from archive
+#
+#
+#
+################################################################################
+################################################################################
 
 ################################################################################
 ################################################################################
@@ -72,6 +93,36 @@ define download-tool-macro
 	$@ --version
 endef
 
+define download-tool-macro-new
+	set -e
+	mkdir -vp ${PATH_ARTIFACTS}
+	mkdir -vp ${PATH_STAGE}
+	URL_TARGET=${${@F}_${HOST_DIST}_${HOST_ARCH}_url}
+	if [ -z "$${URL_TARGET}" ]; then
+		@echo "error: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."
+		exit 1
+	fi
+
+	case "$${URL_TARGET##*.}" in
+		gz)
+			UNZIP=gunzip
+			;;
+		xz)
+			UNZIP=unxz
+			;;
+		*)
+			exit 1
+			;;
+	esac
+
+
+	wget -O "${PATH_STAGE}/${@F}.tar.$${URL_TARGET##*.}" "$${URL_TARGET}"
+	$${UNZIP} "${PATH_STAGE}/${@F}.tar"*
+	mkdir -v "${PATH_STAGE}/${@F}"
+	tar -xvf  "${PATH_STAGE}/${@F}.tar" -C "${PATH_STAGE}/${@F}"
+	mv -v "${PATH_STAGE}/${@F}"/$$(ls "${PATH_STAGE}/${@F}") "${PATH_ARTIFACTS}/${@F}"
+	rm -vrf "${PATH_STAGE}/${@F}"*
+endef
 
 
 ###############################################################################
@@ -79,8 +130,15 @@ endef
 # GENERAL PURPOSE RECIPES
 ###############################################################################
 ###############################################################################
+.PHONY: build initialize install
+build: $(addprefix ${PATH_ARTIFACTS}/, nvim fd rg node npm config.nvim) git submodules wget xz
+	@echo "build complete. artifacts assembled in '${PATH_ARTIFACTS}'"
 
-.PHONY: install submodules fd rg node npm nvim nvim-config
+initialize: $(addprefix ${PATH_ARTIFACTS}/, nvim fd rg node npm config.nvim)
+	@echo "initialization step not yet configured. "
+	exit 1
+
+.PHONY: submodules fd rg node npm nvim nvim-config
 install: submodules fd rg node npm nvim nvim-config
 	echo "installer source code incomplete"
 	exit 1
@@ -109,6 +167,15 @@ nvim-config: git submodules
 	# CLONE CURRENT CONFIGURATION
 	cd "$$USER_DOTCONFIG" && git clone https://github.com/seantronsen/neovim-config.git nvim
 
+${PATH_ARTIFACTS}/config.nvim: 
+	@echo "downloading configuration files"
+	@if [ -a "$@" ]; then exit 1; fi
+	git clone https://github.com/seantronsen/neovim-config.git $@
+
+# todo: add check to ensure user dotconfig isn't the empty string
+${USER_DOTCONFIG}/nvim: ${PATH_ARTIFACTS}/config.nvim
+	if [ -a $@ ]; then exit 1; fi
+	mv -v $@ $<
 
 ################################################################################
 ################################################################################
@@ -122,11 +189,17 @@ nvim_Darwin_arm64_url:=https://github.com/neovim/neovim/releases/download/v0.9.5
 nvim: xz wget
 	$(download-tool-macro)
 
+${PATH_ARTIFACTS}/nvim:
+	$(download-tool-macro-new)
+
 fd_internal_bin_dir:=
 fd_Linux_x86_64_url:=https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz
 fd_Darwin_arm64_url:=https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-aarch64-apple-darwin.tar.gz
 fd: wget xz ${USER_SRC} ${USER_BIN}
 	$(download-tool-macro)
+
+${PATH_ARTIFACTS}/fd:
+	$(download-tool-macro-new)
 
 rg_internal_bin_dir:=
 rg_Linux_x86_64_url:=https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
@@ -134,11 +207,18 @@ rg_Darwin_arm64_url:=https://github.com/BurntSushi/ripgrep/releases/download/14.
 rg: wget xz ${USER_SRC} ${USER_BIN}
 	$(download-tool-macro)
 
+${PATH_ARTIFACTS}/rg:
+	$(download-tool-macro-new)
+
 node_internal_bin_dir:=/bin
 node_Linux_x86_64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz
 node_Darwin_arm64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-darwin-arm64.tar.gz
 node: wget xz ${USER_SRC} ${USER_BIN}
 	$(download-tool-macro)
+
+
+${PATH_ARTIFACTS}/node:
+	$(download-tool-macro-new)
 
 # NOTE: npm is a runnable packaged with node. no fancy download logic here.
 npm: node ${USER_SRC} ${USER_BIN}
@@ -154,6 +234,11 @@ npm: node ${USER_SRC} ${USER_BIN}
 	fi
 	echo "$@ binary located at $$(command -v $@)"
 	$@ --version
+
+
+${PATH_ARTIFACTS}/npm: ${PATH_ARTIFACTS}/node
+	@echo "npm implicitly obtained during build process for $<"
+
 
 ################################################################################
 ################################################################################
@@ -221,3 +306,8 @@ xattr:
 
 git:
 	$(verify-command-installation-macro)
+
+
+.PHONY: clean
+clean:
+	-rm -vrf ${OBJS}
