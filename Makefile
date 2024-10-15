@@ -47,6 +47,7 @@ rg_Linux_x86_64_url:=https://github.com/BurntSushi/ripgrep/releases/download/14.
 rg_Darwin_arm64_url:=https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-apple-darwin.tar.gz
 
 node_internal_bin_dir:=/bin
+npm_internal_bin_dir:=${node_internal_bin_dir}
 node_Linux_x86_64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz
 node_Darwin_arm64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-darwin-arm64.tar.gz
 
@@ -174,17 +175,65 @@ install: \
 # TOOLING INSTALLATION
 ################################################################################
 ################################################################################
+define standard-install-macro
+	@set -e
+	@cp -vr $$(realpath "$<") $$(realpath "$@")
+	@echo "installed '${@F}' at path: '$@'"
+endef
+
+define standard-symlink-macro
+	@set -e
+	@ln -vs $$(realpath "$<")${${@F}_internal_bin_path}/${@F} $$(realpath "$@")
+	@echo "symlinked '${@F}' to user local bin directory at path: '$@'"
+endef
+
 ${USER_BIN}/nvim: ${USER_SRC}/nvim
-	exit 1
+	$(standard-symlink-macro)
 
 ${USER_SRC}/nvim: ${PATH_ARTIFACTS}/nvim
-	@cp -vr 
-	exit 1
+	$(standard-install-macro)
+
+${USER_BIN}/rg: ${USER_SRC}/rg
+	$(standard-symlink-macro)
+
+${USER_SRC}/rg: ${PATH_ARTIFACTS}/rg
+	$(standard-install-macro)
+
+${USER_BIN}/fd: ${USER_SRC}/fd
+	$(standard-symlink-macro)
+
+${USER_SRC}/fd: ${PATH_ARTIFACTS}/fd
+	$(standard-install-macro)
+
+${USER_BIN}/node: ${USER_SRC}/node
+	$(standard-symlink-macro)
+
+${USER_SRC}/node: ${PATH_ARTIFACTS}/node
+	$(standard-install-macro)
+
+${USER_BIN}/npm: ${USER_SRC}/node
+	$(standard-symlink-macro)
+
+################################################################################
+################################################################################
+# PROGRAM DATA (PLUGINS, ETC.) INSTALLATION
+################################################################################
+################################################################################
+${USER_DATA}/nvim: ${PATH_DATA}/nvim
+	$(standard-install-macro)
+
+################################################################################
+################################################################################
+# CONFIGURATION INSTALLATION
+################################################################################
+################################################################################
+${USER_DOTCONFIG}/nvim: ${PATH_CONFIG}/nvim
+	$(standard-install-macro)
 
 
 ################################################################################
 ################################################################################
-# TOOLING INITIALIZATION
+# TOOLING INITIALIZATION / BUILD PROGRAM DATA DEPENDENCIES (PLUGINS, ETC.)
 ################################################################################
 ################################################################################
 
@@ -205,7 +254,6 @@ ${PATH_DATA}/nvim: $(addprefix ${PATH_ARTIFACTS}/, nvim node npm) $(addprefix ${
 # TOOLING DOWNLOADS
 ################################################################################
 ################################################################################
-
 ${PATH_ARTIFACTS}/nvim:
 	$(download-tool-macro-new)
 
@@ -220,24 +268,9 @@ ${PATH_ARTIFACTS}/node:
 
 # NOTE: npm is a runnable packaged with node. no fancy download logic here.
 ${PATH_ARTIFACTS}/npm: ${PATH_ARTIFACTS}/node
-	set -e
-	mkdir -vp $@
+	@set -e
+	@mkdir -vp $@
 	@echo "${@F} implicitly obtained during build process for $<"
-
-npm: node ${USER_SRC} ${USER_BIN}
-	$(shell-prep-macro)
-	if ! command -v $@ &> /dev/null; then
-		echo "$@ not found"
-		DIRPATH=$$(dirname $$(readlink $$(command -v node)))
-		if [ ! -f "$$DIRPATH/$@" ]; then
-				echo "$@ installation could not be found at $$NODE_PATH"
-				exit 1
-		fi
-		cd ${USER_BIN} && ln -s $$DIRPATH/$@ .
-	fi
-	echo "$@ binary located at $$(command -v $@)"
-	$@ --version
-
 
 ################################################################################
 ################################################################################
@@ -246,20 +279,10 @@ npm: node ${USER_SRC} ${USER_BIN}
 ################################################################################
 
 ${PATH_CONFIG}/nvim:
-	set -e
-	@echo "downloading configuration files"
-	mkdir -vp "${PATH_CONFIG}"
-	git clone https://github.com/seantronsen/neovim-config.git $@
-
-# todo: add check to ensure user dotconfig isn't the empty string
-# todo: if the user already has one installed in this location, it fails to check that
-# can be fixed with convert to phony
-${USER_DOTCONFIG}/nvim: ${PATH_ARTIFACTS}/config.nvim
-	set -e
-	if [ -a $@ ]; then exit 1; fi
-	mv -v $@ $<
-
-
+	@set -e
+	@echo "verifying '${@F}' configuration files"
+	@mkdir -vp "${PATH_CONFIG}"
+	@git clone https://github.com/seantronsen/neovim-config.git $@
 
 ################################################################################
 ################################################################################
@@ -267,6 +290,9 @@ ${USER_DOTCONFIG}/nvim: ${PATH_ARTIFACTS}/config.nvim
 ################################################################################
 ################################################################################
 
+# todo: add check to ensure user dotconfig isn't the empty string
+# todo: if the user already has one installed in this location, it fails to check that
+# can be fixed with convert to phony
 # todo: these should be configurable. could just use of the xdg env vars?
 ${USER_BIN}:
 	mkdir -vp $@
@@ -305,7 +331,6 @@ define verify-command-installation-macro
 	@fi
 
 	@echo "found '$@' binary."
-	# @$@ --version
 endef
 
 .PHONY: cp wget xz zip gcc g++ file xattr git python3 mkdir mv rm readlink dirname realpath tar gzip unzip unxz
