@@ -14,6 +14,7 @@ PATH_DATA:=${PATH_BUILD}/data
 # DETERMINE HOST PROPERTIES
 HOST_DIST := $(shell uname -s)
 HOST_ARCH := $(shell uname -m)
+REQUIRED_SYSTEM_COMMANDS:=cp echo wget xz zip gcc g++ file xattr git python3 mkdir mv rm readlink dirname realpath tar gzip unzip unxz
 
 # LOAD BASH LIBRARY TO INITIALIZE SEVERAL DIRECTORY TARGET VARIABLES
 USER_BIN := $(shell source bash-common-lib/lib.bash && echo $$USER_BIN)
@@ -148,13 +149,12 @@ endef
 ###############################################################################
 
 .PHONY: environment-check build initialize install
-environment-check: cp echo wget xz zip gcc g++ file xattr git python3 mkdir mv rm readlink dirname realpath tar gzip unzip unxz submodules
+environment-check: ${REQUIRED_SYSTEM_COMMANDS} submodules
 	@echo "environment verified. no build errors anticipated."
-
 	@echo "check for existing local installations not configured."
 	exit 1
 
-build: $(addprefix ${PATH_ARTIFACTS}/, ${PROGRAMS})
+build: environment-check $(addprefix ${PATH_ARTIFACTS}/, ${PROGRAMS})
 	@echo "verified build. artifacts located in '${PATH_ARTIFACTS}'"
 
 initialize: build $(addprefix ${PATH_DATA}/, ${PROGRAM_DATA})
@@ -313,7 +313,6 @@ ${USER_DATA}:
 ################################################################################
 
 .PHONY: submodules
-
 submodules: git
 	@git submodule update --init --recursive && \
 	echo "verified installation of required submodules.";
@@ -325,77 +324,19 @@ submodules: git
 ################################################################################
 
 define verify-command-installation-macro
-	@if ! command -v $@ &> /dev/null; then
-		@echo "error: could not find '$@' on PATH"
+$(1):
+	@if ! command -v $(1) &> /dev/null; then
+		@echo "error: could not find '$(1)' on PATH"
 		@exit 1
 	@fi
 
-	@echo "found '$@' binary."
+	@echo "found '$(1)' binary."
 endef
 
-.PHONY: cp wget xz zip gcc g++ file xattr git python3 mkdir mv rm readlink dirname realpath tar gzip unzip unxz
-echo:
-	$(verify-command-installation-macro)
 
-wget:
-	$(verify-command-installation-macro)
+.PHONY: ${REQUIRED_SYSTEM_COMMANDS}
+$(foreach command_name,${REQUIRED_SYSTEM_COMMANDS},$(eval $(call verify-command-installation-macro,$(command_name))))
 
-xz:
-	$(verify-command-installation-macro)
-
-zip:
-	$(verify-command-installation-macro)
-
-gcc:
-	$(verify-command-installation-macro)
-
-g++:
-	$(verify-command-installation-macro)
-
-file:
-	$(verify-command-installation-macro)
-
-xattr:
-	$(verify-command-installation-macro)
-
-git:
-	$(verify-command-installation-macro)
-
-python3:
-	$(verify-command-installation-macro)
-
-mkdir:
-	$(verify-command-installation-macro)
-
-mv:
-	$(verify-command-installation-macro)
-
-rm:
-	$(verify-command-installation-macro)
-
-readlink:
-	$(verify-command-installation-macro)
-
-dirname:
-	$(verify-command-installation-macro)
-
-realpath:
-	$(verify-command-installation-macro)
-
-tar:
-	$(verify-command-installation-macro)
-
-gzip:
-	$(verify-command-installation-macro)
-
-unzip:
-	$(verify-command-installation-macro)
-
-unxz:
-	$(verify-command-installation-macro)
-
-cp:
-	$(verify-command-installation-macro)
 
 .PHONY: clean
 clean:
