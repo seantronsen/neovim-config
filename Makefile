@@ -18,9 +18,9 @@ REQUIRED_SYSTEM_COMMANDS:=cp echo wget xz zip gcc g++ file xattr git python3 \
 													mkdir mv rm readlink dirname realpath tar gzip unzip \
 													unxz grep
 
-# LOAD BASH LIBRARY TO INITIALIZE SEVERAL DIRECTORY TARGET VARIABLES
+# INITIALIZE SEVERAL DIRECTORY TARGET VARIABLES IF NOT ALREADY DEFINED (including env vars)
 USER_BIN ?= ${HOME}/bin
-USER_SRC ?= ${HOME}/src
+USER_SRC ?= ${HOME}/sources
 USER_DOTCONFIG ?= ${HOME}/.config
 USER_DATA ?=${HOME}/.local/share
 
@@ -31,29 +31,7 @@ PROGRAMS:=nvim fd rg node npm
 CONFIGS:=nvim
 PROGRAM_DATA:=nvim
 
-################################################################################
-################################################################################
-# issue
-################################################################################
-################################################################################
-# describe the problem: need to prevent the user attempting to install into the
-# target path while existing at the target path or a child path of the target
-# path.
-#
-# example: running `make install` when the target path is `~/.config/nvim` and
-# the shell PWD=`~/.config/nvim` or PWD=`~/.config/nvim/childA/childB/...`
-#
-#
-# therefore, for each illegal path (`~/.config/nvim` and children in this case)
-# assert the target path does not match
-#
-#
-# just use grep dumbasss.
-#
-#
-#
-#
-
+OVERWRITE_INSTALLATION?=0
 
 ################################################################################
 ################################################################################
@@ -93,7 +71,7 @@ define download-tool-macro
 	mkdir -vp ${PATH_STAGE}
 	URL_TARGET=${${@F}_${HOST_DIST}_${HOST_ARCH}_url}
 	if [ -z "$${URL_TARGET}" ]; then
-		@echo "error: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."
+		@echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."
 		exit 1
 	fi
 
@@ -118,21 +96,20 @@ endef
 # GENERAL PURPOSE RECIPES
 ###############################################################################
 ###############################################################################
-INSTALLATION_PATHS:=${USER_SRC} \
-										${USER_BIN} $(addprefix ${USER_BIN}/, ${PROGRAMS}) \
-										${USER_DOTCONFIG} $(addprefix ${USER_DOTCONFIG}/, ${CONFIGS})  \
-										${USER_DATA} $(addprefix ${USER_DATA}/, ${PROGRAM_DATA})
-ILLEGAL_PWDS:=${INSTALLATION_PATHS}
-
+INSTALLATION_PATHS:=$(addprefix ${USER_SRC}/, ${PROGRAMS}) \
+										$(addprefix ${USER_BIN}/, ${PROGRAMS}) \
+										$(addprefix ${USER_DOTCONFIG}/, ${CONFIGS})  \
+										$(addprefix ${USER_DATA}/, ${PROGRAM_DATA})
+ILLEGAL_PWDS:= ${USER_SRC} ${USER_BIN} ${USER_DOTCONFIG} ${USER_DATA} ${INSTALLATION_PATHS}
 .PHONY: environment-check build initialize install
-environment-check: ${REQUIRED_SYSTEM_COMMANDS} submodules
-	@echo "environment verified. no build errors anticipated."
-	@echo "check for existing local installations not configured."
+environment-check: ${REQUIRED_SYSTEM_COMMANDS}
+	@echo "INFO: command line environment verified. no build errors anticipated."
+	@echo "INFO: verifying installation path abides by requirements."
 	@for illegal_path in ${ILLEGAL_PWDS}; do \
 		if echo "${PWD}" | grep -iq $${illegal_path}; then \
-			echo "error: detected illegal installation path component: '$${illegal_path}'"; \
+			echo "ERROR: attempted installation inside an illegal working directory: '$${illegal_path}'"; \
 			echo "installation will not proceed while the current working directory"; \
-			echo "matches any of the following paths: ";\
+			echo "matches or is a child of the following paths: ";\
 			for pn in ${ILLEGAL_PWDS}; do \
 				echo "- $${pn}"; \
 			done; \
@@ -140,13 +117,19 @@ environment-check: ${REQUIRED_SYSTEM_COMMANDS} submodules
 			exit 1; \
 		fi; \
 	done;
+	@echo "INFO: installation path verified."
+	@echo "INFO: searching for existing installation(s) and related components."
+	@for install_path in ${INSTALLATION_PATHS}; do \
+		if [ -e $$(realpath -m "$${install_path}") ]; then \
+			echo "WARNING: overwrite required. installation files detected at: '$${install_path}'"; \
+			if [ "${OVERWRITE_INSTALLATION}" -eq 0 ]; then
+				echo "ERROR: overwrite disabled. build sequence cannot continue."; \
+				exit 1; \
+			fi; \
+		fi; \
+	done;
 
-	@if [ -e "${USER_BIN}/nvim" ]; then \
-		echo "error: detected existing local nvim installation. terminating build sequence."; \
-		exit 1; \
-	fi; \
 
-	exit 0
 
 build: environment-check $(addprefix ${PATH_ARTIFACTS}/, ${PROGRAMS})
 	@echo "verified build. artifacts located in '${PATH_ARTIFACTS}'"
@@ -154,13 +137,11 @@ build: environment-check $(addprefix ${PATH_ARTIFACTS}/, ${PROGRAMS})
 initialize: build $(addprefix ${PATH_DATA}/, ${PROGRAM_DATA})
 	@echo "verified initialization. artifact plugins and dependencies located in '${PATH_DATA}'."
 
-# install: submodules fd rg node npm nvim nvim-config
 install: \
 	${USER_SRC} \
 	${USER_BIN} $(addprefix ${USER_BIN}/, ${PROGRAMS}) \
 	${USER_DOTCONFIG} $(addprefix ${USER_DOTCONFIG}/, ${CONFIGS})  \
 	${USER_DATA} $(addprefix ${USER_DATA}/, ${PROGRAM_DATA})
-
 	@echo "installation successful."
 
 
@@ -169,22 +150,43 @@ install: \
 # TOOLING INSTALLATION
 ################################################################################
 ################################################################################
-# todo: fixme: need edge case for nvim to install anyways
+
 define standard-install-macro
-	@if ! command -v ${@F}; then \
-		set -e; \
-		cp -vr $$(realpath "$<") $$(realpath "$@"); \
-		echo "installed '${@F}' at path: '$@'"; \
-	fi
+@set -e;
+
+@if [ "${OVERWRITE_INSTALLATION}" -eq 0 ] && [ -e "$@" ]; then \
+	echo "error: detected existing installation for '${@F}', but overwrite was not enabled"; \
+	exit 1; \
+fi;
+
+@if [ -e "$@" ]; then \
+	echo "overwriting existing local installation for: '${@F}'"; \
+	rm -rfv "$@"; \
+fi
+
+
+@cp -vr $$(realpath "$<") $$(realpath -m "$@");
+@echo "installed '${@F}' at path: '$@'";
 endef
 
 define standard-symlink-macro
-	@if ! command -v ${@F}; then \
-		set -e; \
-		ln -vs $$(realpath "$<")${${@F}_internal_bin_path}/${@F} $$(realpath "$@"); \
-		echo "symlinked '${@F}' to user local bin directory at path: '$@'"; \
-	fi
+set -e;
+
+@if [ "${OVERWRITE_INSTALLATION}" -eq 0 ] && [ -e "$@" ]; then \
+	echo "error: detected existing installation for '${@F}', but overwrite was not enabled"; \
+	exit 1; \
+fi;
+
+@if [ -e "$@" ]; then \
+	echo "overwriting existing local installation for: '${@F}'"; \
+	rm -rfv "$@"; \
+fi
+
+@ln -sv $$(realpath "$<")${${@F}_internal_bin_dir}/${@F} $$(realpath -m "$@");
+@echo "symlinked '${@F}' to user local bin directory at path: '$@'";
 endef
+
+.PHONY: $(addprefix ${USER_BIN}/, ${PROGRAMS})  $(addprefix ${USER_SRC}/, ${PROGRAMS})
 
 ${USER_BIN}/nvim: ${USER_SRC}/nvim
 	$(standard-symlink-macro)
@@ -218,6 +220,7 @@ ${USER_BIN}/npm: ${USER_SRC}/node
 # PROGRAM DATA (PLUGINS, ETC.) INSTALLATION
 ################################################################################
 ################################################################################
+.PHONY: $(addprefix ${USER_DATA}/, ${PROGRAMS})
 ${USER_DATA}/nvim: ${PATH_DATA}/nvim
 	$(standard-install-macro)
 
@@ -226,6 +229,7 @@ ${USER_DATA}/nvim: ${PATH_DATA}/nvim
 # CONFIGURATION INSTALLATION
 ################################################################################
 ################################################################################
+.PHONY: $(addprefix ${USER_DOTCONFIG}/, ${PROGRAMS})
 ${USER_DOTCONFIG}/nvim: ${PATH_CONFIG}/nvim
 	$(standard-install-macro)
 
@@ -244,7 +248,7 @@ ${PATH_DATA}/nvim: $(addprefix ${PATH_ARTIFACTS}/, nvim node npm) $(addprefix ${
 	export \
 		XDG_CONFIG_HOME=$$(realpath "${PATH_CONFIG}") \
 		XDG_DATA_HOME=$$(realpath "${PATH_DATA}") \
-		PATH=$$(realpath "${PATH_ARTIFACTS}/node${node_internal_bin_dir})"):${PATH} && \
+		PATH=$$(realpath "${PATH_ARTIFACTS}/node${node_internal_bin_dir}"):${PATH} && \
 		./${PATH_ARTIFACTS}/nvim${nvim_internal_bin_dir}/nvim
 
 
@@ -307,29 +311,17 @@ ${USER_DATA}:
 
 ################################################################################
 ################################################################################
-# REPOSITORY BUILD-TIME DEPENDENCY TARGETS
-################################################################################
-################################################################################
-
-.PHONY: submodules
-submodules: git
-	@git submodule update --init --recursive && \
-	echo "verified installation of required submodules.";
-
-################################################################################
-################################################################################
 # ASSUMED CLI BINARY FEATURES
 ################################################################################
 ################################################################################
 
 define verify-command-installation-macro
 $(1):
-	@if ! command -v $(1) &> /dev/null; then
-		@echo "error: could not find '$(1)' on PATH"
-		@exit 1
-	@fi
-
-	@echo "found '$(1)' binary."
+	@if ! command -v $(1) &> /dev/null; then \
+		echo "ERROR: could not find '$(1)' on PATH"; \
+		exit 1; \
+	fi;
+	@echo "INFO: found required binary: $(1)"
 endef
 
 
