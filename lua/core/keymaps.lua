@@ -1,9 +1,18 @@
+-- ease of use -- sanity -- pane motion without the tmux bullshit
+
+vim.keymap.set({"n", "i"}, "<C-h>", function () vim.cmd("wincmd h") end, {desc="focus pane up"})
+vim.keymap.set({"n", "i"}, "<C-j>", function () vim.cmd("wincmd j") end, {desc="focus pane up"})
+vim.keymap.set({"n", "i"}, "<C-k>", function () vim.cmd("wincmd k") end, {desc="focus pane up"})
+vim.keymap.set({"n", "i"}, "<C-l>", function () vim.cmd("wincmd l") end, {desc="focus pane up"})
+
+
 -- formatting
 vim.keymap.set("n", "<leader>re", function() vim.cmd("Format") end, { desc = "[r]e[f]ormat" })
 vim.keymap.set("n", "<leader>nh", function() vim.cmd("nohls") end, { desc = "[n]o [h]ighlight" })
 
 vim.keymap.set("n", "<leader>vv", function() vim.cmd("VimtexView") end, { desc = "[v]imtex [v]iew" })
 vim.keymap.set("n", "<leader>vc", function() vim.cmd("VimtexCompile") end, { desc = "[v]imtex [c]ompile (sync)" })
+
 
 -- note: fixes pain point issue where <C-w> keybinding doesn't substitute-style
 -- delete the word before the cursor while in insert mode inside a `prompt`

@@ -16,7 +16,8 @@ vim.g.mapleader = ","
 
 require("lazy").setup({
 	-- can we get rid of this one? seems unnecessary
-	{ "folke/neoconf.nvim", cmd = "Neoconf" },
+	-- { "folke/neoconf.nvim", cmd = "Neoconf" },
+	-- check out https://github.com/folke/lazydev.nvim instead when time permits
 
 	--THEMES
 	--------------------------------
@@ -37,7 +38,6 @@ require("lazy").setup({
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "e4f3474" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v1.31.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
-	"simrat39/rust-tools.nvim",
 	"folke/neodev.nvim",
 
 	{ "nvimdev/lspsaga.nvim", commit = "199eb00" },
@@ -96,5 +96,22 @@ require("lazy").setup({
 
 	--TMUX COMPATIBILITY
 	--------------------------------
-	"christoomey/vim-tmux-navigator",
+	-- {
+	-- 	"christoomey/vim-tmux-navigator",
+	-- 	cmd = {
+	-- 		"TmuxNavigateLeft",
+	-- 		"TmuxNavigateDown",
+	-- 		"TmuxNavigateUp",
+	-- 		"TmuxNavigateRight",
+	-- 		"TmuxNavigatePrevious",
+	-- 		"TmuxNavigatorProcessList",
+	-- 	},
+	-- 	keys = {
+	-- 		{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+	-- 		{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+	-- 		{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+	-- 		{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+	-- 		{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+	-- 	},
+	-- },
 })
