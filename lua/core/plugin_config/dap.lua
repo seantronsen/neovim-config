@@ -125,6 +125,27 @@ require("dap.ext.vscode").load_launchjs(launch_path, launch_filetype_maps)
 ------------------------------------------
 local dapui = require("dapui")
 local dapui_config = {
+	controls = {
+		element = "repl",
+		enabled = true,
+		icons = {
+			disconnect = "disconnect",
+			pause = "pause",
+			play = "play",
+			run_last = "run-last",
+			step_back = "step-back",
+			step_into = "step-into",
+			step_out = "step-out",
+			step_over = "step-over",
+			terminate = "terminate",
+		},
+	},
+	icons = {
+      collapsed = ">",
+      current_frame = "*",
+      expanded = "v"
+
+	},
 	layouts = {
 		{
 			elements = {
