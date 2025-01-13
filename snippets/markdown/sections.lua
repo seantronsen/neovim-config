@@ -11,6 +11,7 @@ local fmt = require("luasnip.extras.fmt").fmt
 
 local snutils = require("core.snippetutils")
 local obsidian_header = [[> [!{}] {}
+>
 > ]]
 
 return {}, {
