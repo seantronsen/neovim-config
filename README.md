@@ -1,5 +1,7 @@
 # neovim-config
 
+**this document is extremely out of date**
+
 Simple backup of the neovim config used for writing code within unix-like
 terminals. Currently using this toolset for writing source code based in Rust,
 C, C++, and Python.
