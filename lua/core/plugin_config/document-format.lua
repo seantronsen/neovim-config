@@ -99,6 +99,7 @@ require("formatter").setup({
 			end,
 		},
 
+		xml = { require("formatter.filetypes.xml").tidy },
 		toml = { require("formatter.filetypes.toml").taplo },
 		yaml = { require("formatter.filetypes.yaml").yamlfmt },
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
