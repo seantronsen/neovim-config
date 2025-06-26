@@ -26,7 +26,7 @@ vim.keymap.set(
 
 vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(ev)
-        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        -- local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
 			-- disable formatting from non formatter.nvim sources, so it doesn't
 				-- interfere with gqq
