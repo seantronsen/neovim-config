@@ -11,7 +11,6 @@ vim.o.number = true
 vim.o.hlsearch = true
 vim.o.showmatch = true
 vim.o.mouse = "a"
-vim.o.t_Co = 256 -- todo: fixme: this is invalid in nvim version 10+
 vim.cmd([[set termguicolors]])
 vim.o.diffopt = "vertical"
 

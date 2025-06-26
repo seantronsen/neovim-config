@@ -35,13 +35,13 @@ require("lazy").setup({
 
 	{ "neovim/nvim-lspconfig", tag = "v2.3.0" }, -- possible candidate for removal
 	{ "williamboman/mason.nvim", tag = "v2.0.0" },
-	
+
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
 	"folke/neodev.nvim", -- removal candidate
 
-	{ "nvimdev/lspsaga.nvim", commit = "199eb00" },
+	{ "nvimdev/lspsaga.nvim", commit = "8efe00d" },
 
 	-- note taking
 	--------------------------------
@@ -95,24 +95,4 @@ require("lazy").setup({
 	{ "kkoomen/vim-doge", build = ":call doge#install()" },
 	{ "danymat/neogen", tag = "2.17.1" },
 
-	--TMUX COMPATIBILITY
-	--------------------------------
-	-- {
-	-- 	"christoomey/vim-tmux-navigator",
-	-- 	cmd = {
-	-- 		"TmuxNavigateLeft",
-	-- 		"TmuxNavigateDown",
-	-- 		"TmuxNavigateUp",
-	-- 		"TmuxNavigateRight",
-	-- 		"TmuxNavigatePrevious",
-	-- 		"TmuxNavigatorProcessList",
-	-- 	},
-	-- 	keys = {
-	-- 		{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-	-- 		{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-	-- 		{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-	-- 		{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-	-- 		{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-	-- 	},
-	-- },
-})
+}, { rocks = { enabled = false } })
