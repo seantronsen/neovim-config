@@ -14,13 +14,13 @@ PATH_DATA:=${PATH_BUILD}/data
 # DETERMINE HOST PROPERTIES
 HOST_DIST := $(shell uname -s)
 HOST_ARCH := $(shell uname -m)
-REQUIRED_SYSTEM_COMMANDS:=cp echo wget xz zip gcc g++ file xattr git python3 \
+REQUIRED_SYSTEM_COMMANDS:=cp echo wget xz zip gcc g++ file git python3 \
 													mkdir mv rm readlink dirname realpath tar gzip unzip \
 													unxz grep
 
 # INITIALIZE SEVERAL DIRECTORY TARGET VARIABLES IF NOT ALREADY DEFINED (including env vars)
-USER_BIN ?= ${HOME}/bin
-USER_SRC ?= ${HOME}/sources
+USER_BIN ?= ${HOME}/.local/bin
+USER_SRC ?= ${HOME}/.local/sources
 USER_DOTCONFIG ?= ${HOME}/.config
 USER_DATA ?=${HOME}/.local/share
 
