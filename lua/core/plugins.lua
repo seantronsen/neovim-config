@@ -21,27 +21,26 @@ require("lazy").setup({
 
 	--THEMES
 	--------------------------------
-	"EdenEast/nightfox.nvim",
+	{ "EdenEast/nightfox.nvim" },
 
 	--STATUS LINE
 	--------------------------------
 
-	-- "kyazdani42/nvim-web-devicons",
 	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
 	{ "j-hui/fidget.nvim", tag = "v1.6.1", event = "LspAttach" },
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
 
-	{ "neovim/nvim-lspconfig", tag = "v2.3.0" }, -- possible candidate for removal
+	-- { "neovim/nvim-lspconfig", tag = "v2.3.0" }, -- possible candidate for removal
 	{ "williamboman/mason.nvim", tag = "v2.0.0" },
 
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
-	"folke/neodev.nvim", -- removal candidate
+	-- "folke/neodev.nvim", -- removal candidate
 
-	{ "nvimdev/lspsaga.nvim", commit = "8efe00d" },
+	-- { "nvimdev/lspsaga.nvim", commit = "8efe00d" },
 
 	-- note taking
 	--------------------------------
@@ -57,7 +56,7 @@ require("lazy").setup({
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
 			{ "rcarriga/nvim-dap-ui", tag = "v3.9.1" },
-			{ "rcarriga/cmp-dap", commit = "d16f14a" },
+			-- { "rcarriga/cmp-dap", commit = "d16f14a" },
 			{ "theHamsta/nvim-dap-virtual-text", commit = "57f1dbd" },
 		},
 	},
@@ -92,7 +91,6 @@ require("lazy").setup({
 
 	-- AUTODOCUMENTATION
 	--------------------------------
-	{ "kkoomen/vim-doge", build = ":call doge#install()" },
+	-- { "kkoomen/vim-doge", build = ":call doge#install()" },
 	{ "danymat/neogen", tag = "2.17.1" },
-
 }, { rocks = { enabled = false } })

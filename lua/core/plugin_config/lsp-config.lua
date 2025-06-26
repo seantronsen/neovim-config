@@ -105,7 +105,7 @@ require("mason-tool-installer").setup({
 	auto_update = false,
 })
 
-require("neodev").setup()
+-- require("neodev").setup()
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- possible deletion candidate
