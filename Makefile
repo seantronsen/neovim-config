@@ -14,13 +14,13 @@ PATH_DATA:=${PATH_BUILD}/data
 # DETERMINE HOST PROPERTIES
 HOST_DIST := $(shell uname -s)
 HOST_ARCH := $(shell uname -m)
-REQUIRED_SYSTEM_COMMANDS:=cp echo wget xz zip gcc g++ file git python3 \
+REQUIRED_SYSTEM_COMMANDS:=cp echo wget xz zip gcc g++ file xattr git python3 \
 													mkdir mv rm readlink dirname realpath tar gzip unzip \
 													unxz grep
 
 # INITIALIZE SEVERAL DIRECTORY TARGET VARIABLES IF NOT ALREADY DEFINED (including env vars)
-USER_BIN ?= ${HOME}/.local/bin
-USER_SRC ?= ${HOME}/.local/sources
+USER_BIN ?= ${HOME}/bin
+USER_SRC ?= ${HOME}/sources
 USER_DOTCONFIG ?= ${HOME}/.config
 USER_DATA ?=${HOME}/.local/share
 
@@ -39,8 +39,8 @@ OVERWRITE_INSTALLATION?=0
 ################################################################################
 ################################################################################
 nvim_internal_bin_dir:=/bin
-nvim_Linux_x86_64_url:=https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
-nvim_Darwin_arm64_url:=https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-macos.tar.gz
+nvim_Linux_x86_64_url:=https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
+nvim_Darwin_arm64_url:=https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-macos-arm64.tar.gz
 
 fd_internal_bin_dir:=
 fd_Linux_x86_64_url:=https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz

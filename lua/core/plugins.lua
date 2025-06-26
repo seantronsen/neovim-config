@@ -28,17 +28,18 @@ require("lazy").setup({
 
 	-- "kyazdani42/nvim-web-devicons",
 	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
-	{ "j-hui/fidget.nvim", tag = "v1.4.5", event = "LspAttach" },
+	{ "j-hui/fidget.nvim", tag = "v1.6.1", event = "LspAttach" },
 
 	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
 	--------------------------------
 
-	{ "neovim/nvim-lspconfig", tag = "v1.0.0" },
-	{ "williamboman/mason.nvim", tag = "v1.10.0" },
-	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "e4f3474" },
-	{ "williamboman/mason-lspconfig.nvim", tag = "v1.31.0" },
-	{ "nvim-treesitter/nvim-treesitter", tag = "v0.9.1", build = ":TSUpdate" },
-	"folke/neodev.nvim",
+	{ "neovim/nvim-lspconfig", tag = "v2.3.0" }, -- possible candidate for removal
+	{ "williamboman/mason.nvim", tag = "v2.0.0" },
+	
+	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
+	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
+	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
+	"folke/neodev.nvim", -- removal candidate
 
 	{ "nvimdev/lspsaga.nvim", commit = "199eb00" },
 
