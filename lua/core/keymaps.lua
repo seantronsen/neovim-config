@@ -4,12 +4,11 @@ vim.keymap.set({"n", "i"}, "<C-j>", function () vim.cmd("wincmd j") end, {desc="
 vim.keymap.set({"n", "i"}, "<C-k>", function () vim.cmd("wincmd k") end, {desc="focus pane up"})
 vim.keymap.set({"n", "i"}, "<C-l>", function () vim.cmd("wincmd l") end, {desc="focus pane right"})
 
--- NOTE: fixes pain point issue where <C-w> keybinding doesn't substitute-style
--- delete the word before the cursor while in insert mode inside a `prompt`
--- type buffer. according to the nvim docs here (accessed 10/01/2024):
+-- NOTE: fixes pain point where <C-w> keybinding in a `prompt` type buffer
+-- doesn't delete the word before the cursor while in insert mode. according to
+-- the nvim docs here (accessed 10/01/2024):
 -- <https://neovim.io/doc/user/channel.html#_5.-using-a-prompt-buffer>, the
--- maintainers have designed this as the default behavior within nvim. however,
--- I prefer consistency...
+-- maintainers have designed this as the default behavior within nvim...
 vim.api.nvim_create_autocmd("BufEnter", {
 	pattern = "*",
 	callback = function()
