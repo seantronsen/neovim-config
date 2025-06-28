@@ -26,7 +26,7 @@ require("lazy").setup({
 	--STATUS
 	--------------------------------
 
-	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
+	{ "nvim-lualine/lualine.nvim", commit = "a94fc68" },
 	{ "j-hui/fidget.nvim", tag = "v1.6.1", event = "LspAttach" },
 
 	--LANGUAGE SERVERS & HIGHLIGHTING
