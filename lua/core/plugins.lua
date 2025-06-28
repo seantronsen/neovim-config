@@ -53,8 +53,8 @@ require("lazy").setup({
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
 			{ "rcarriga/nvim-dap-ui", tag = "v3.9.1" },
-			-- { "rcarriga/cmp-dap", commit = "d16f14a" },
 			{ "theHamsta/nvim-dap-virtual-text", commit = "57f1dbd" },
+			{ "rcarriga/cmp-dap", commit = "d16f14a" },
 		},
 	},
 
