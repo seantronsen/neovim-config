@@ -51,11 +51,47 @@ require("mason").setup({
 })
 
 require("mason-lspconfig").setup({
-	ensure_installed = require("core.plugin_config.mason.mason-installs"),
+	ensure_installed = {
+		"bashls",
+		"clangd",
+		"cmake",
+		"dockerls",
+		"html",
+		"jsonls",
+		"lua_ls",
+		"marksman",
+		"pyright",
+		"rust_analyzer",
+		"taplo",
+		"yamlls",
+	},
 })
 
 require("mason-tool-installer").setup({
-	ensure_installed = require("core.plugin_config.mason.mason-tool-installs"),
+	ensure_installed = {
+		"bash-debug-adapter",
+		"bashls",
+		"bibtex-tidy",
+		"black",
+		"clangd",
+		"cmake",
+		"codelldb",
+		"debugpy",
+		"dockerls",
+		"html",
+		"jsonls",
+		"lua_ls",
+		"marksman",
+		"prettier",
+		"pyright",
+		"rust_analyzer",
+		"shfmt",
+		"sqlfmt",
+		"stylua",
+		"taplo",
+		"yamlfmt",
+		"yamlls",
+	},
 	auto_update = false,
 })
 
