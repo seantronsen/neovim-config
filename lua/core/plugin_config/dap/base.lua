@@ -2,8 +2,8 @@
 -- BASIC CONFIGURATION FOR DAP
 ------------------------------------------
 local dap = require("dap")
-dap.set_exception_breakpoints({ "raised", "uncaught" })
-dap.defaults.fallback.exception_breakpoints = { "raised", "uncaught" }
+-- dap.set_exception_breakpoints({ "raised", "uncaught" })
+-- dap.defaults.fallback.exception_breakpoints = { "raised", "uncaught" }
 
 -- SUPPORT LAUNCH.JSON FILES
 ------------------------------------------
