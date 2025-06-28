@@ -56,15 +56,13 @@ require("mason").setup({
 
 local is_headless = require("core.utils").is_running_in_headless_mode()
 require("mason-lspconfig").setup({
-	-- ensure_installed = is_headless and {} or require("core.plugin_config.mason.mason-installs"),
-	ensure_installed = {}, -- is_headless and {} or require("core.plugin_config.mason.mason-installs"),
-	automatic_installation = false,
+	ensure_installed = is_headless and {} or require("core.plugin_config.mason.mason-installs"),
+	automatic_installation = false, -- does this even work anymore....?
 })
 
 require("mason-tool-installer").setup({
-	ensure_installed = is_headless and {}
-		or require("core.plugin_config.mason.mason-tool-installs"),
-	auto_update = false,
+	ensure_installed = is_headless and {} or require("core.plugin_config.mason.mason-tool-installs"),
+	auto_update = false, -- does this even work anymore....?
 })
 
 vim.lsp.config("*", {
