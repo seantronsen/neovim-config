@@ -23,7 +23,7 @@ luasnip.config.set_config({
 	enable_autosnippets = true,
 })
 
--- todo: create a jelescope picker for this
+-- todo: create a telescope picker for this
 vim.keymap.set("n", "<leader>lsa", function()
 	local message = [[
 	AVAILABLE LUASNIP SNIPPETS
