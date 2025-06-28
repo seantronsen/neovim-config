@@ -17,6 +17,11 @@ local sqlfmt = function()
 	return { exe = "sqlfmt", args = args, stdin = true }
 end
 
+local xmlfmt = function()
+	local args = { " ", "-" }
+	return { exe = "xmlformat", args = args, stdin = true }
+end
+
 local max_line_chars = 120
 
 require("formatter").setup({
@@ -55,6 +60,7 @@ require("formatter").setup({
 			end,
 		},
 		html = { require("formatter.filetypes.html").prettier },
+		xml = { xmlfmt },
 		latex = { latexfmt },
 		tex = { latexfmt },
 		-- markdown = { require("formatter.filetypes.markdown").prettier },
@@ -99,7 +105,7 @@ require("formatter").setup({
 			end,
 		},
 
-		xml = { require("formatter.filetypes.xml").tidy },
+		-- xml = { require("formatter.filetypes.xml").tidy },
 		toml = { require("formatter.filetypes.toml").taplo },
 		yaml = { require("formatter.filetypes.yaml").yamlfmt },
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
