@@ -1,28 +1,7 @@
 -- ------------------------------
 -- IDE-LIKE COMMANDS
 -- ------------------------------
-vim.keymap.set(
-	"n",
-	"<leader>e",
-	vim.diagnostic.open_float,
-	{ desc = "display error", noremap = true, silent = true }
-)
-vim.keymap.set(
-	"n",
-	"[d",
-	vim.diagnostic.goto_prev,
-	{ desc = "go to previous [d]iagnostic", noremap = true, silent = true }
-)
-vim.keymap.set(
-	"n",
-	"]d",
-	vim.diagnostic.goto_next,
-	{ desc = "go to next [d]iagnostic", noremap = true, silent = true }
-)
--- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
 
 vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(ev)
@@ -65,12 +44,21 @@ vim.api.nvim_create_autocmd('LspAttach', {
 				vim.keymap.set("n", "<leader>a", function()
 					vim.cmd([[Lspsaga code_action]])
 				end, { desc = "code [a]ction" })
+local function diag_next()
+	vim.diagnostic.jump({ count = 1, float = true })
+end
 
 				-- REFACTORING
 				vim.keymap.set("n", "<leader>rr", function()
 					vim.cmd([[Lspsaga rename]])
 				end, { desc = "[r]efactor [r]ename symbol and references" })
+local function diag_prev()
+	vim.diagnostic.jump({ count = -1, float = true })
+end
 
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display error", noremap = true, silent = true })
+vim.keymap.set("n", "]d", diag_next, { desc = "go to next [d]iagnostic", noremap = true, silent = true })
+vim.keymap.set("n", "[d", diag_prev, { desc = "go to previous [d]iagnostic", noremap = true, silent = true })
 
       end
 })
