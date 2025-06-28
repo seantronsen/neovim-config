@@ -41,10 +41,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
-
-
-local lsp_flags = { debounce_text_changes = 100 }
-
 --------------------------------
 -- CONFIGURATION FOR LSP SERVERS
 --------------------------------
@@ -71,24 +67,6 @@ require("mason-tool-installer").setup({
 	auto_update = false,
 })
 
--- require("neodev").setup()
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
--- possible deletion candidate
---
--- local lspsaga = require("lspsaga")
--- lspsaga.setup({
--- 
--- 	ui = {
--- 		code_action = "A",
--- 	},
--- 	lightbulb = {
--- 		sign = false,
--- 	},
--- 	implement = {
--- 		sign = false,
--- 	},
--- })
 
 vim.lsp.config("pyright", {
 	settings = {
