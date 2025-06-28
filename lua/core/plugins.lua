@@ -32,7 +32,7 @@ require("lazy").setup({
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
 
-	-- { "neovim/nvim-lspconfig", tag = "v2.3.0" }, -- todo: now built-in to the editor itself
+	{ "neovim/nvim-lspconfig", tag = "v2.3.0" }, 
 	{ "williamboman/mason.nvim", tag = "v2.0.0" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 
