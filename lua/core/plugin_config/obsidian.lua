@@ -70,7 +70,7 @@ obs.setup({
 })
 
 vim.keymap.set("n", "<leader>ol", function() vim.cmd("ObsidianLinks") end, { desc = "[o]bsidian [l]inks" })
-vim.keymap.set("n", "<leader>fn", function() vim.cmd("ObsidianSearch") end, { desc = "[f]ind [n]ote (search obsidian)" })
+vim.keymap.set("n", "<leader>fo", function() vim.cmd("ObsidianSearch") end, { desc = "[f]ind note (search [o]bsidian)" })
 vim.keymap.set("n", "<leader>ob", function() vim.cmd("ObsidianBacklinks") end, { desc = "[o]bsidian [b]acklinks" })
 vim.keymap.set("n", "<leader>oo", function() vim.cmd("ObsidianOpen") end, { desc = "[o]bsidian [o]pen" })
 vim.keymap.set("n", "<leader>ot", function() vim.cmd("ObsidianTags") end, { desc = "[o]bsidian [t]ags" })
