@@ -19,17 +19,17 @@ vim.g.mapleader = ","
 
 require("lazy").setup({
 
-	--THEMES
+	--COLORSCHEME
 	--------------------------------
 	{ "EdenEast/nightfox.nvim" },
 
-	--STATUS LINE
+	--STATUS
 	--------------------------------
 
 	{ "nvim-lualine/lualine.nvim", commit = "2248ef2" },
 	{ "j-hui/fidget.nvim", tag = "v1.6.1", event = "LspAttach" },
 
-	--LANGUAGE SERVER AND INFORMATION HIGHLIGHTING
+	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
 
 	-- { "neovim/nvim-lspconfig", tag = "v2.3.0" }, -- possible candidate for removal
@@ -39,7 +39,7 @@ require("lazy").setup({
 	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
 
-	-- note taking
+	-- NOTES
 	--------------------------------
 	{ "lervag/vimtex", tag = "v2.13", ft = { "tex", "markdown" } },
 	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v3.9.0" },
