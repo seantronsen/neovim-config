@@ -32,7 +32,7 @@ require("lazy").setup({
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
 
-	{ "neovim/nvim-lspconfig", tag = "v2.3.0" }, 
+	{ "neovim/nvim-lspconfig", tag = "v2.3.0" },
 	{ "williamboman/mason.nvim", tag = "v2.0.0" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 
@@ -49,10 +49,10 @@ require("lazy").setup({
 	--------------------------------
 	{
 		"mfussenegger/nvim-dap",
-		tag = "0.6.0",
+		tag = "0.10.0",
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
-			{ "rcarriga/nvim-dap-ui", tag = "v3.9.1" },
+			{ "rcarriga/nvim-dap-ui", tag = "v4.0.0" },
 			{ "rcarriga/cmp-dap", commit = "d16f14a" },
 			{ "theHamsta/nvim-dap-virtual-text", commit = "fbdb48c" },
 		},
@@ -67,7 +67,7 @@ require("lazy").setup({
 	{ "stevearc/oil.nvim", tag = "v2.2.0" },
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.4",
+		tag = "0.1.8",
 		dependencies = { { "nvim-lua/plenary.nvim" } },
 	},
 
@@ -84,9 +84,7 @@ require("lazy").setup({
 		end,
 		dependencies = {
 			{ "hrsh7th/cmp-nvim-lsp" },
-			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-path" },
-			{ "hrsh7th/cmp-cmdline" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "L3MON4D3/LuaSnip" },
 			{ "saadparwaiz1/cmp_luasnip" },
