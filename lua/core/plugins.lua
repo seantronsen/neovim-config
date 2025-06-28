@@ -32,11 +32,16 @@ require("lazy").setup({
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
 
-	{ "neovim/nvim-lspconfig", tag = "v2.3.0" },
-	{ "williamboman/mason.nvim", tag = "v2.0.0" },
-	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
+	{
+		"williamboman/mason-lspconfig.nvim",
+		tag = "v2.0.0",
+		dependencies = {
+			{ "neovim/nvim-lspconfig", tag = "v2.3.0" },
+			{ "williamboman/mason.nvim", tag = "v2.0.0" },
+			{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
+		},
+	},
 
-	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
 
 	-- NOTES
