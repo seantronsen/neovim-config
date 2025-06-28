@@ -4,10 +4,6 @@ vim.keymap.set({"n", "i"}, "<C-j>", function () vim.cmd("wincmd j") end, {desc="
 vim.keymap.set({"n", "i"}, "<C-k>", function () vim.cmd("wincmd k") end, {desc="focus pane up"})
 vim.keymap.set({"n", "i"}, "<C-l>", function () vim.cmd("wincmd l") end, {desc="focus pane right"})
 
--- formatting
-vim.keymap.set("n", "<leader>re", function() vim.cmd("Format") end, { desc = "[r]e[f]ormat" })
-vim.keymap.set("n", "<leader>nh", function() vim.cmd("nohls") end, { desc = "[n]o [h]ighlight" })
-
 -- NOTE: fixes pain point issue where <C-w> keybinding doesn't substitute-style
 -- delete the word before the cursor while in insert mode inside a `prompt`
 -- type buffer. according to the nvim docs here (accessed 10/01/2024):
