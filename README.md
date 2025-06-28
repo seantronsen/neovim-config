@@ -1,59 +1,41 @@
 # neovim-config
 
-**this document is hilariously out of date**
-
-Simple backup of the neovim config used for writing code within unix-like
-terminals. Currently using this toolset for writing source code based in Rust,
-C, C++, and Python.
+Simple backup of the `nvim` config used for writing code within `*nix`
+terminals.
 
 As for how to actually use the tooling, view a list of currently installed
 plugins within `plugins.lua` and visit the docs of the associated projects. It
-should be possible to find most of that information using nvims `:help
-[item-name]` command. More detailed information can also be found within the
-'LOCAL ADDITIONS' section at the bottom of the buffer after executing `:help`.
+should be possible to find most of that information using nvims
+`:help [item-name]` command. There's also a helpful `,fh` keybinding which
+spawns an interactive search over the same help pages.
+
+Detailed information can also be found within the 'LOCAL ADDITIONS' section at
+the bottom of the buffer after executing `:help`.
 
 ## Syntax Highlighting and Code Editing
 
 Proper syntax highlighting and IDE-like features must be installed on a
-language-by-language basis. In the current working version much of it is
-installed automatically, but for languages not included by default (those
-outside my preferences) the features must be installed somewhat manually.
+language-by-language basis. In the current working version, much of the tooling
+is installed automatically, but for languages not included by default (those
+outside my preferences) the kit must be installed manually.
 
-To perform a one-time installation, execute the following in command mode:
+To perform a one-time installation, execute `:Mason` and use the built-in UI to
+download the relevant language server. If necessary, specify additional settings
+for that server in `lua/core/plugin_config/lsp.lua`. For better syntax
+highlighting, install the treesitter grammar for the target language using
+`:TSInstall <lang-name>`.
 
-1. `:MasonInstall [language analyzer/parser/formatter]`
-   a. Repeat as needed for each unique type of tool.
-   b. Note that a list of all available tools can be found using the command
-   `:Mason`
-2. `:LspInstall [language name]`
-   a. Language server protocol support -- **Important**
-3. `:TSInstall [language name]`
-   a. Treesitter syntax highlighting support
+## Runtime Dependencies
 
-> To ensure automatic installation later on, add the appropriate language
-> server to the table of auto installs in the `lsp-config.lua` file. At the
-> time of writing, the configuration properties exist under the section for
-> `mason.nvim`.
-
-## Possible Installation Issues
-
-### Multiple Parser Issues
-
-Ensure the only parser directory used by neovim is the nvim-treesitter/parser
-directory. Find and delete any conflicting directories via the command:
-`:echo nvim_get_runtime_file('parser', v:true)`
-
-Typically, this only occurs if more than a single installation exists globally
-on all user `$PATH`'s (via `apt`, `snap`, etc.).
-
-## Dependencies
-
-- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.9.4
+- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.11.2
 - [find-fd](https://github.com/sharkdp/fd)
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
-- luarocks -- see `:checkhealth` for more info
-- python v3.*
+- python v3.\*
 - nodejs $\geq$ v18
+
+> The `Makefile` based installer will handle everything except for the
+> installation of `python3`. Almost all modern `*nix` systems come with such an
+> installation, so for brevity that one's been left out.
 
 ## Build Dependencies
 
