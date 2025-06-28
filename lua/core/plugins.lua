@@ -41,7 +41,7 @@ require("lazy").setup({
 
 	-- NOTES
 	--------------------------------
-	{ "lervag/vimtex", tag = "v2.13", ft = { "tex", "markdown" } },
+	{ "lervag/vimtex", tag = "v2.16", ft = { "tex", "markdown" } },
 	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v3.9.0" },
 	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy" },
 
@@ -52,9 +52,7 @@ require("lazy").setup({
 		tag = "0.10.0",
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
-			{ "rcarriga/nvim-dap-ui", tag = "v4.0.0", dependencies = {
-				{ "nvim-neotest/nvim-nio" },
-			} },
+			{ "rcarriga/nvim-dap-ui", tag = "v4.0.0", dependencies = { { "nvim-neotest/nvim-nio" } } },
 			{ "rcarriga/cmp-dap", commit = "d16f14a" },
 			{ "theHamsta/nvim-dap-virtual-text", commit = "fbdb48c" },
 		},
