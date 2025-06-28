@@ -14,19 +14,15 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display er
 vim.keymap.set("n", "]d", diag_next, { desc = "go to next [d]iagnostic", noremap = true, silent = true })
 vim.keymap.set("n", "[d", diag_prev, { desc = "go to previous [d]iagnostic", noremap = true, silent = true })
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
+-- Use an on_attach function to only map the following keys after the language
+-- server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(ev)
-		local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-		-- old --> from nvim 9.5 (unsure if this still has any value...)
+	callback = function(args)
 		-- disable formatting from non formatter.nvim sources, so it doesn't
 		-- interfere with gqq
-		-- vim.bo[bufnr].formatexpr = nil
-		-- Mappings.
-		-- See for documentation on any of the below functions
-		-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
+		vim.bo[args.buf].formatexpr = nil
+
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
 
 		vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
 		vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
