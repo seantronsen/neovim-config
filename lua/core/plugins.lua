@@ -60,7 +60,7 @@ require("lazy").setup({
 
 	--DOCUMENT FORMATTING
 	--------------------------------
-	{ "mhartington/formatter.nvim", commit = "34dcdfa" },
+	{ "mhartington/formatter.nvim", commit = "b9d7f85" },
 
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
