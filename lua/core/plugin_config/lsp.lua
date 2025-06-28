@@ -56,7 +56,7 @@ require("mason-lspconfig").setup({
 
 require("mason-tool-installer").setup({
 	ensure_installed = require("core.plugin_config.mason.mason-tool-installs"),
-	auto_update = false, -- does this even work anymore....?
+	auto_update = false,
 })
 
 vim.lsp.config("*", {
