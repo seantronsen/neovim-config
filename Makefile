@@ -66,28 +66,25 @@ node_Darwin_arm64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-darwin-arm
 # this under a temporary makefile recipe so the syntax highlights appear properly
 # TODO: SWITCH TO AN EXTERNAL SCRIPT (IN PROGRESS)
 define download-tool-macro
-	set -e
-	mkdir -vp ${PATH_ARTIFACTS}
-	mkdir -vp ${PATH_STAGE}
-	URL_TARGET=${${@F}_${HOST_DIST}_${HOST_ARCH}_url}
-	if [ -z "$${URL_TARGET}" ]; then
-		@echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."
-		exit 1
-	fi
-
-	case "$${URL_TARGET##*.}" in
-		gz) UNZIP=gunzip ;;
-		xz) UNZIP=unxz ;;
-		*) exit 1 ;;
-	esac
-
-
-	wget -O "${PATH_STAGE}/${@F}.tar.$${URL_TARGET##*.}" "$${URL_TARGET}"
-	$${UNZIP} "${PATH_STAGE}/${@F}.tar"*
-	mkdir -v "${PATH_STAGE}/${@F}"
-	tar -xvf  "${PATH_STAGE}/${@F}.tar" -C "${PATH_STAGE}/${@F}"
-	mv -v "${PATH_STAGE}/${@F}"/$$(ls "${PATH_STAGE}/${@F}") "${PATH_ARTIFACTS}/${@F}"
-	rm -vrf "${PATH_STAGE}/${@F}"*
+	set -e; \
+	mkdir -vp ${PATH_ARTIFACTS}; \
+	mkdir -vp ${PATH_STAGE}; \
+	URL_TARGET=${${@F}_${HOST_DIST}_${HOST_ARCH}_url}; \
+	if [ -z "$${URL_TARGET}" ]; then \
+		@echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."; \
+		exit 1; \
+	fi; \
+	case "$${URL_TARGET##*.}" in \
+		gz) UNZIP=gunzip ;; \
+		xz) UNZIP=unxz ;; \
+		*) exit 1 ;; \
+	esac; \
+	wget -O "${PATH_STAGE}/${@F}.tar.$${URL_TARGET##*.}" "$${URL_TARGET}"; \
+	$${UNZIP} "${PATH_STAGE}/${@F}.tar"* ; \
+	mkdir -v "${PATH_STAGE}/${@F}" ; \
+	tar -xvf  "${PATH_STAGE}/${@F}.tar" -C "${PATH_STAGE}/${@F}" ; \
+	mv -v "${PATH_STAGE}/${@F}"/$$(ls "${PATH_STAGE}/${@F}") "${PATH_ARTIFACTS}/${@F}" ; \
+	rm -vrf "${PATH_STAGE}/${@F}"* ; 
 endef
 
 
