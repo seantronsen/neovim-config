@@ -18,9 +18,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = ","
 
 require("lazy").setup({
-	-- can we get rid of this one? seems unnecessary
-	-- { "folke/neoconf.nvim", cmd = "Neoconf" },
-	-- check out https://github.com/folke/lazydev.nvim instead when time permits
 
 	--THEMES
 	--------------------------------
@@ -41,9 +38,6 @@ require("lazy").setup({
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
 	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
-	-- "folke/neodev.nvim", -- removal candidate
-
-	-- { "nvimdev/lspsaga.nvim", commit = "8efe00d" },
 
 	-- note taking
 	--------------------------------
