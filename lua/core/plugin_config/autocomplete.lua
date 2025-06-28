@@ -61,10 +61,6 @@ cmp.setup({
 })
 
 -- Set configuration for specific filetype.
-cmp.setup.filetype("gitcommit", {
-	enabled = true,
-	sources = cmp.config.sources({ { name = "git" } }, { { name = "buffer" } }),
-})
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline({ "/", "?" }, {

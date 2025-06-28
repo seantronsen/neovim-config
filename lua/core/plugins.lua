@@ -76,6 +76,7 @@ require("lazy").setup({
 	--------------------------------
 	{
 		"hrsh7th/nvim-cmp",
+		tag = "v0.0.2",
 		opts = function(_, opts)
 			opts.sources = opts.sources or {}
 			table.insert(opts.sources, {
@@ -85,8 +86,10 @@ require("lazy").setup({
 		end,
 		dependencies = {
 			{ "hrsh7th/cmp-nvim-lsp" },
-			{ "hrsh7th/cmp-path" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
+			{ "hrsh7th/cmp-path" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-cmdline" },
 			{ "L3MON4D3/LuaSnip" },
 			{ "saadparwaiz1/cmp_luasnip" },
 		},
