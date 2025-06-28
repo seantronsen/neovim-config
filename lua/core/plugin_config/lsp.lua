@@ -22,7 +22,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- interfere with gqq
 		vim.bo[args.buf].formatexpr = nil
 
-		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		-- local client = vim.lsp.get_client_by_id(args.data.client_id)
 
 		vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
 		vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
