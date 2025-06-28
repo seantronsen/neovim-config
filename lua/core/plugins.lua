@@ -41,9 +41,10 @@ require("lazy").setup({
 
 	-- NOTES
 	--------------------------------
+
 	{ "lervag/vimtex", tag = "v2.16", ft = { "tex", "markdown" } },
-	{ "epwalsh/obsidian.nvim", dependencies = { "nvim-lua/plenary.nvim" }, tag = "v3.9.0" },
-	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy" },
+	{ "obsidian-nvim/obsidian.nvim", tag = "v3.11.0", ft = { "markdown" }, dependencies = { "nvim-lua/plenary.nvim" } },
+	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy", ft = { "markdown" } },
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
