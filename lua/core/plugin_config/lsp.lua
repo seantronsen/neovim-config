@@ -52,7 +52,6 @@ require("mason").setup({
 
 require("mason-lspconfig").setup({
 	ensure_installed = require("core.plugin_config.mason.mason-installs"),
-	automatic_installation = false, -- does this even work anymore....?
 })
 
 require("mason-tool-installer").setup({
