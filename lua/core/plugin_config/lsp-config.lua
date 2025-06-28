@@ -2,56 +2,10 @@
 -- IDE-LIKE COMMANDS
 -- ------------------------------
 
-
-vim.api.nvim_create_autocmd('LspAttach', {
-      callback = function(ev)
-        -- local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-			-- disable formatting from non formatter.nvim sources, so it doesn't
-				-- interfere with gqq
-				vim.bo[bufnr].formatexpr = nil
-				-- Mappings.
-				-- See  for documentation on any of the below functions
-				-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
-				vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
-				vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
-				vim.keymap.set(
-					"n",
-					"<leader>gt",
-					vim.lsp.buf.type_definition,
-					{ desc = "[g]o to symbol [t]ype definition" }
-				)
-				vim.keymap.set(
-					"n",
-					"<leader>gi",
-					vim.lsp.buf.implementation,
-					{ desc = "[g]o to [i]mplementation" }
-				)
-				vim.keymap.set(
-					"n",
-					"<leader>h",
-					vim.lsp.buf.hover,
-					{ desc = "[h]elp (information for hovered item)" }
-				)
-				vim.keymap.set(
-					"n",
-					"<leader>fr",
-					require("telescope.builtin").lsp_references,
-					{ desc = "[f]ind [r]eferences" }
-				)
-
-				-- CODE ACTION
-				vim.keymap.set("n", "<leader>a", function()
-					vim.cmd([[Lspsaga code_action]])
-				end, { desc = "code [a]ction" })
 local function diag_next()
 	vim.diagnostic.jump({ count = 1, float = true })
 end
 
-				-- REFACTORING
-				vim.keymap.set("n", "<leader>rr", function()
-					vim.cmd([[Lspsaga rename]])
-				end, { desc = "[r]efactor [r]ename symbol and references" })
 local function diag_prev()
 	vim.diagnostic.jump({ count = -1, float = true })
 end
@@ -60,7 +14,31 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display er
 vim.keymap.set("n", "]d", diag_next, { desc = "go to next [d]iagnostic", noremap = true, silent = true })
 vim.keymap.set("n", "[d", diag_prev, { desc = "go to previous [d]iagnostic", noremap = true, silent = true })
 
-      end
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+		-- old --> from nvim 9.5 (unsure if this still has any value...)
+		-- disable formatting from non formatter.nvim sources, so it doesn't
+		-- interfere with gqq
+		-- vim.bo[bufnr].formatexpr = nil
+		-- Mappings.
+		-- See for documentation on any of the below functions
+		-- local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
+		vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
+		vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
+		vim.keymap.set("n", "<leader>gt", vim.lsp.buf.type_definition, { desc = "[g]o to symbol [t]ype definition" })
+		vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, { desc = "[g]o to [i]mplementation" })
+		vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
+		vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
+
+		-- REFACTORING
+		vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
+		vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { desc = "code [a]ction" })
+	end,
 })
 
 
