@@ -1,13 +1,13 @@
 ---@diagnostic disable: missing-fields
-local obs = require("obsidian")
 
 local path_notes = vim.env.HOME .. "/notes"
-if not vim.loop.fs_stat(path_notes) then
+if not vim.uv.fs_stat(path_notes) then
 	local mode = tonumber("0755", 8) -- convert permissions to octal
-	vim.loop.fs_mkdir(path_notes, mode)
+	vim.uv.fs_mkdir(path_notes, mode)
 	vim.notify("configured notes directory did not exist, so it was created", vim.log.levels.INFO)
 end
 
+local obs = require("obsidian")
 obs.setup({
 	dir = path_notes,
 	new_notes_location = "current_dir",
@@ -15,13 +15,6 @@ obs.setup({
 		nvim_cmp = true,
 		min_chars = 3,
 	},
-	-- templates = {
-	-- 	subdir = "templates",
-	-- 	date_format = "%Y-%m-%d",
-	-- 	time_format = "%H:%M",
-	-- 	-- A map for custom variables, the key should be the variable and the value a function
-	-- 	substitutions = {},
-	-- },
 
 	open_app_foreground = false,
 	preferred_link_style = "wiki",
@@ -76,30 +69,12 @@ obs.setup({
 	},
 })
 
-vim.keymap.set("n", "<leader>ol", function()
-	vim.cmd("ObsidianLinks")
-end, { desc = "[o]bsidian [l]inks" })
-
--- todo: change to ,fo and change original fo to ffo
-vim.keymap.set("n", "<leader>of", function()
-	vim.cmd("ObsidianSearch")
-end, { desc = "[f]ind obsidian [n]ote (search vault)" })
-
-vim.keymap.set("n", "<leader>ob", function()
-	vim.cmd("ObsidianBacklinks")
-end, { desc = "[o]bsidian [b]acklinks" })
-
-vim.keymap.set("n", "<leader>oo", function()
-	vim.cmd("ObsidianOpen")
-end, { desc = "[o]bsidian [o]pen" })
-
-vim.keymap.set("n", "<leader>ot", function()
-	vim.cmd("ObsidianTags")
-end, { desc = "[o]bsidian [t]ags" })
-
-vim.keymap.set("n", "<leader>oc", function()
-	vim.cmd("ObsidianTOC")
-end, { desc = "[o]bsidian note table of [c]ontents" })
+vim.keymap.set("n", "<leader>ol", function() vim.cmd("ObsidianLinks") end, { desc = "[o]bsidian [l]inks" })
+vim.keymap.set("n", "<leader>fn", function() vim.cmd("ObsidianSearch") end, { desc = "[f]ind [n]ote (search obsidian)" })
+vim.keymap.set("n", "<leader>ob", function() vim.cmd("ObsidianBacklinks") end, { desc = "[o]bsidian [b]acklinks" })
+vim.keymap.set("n", "<leader>oo", function() vim.cmd("ObsidianOpen") end, { desc = "[o]bsidian [o]pen" })
+vim.keymap.set("n", "<leader>ot", function() vim.cmd("ObsidianTags") end, { desc = "[o]bsidian [t]ags" })
+vim.keymap.set("n", "<leader>oc", function() vim.cmd("ObsidianTOC") end, { desc = "[o]bsidian note table of [c]ontents" })
 
 -- todo: create new bindings for
 
