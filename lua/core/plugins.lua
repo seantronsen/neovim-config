@@ -32,11 +32,11 @@ require("lazy").setup({
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
 
-	-- { "neovim/nvim-lspconfig", tag = "v2.3.0" }, -- possible candidate for removal
+	{ "neovim/nvim-lspconfig", tag = "v2.3.0" },
 	{ "williamboman/mason.nvim", tag = "v2.0.0" },
+	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 
 	{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
-	{ "williamboman/mason-lspconfig.nvim", tag = "v2.0.0" },
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
 
 	-- NOTES
@@ -88,6 +88,5 @@ require("lazy").setup({
 
 	-- AUTODOCUMENTATION
 	--------------------------------
-	-- { "kkoomen/vim-doge", build = ":call doge#install()" },
 	{ "danymat/neogen", tag = "2.17.1" },
 }, { rocks = { enabled = false } })
