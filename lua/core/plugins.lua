@@ -46,7 +46,7 @@ require("lazy").setup({
 
 	-- NOTES
 	--------------------------------
-
+	-- since this is lazy loaded, docs are unavailable until one opens a .tex file
 	{ "lervag/vimtex", tag = "v2.16", ft = { "tex", "markdown" } },
 	{ "obsidian-nvim/obsidian.nvim", tag = "v3.11.0", ft = { "markdown" }, dependencies = { "nvim-lua/plenary.nvim" } },
 	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy", ft = { "markdown" } },
