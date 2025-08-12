@@ -28,3 +28,14 @@ vim.g.loaded_julia_provider = 0
 ------------------------
 vim.g.vimtex_view_method = "zathura"
 vim.g.vimtex_quickfix_open_on_warning = 0
+
+-- synctex isn't applicable to macos installations unless one is willing to
+-- undergo the setup process for DBUS on such systems. this process requires
+-- elevated privileges and is especially troublesome on aarch64 type
+-- processors.
+-- for that reason, I'm choosing to forego the feature entirely when I'm stuck
+-- on macos devices...
+if vim.uv.os_uname().sysname == "Darwin" then
+	-- vim.notify("macOS detected")
+	vim.g.vimtex_view_zathura_use_synctex = 0
+end
