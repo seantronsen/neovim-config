@@ -14,26 +14,17 @@ local markdown_header = [[> [!{}] {}
 >
 > ]]
 
+-- GitLab flavored markdown headers
 return {}, {
 	s(
-		{ trig = "^sthe", wordTrig = false, regTrig = true },
-		fmt(markdown_header, { ntext("important"), ntext("Theorem") }),
-		{ condition = snutils.not_mathzone }
-	),
-	s(
-		{ trig = "^sdef", wordTrig = false, regTrig = true },
-		fmt(markdown_header, { ntext("important"), ntext("Definition") }),
-		{ condition = snutils.not_mathzone }
-	),
-	s(
 		{ trig = "^snot", wordTrig = false, regTrig = true },
-		fmt(markdown_header, { ntext("info"), ntext("Note") }),
+		fmt(markdown_header, { ntext("note"), ntext("") }),
 		{ condition = snutils.not_mathzone }
 	),
 
 	s(
-		{ trig = "^swar", wordTrig = false, regTrig = true },
-		fmt(markdown_header, { ntext("warning"), ntext("") }),
+		{ trig = "^s%+", wordTrig = false, regTrig = true },
+		fmt(markdown_header, { ntext("tip"), ntext("") }),
 		{ condition = snutils.not_mathzone }
 	),
 
@@ -44,14 +35,24 @@ return {}, {
 	),
 
 	s(
-		{ trig = "^s%?", wordTrig = false, regTrig = true },
-		fmt(markdown_header, { ntext("faq"), ntext("Common Questions") }),
+		{ trig = "^scau", wordTrig = false, regTrig = true },
+		fmt(markdown_header, { ntext("caution"), ntext("") }),
 		{ condition = snutils.not_mathzone }
 	),
 
 	s(
-		{ trig = "^serr", wordTrig = false, regTrig = true },
-		fmt(markdown_header, { ntext("fail"), ntext("") }),
+		{ trig = "^swar", wordTrig = false, regTrig = true },
+		fmt(markdown_header, { ntext("warning"), ntext("") }),
+		{ condition = snutils.not_mathzone }
+	),
+	s(
+		{ trig = "^s%?", wordTrig = false, regTrig = true },
+		fmt(markdown_header, { ntext("caution"), ntext("Common Questions") }),
+		{ condition = snutils.not_mathzone }
+	),
+	s(
+		{ trig = "^sdef", wordTrig = false, regTrig = true },
+		fmt(markdown_header, { ntext("important"), ntext("Definition") }),
 		{ condition = snutils.not_mathzone }
 	),
 }
