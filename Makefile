@@ -39,7 +39,8 @@ OVERWRITE_INSTALLATION?=0
 ################################################################################
 ################################################################################
 nvim_internal_bin_dir:=/bin
-nvim_Linux_x86_64_url:=https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
+nvim_Linux_x86_64_url:=https://github.com/neovim/neovim-releases/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
+# nvim_Linux_x86_64_url:=https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
 nvim_Darwin_arm64_url:=https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-macos-arm64.tar.gz
 
 fd_internal_bin_dir:=
