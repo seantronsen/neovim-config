@@ -12,6 +12,11 @@ local latexfmt = function()
 	return { exe = "latexindent", args = args, stdin = true }
 end
 
+local python_ruff_isort_fmt = function()
+	local args = { "-q", "check", "--select", "I", "--fix", "-" }
+	return { exe = "ruff", args = args, stdin = true }
+end
+
 local sqlfmt = function()
 	local args = { " ", "-" }
 	return { exe = "sqlfmt", args = args, stdin = true }
@@ -36,7 +41,7 @@ require("formatter").setup({
 		cmake = { require("formatter.filetypes.cmake").cmakeformat },
 		javascript = { require("formatter.filetypes.javascript").prettier },
 		lua = { require("formatter.filetypes.lua").stylua },
-		python = { require("formatter.filetypes.python").ruff },
+		python = { require("formatter.filetypes.python").ruff, python_ruff_isort_fmt },
 		rust = { require("formatter.filetypes.rust").rustfmt },
 		typescript = { require("formatter.filetypes.javascript").prettier },
 
