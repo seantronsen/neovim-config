@@ -72,6 +72,7 @@ require("mason-tool-installer").setup({
 		"html",
 		"jsonls",
 		"lua_ls",
+		"latexindent",
 		"marksman",
 		"prettier",
 		"pyright",
