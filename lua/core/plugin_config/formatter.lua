@@ -36,7 +36,7 @@ require("formatter").setup({
 		cmake = { require("formatter.filetypes.cmake").cmakeformat },
 		javascript = { require("formatter.filetypes.javascript").prettier },
 		lua = { require("formatter.filetypes.lua").stylua },
-		python = { require("formatter.filetypes.python").black },
+		python = { require("formatter.filetypes.python").ruff },
 		rust = { require("formatter.filetypes.rust").rustfmt },
 		typescript = { require("formatter.filetypes.javascript").prettier },
 

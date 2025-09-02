@@ -67,7 +67,6 @@ require("mason-lspconfig").setup({
 require("mason-tool-installer").setup({
 	ensure_installed = {
 		"bibtex-tidy",
-		"black",
 		"clangd",
 		"debugpy",
 		"html",
@@ -76,6 +75,7 @@ require("mason-tool-installer").setup({
 		"marksman",
 		"prettier",
 		"pyright",
+		"ruff",
 		"shfmt",
 		"stylua",
 		"taplo",
