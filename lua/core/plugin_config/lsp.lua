@@ -54,6 +54,7 @@ require("mason-lspconfig").setup({
 	ensure_installed = {
 		"bashls",
 		"clangd",
+		"gopls",
 		"html",
 		"jsonls",
 		"lua_ls",
@@ -87,6 +88,18 @@ require("mason-tool-installer").setup({
 
 vim.lsp.config("*", {
 	capabilities = require("cmp_nvim_lsp").default_capabilities(),
+})
+
+vim.lsp.config("gopls", {
+	settings = {
+		gopls = {
+			analyses = {
+				unusedparams = true,
+			},
+			staticcheck = true,
+			gofumpt = true,
+		},
+	},
 })
 
 vim.lsp.config("pyright", {
