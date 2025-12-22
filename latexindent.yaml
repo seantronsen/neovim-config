@@ -1,0 +1,13 @@
+defaultIndent: '    '
+modifyLineBreaks:
+  # oneSentencePerLine:
+  #   manipulateSentences: 1
+  #   textWrapSentences: 1
+  #   # sentencesFollow:
+  #   #   other: \\item
+  textWrapOptions:
+    columns: 80
+    when: after
+    comments:
+      wrap: 1
+      inheritLeadingSpace: 1

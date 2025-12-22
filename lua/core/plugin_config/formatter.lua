@@ -8,7 +8,9 @@ local get_current_filename = function()
 	return util.get_current_buffer_file_path()
 end
 local latexfmt = function()
-	local args = { "-g", "/dev/null", "-m" }
+	local pathconfig = vim.fn.stdpath("config") .. "/latexindent.yaml"
+	-- local args = { "-g", "/dev/null", "-m", "-l="..pathconfig }
+	local args = { "-g", "/dev/null", "-m", "-l", pathconfig, "-" }
 	return { exe = "latexindent", args = args, stdin = true }
 end
 
