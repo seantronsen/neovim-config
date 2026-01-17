@@ -44,6 +44,28 @@ require("lazy").setup({
 
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
 
+	{
+		"nvim-java/nvim-java",
+		config = function()
+			require("java").setup()
+
+			vim.lsp.config("jdtls", {
+				settings = {
+					java = {
+						maven = {
+							downloadSources = true,
+						},
+						eclipse = {
+							downloadSources = true,
+						},
+					},
+				},
+			})
+
+			vim.lsp.enable("jdtls")
+		end,
+	},
+
 	-- NOTES
 	--------------------------------
 	-- since this is lazy loaded, docs are unavailable until one opens a .tex file
