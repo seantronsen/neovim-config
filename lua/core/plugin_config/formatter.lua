@@ -42,6 +42,7 @@ require("formatter").setup({
 		cpp = { require("formatter.filetypes.cpp").clangformat },
 		cmake = { require("formatter.filetypes.cmake").cmakeformat },
 		go = { require("formatter.filetypes.go").gofmt },
+		java = { require("formatter.filetypes.java").google_java_format },
 		javascript = { require("formatter.filetypes.javascript").prettier },
 		lua = { require("formatter.filetypes.lua").stylua },
 		python = { require("formatter.filetypes.python").ruff, python_ruff_isort_fmt },
