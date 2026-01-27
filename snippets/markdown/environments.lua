@@ -26,6 +26,12 @@ return {}, {
 	}, fmta("- [ ] <>", { ninsert(1) }), { condition = ut.not_mathzone }),
 
 	s({
+		trig = "^bd",
+		wordTrig = false,
+		regTrig = true,
+	}, fmta("- **<>**: <>", { ninsert(1, "concept"), ninsert(2, "detail") }), { condition = ut.not_mathzone }),
+
+	s({
 		trig = schars .. "tag" .. psp,
 		wordTrig = false,
 		regTrig = true,
