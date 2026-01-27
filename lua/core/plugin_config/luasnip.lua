@@ -24,7 +24,7 @@ luasnip.config.set_config({
 })
 
 -- todo: create a telescope picker for this
-vim.keymap.set("n", "<leader>lsa", function()
+vim.keymap.set("n", "<leader>fs", function()
 	local message = [[
 	AVAILABLE LUASNIP SNIPPETS
 	--------------------------
