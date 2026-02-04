@@ -22,3 +22,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
 		end
 	end,
 })
+
+
+vim.keymap.set({ "n" }, "<leader>st", function()
+	vim.fn.setreg("/", "\t")
+	vim.fn.search("\t", "w")
+	vim.o.hlsearch = true
+end, { desc = "find tabs in file" })
