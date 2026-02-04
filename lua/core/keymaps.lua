@@ -10,17 +10,17 @@ vim.keymap.set({"n", "i"}, "<C-l>", function () vim.cmd("wincmd l") end, {desc="
 -- <https://neovim.io/doc/user/channel.html#_5.-using-a-prompt-buffer>, the
 -- maintainers have designed this as the default behavior within nvim...
 vim.api.nvim_create_autocmd("BufEnter", {
-	pattern = "*",
-	callback = function()
-		if vim.bo.buftype == "prompt" then
-			vim.keymap.set(
-				"i",
-				"<C-w>",
-				"<S-C-w>",
-				{ noremap = true, silent = true, buffer = true }
-			)
-		end
-	end,
+    pattern = "*",
+    callback = function()
+        if vim.bo.buftype == "prompt" then
+            vim.keymap.set(
+                "i",
+                "<C-w>",
+                "<S-C-w>",
+                { noremap = true, silent = true, buffer = true }
+            )
+        end
+    end,
 })
 
 
