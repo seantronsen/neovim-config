@@ -8,9 +8,12 @@ image_clipper.setup({
 	default = {
 		dir_path = "attachments",
 		file_name = "img-clip-%Y%m%d%H%M%S",
-		-- extension = "jpg",
+		extension = "jpg",
 		relative_to_current_file = true,
 		show_dir_path_in_prompt = true,
+
+        insert_mode_after_paste = false,
+        prompt_for_file_name = false,
 	},
 })
 
