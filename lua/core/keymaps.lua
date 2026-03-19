@@ -29,3 +29,10 @@ vim.keymap.set({ "n" }, "<leader>st", function()
 	vim.fn.search("\t", "w")
 	vim.o.hlsearch = true
 end, { desc = "find tabs in file" })
+
+-- search for unicode using pattern: /[^\x00-\x7F]
+vim.keymap.set({ "n" }, "<leader>su", function()
+	vim.fn.setreg("/", "[^\\x00-\\x7F]")
+	vim.fn.search("[^\\x00-\\x7F]", "w")
+	vim.o.hlsearch = true
+end, { desc = "find non-ascii unicode chars in file" })
