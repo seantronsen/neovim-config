@@ -43,28 +43,7 @@ require("lazy").setup({
 	},
 
 	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
-
-	{
-		"nvim-java/nvim-java",
-		config = function()
-			require("java").setup()
-
-			vim.lsp.config("jdtls", {
-				settings = {
-					java = {
-						maven = {
-							downloadSources = true,
-						},
-						eclipse = {
-							downloadSources = true,
-						},
-					},
-				},
-			})
-
-			vim.lsp.enable("jdtls")
-		end,
-	},
+	{ "mfussenegger/nvim-lint", commit = "eab58b4" },
 
 	-- NOTES
 	--------------------------------
