@@ -9,10 +9,10 @@ vim.cmd("syntax enable")
 local markdown_math_toggle = function()
 	local cft = vim.bo.filetype
 	if cft == "markdown" then
-		vim.cmd("TSDisable true")
+		vim.treesitter.stop()
 		vim.cmd("set filetype=tex")
 	elseif cft == "tex" then
-		vim.cmd("TSEnable true")
+		-- treesitter restarts through the FileType autocmd in syntax-highlight.lua
 		vim.cmd("set filetype=markdown")
 	else
 		print("filetype '" .. cft .. "' is not supported. markdown and tex files only.")

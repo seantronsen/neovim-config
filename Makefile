@@ -3,7 +3,6 @@ SHELL ::= /bin/bash
 
 
 # CONFIGURATION VARIABLES
-DIRNAME_BASE_STAGING:="STAGING"
 PATH_BUILD:=build
 PATH_STAGE:=${PATH_BUILD}/staging
 PATH_ARTIFACTS:=${PATH_BUILD}/artifacts
@@ -16,7 +15,7 @@ HOST_DIST := $(shell uname -s)
 HOST_ARCH := $(shell uname -m)
 REQUIRED_SYSTEM_COMMANDS:=cp echo wget xz zip gcc g++ file git python3 \
 													mkdir mv rm readlink dirname realpath tar gzip unzip \
-													unxz grep
+													unxz grep sed
 
 # INITIALIZE SEVERAL DIRECTORY TARGET VARIABLES IF NOT ALREADY DEFINED (including env vars)
 USER_BIN ?= ${HOME}/.local/bin
@@ -28,6 +27,8 @@ USER_DATA ?=${HOME}/.local/share
 OBJS:=${PATH_BUILD}
 
 PROGRAMS:=nvim fd rg node npm
+# needed while building/initializing only. never installed to the user's system.
+BUILD_TOOLS:=tree-sitter
 CONFIGS:=nvim
 PROGRAM_DATA:=nvim
 
@@ -63,6 +64,15 @@ npm_internal_bin_dir:=${node_internal_bin_dir}
 node_Linux_x86_64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz
 node_Linux_aarch64_url:=
 node_Darwin_arm64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-darwin-arm64.tar.gz
+
+# nvim-treesitter compiles parsers with tree-sitter-cli. its release binaries
+# need glibc >= 2.39, so it's compiled from source with a throwaway rust
+# toolchain that only ever lives inside the staging directory.
+tree_sitter_version:=0.27.1
+rust_toolchain_version:=1.99.1
+rustup_Linux_x86_64_url:=https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
+rustup_Linux_aarch64_url:=https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init
+rustup_Darwin_arm64_url:=https://static.rust-lang.org/rustup/dist/aarch64-apple-darwin/rustup-init
 
 ################################################################################
 ################################################################################
@@ -137,7 +147,7 @@ environment-check: ${REQUIRED_SYSTEM_COMMANDS}
 
 
 
-build: environment-check $(addprefix ${PATH_ARTIFACTS}/, ${PROGRAMS})
+build: environment-check $(addprefix ${PATH_ARTIFACTS}/, ${PROGRAMS} ${BUILD_TOOLS})
 	@echo "verified build. artifacts located in '${PATH_ARTIFACTS}'"
 
 initialize: build $(addprefix ${PATH_DATA}/, ${PROGRAM_DATA})
@@ -156,6 +166,29 @@ install: \
 # TOOLING INSTALLATION
 ################################################################################
 ################################################################################
+
+# installed program data records the absolute path it was staged at: mason
+# bakes it into launcher scripts and python venvs, and nvim-treesitter links its
+# queries with absolute symlinks. rewrite the staging path (recorded during
+# initialization, possibly on another host) to the installed location.
+define relocate-data-macro
+@set -e; \
+dst=$$(realpath -m "$@"); \
+src=$$(cat "$${dst}/.staging-path" 2>/dev/null || realpath "$<"); \
+rm -f "$${dst}/.staging-path"; \
+if [ "$${src}" != "$${dst}" ]; then \
+	if [ -d "$${dst}/mason" ]; then \
+		grep -rlIF "$${src}" "$${dst}/mason" | while IFS= read -r file; do \
+			sed -i.relocate "s|$${src}|$${dst}|g" "$${file}" && rm -f "$${file}.relocate"; \
+		done; \
+	fi; \
+	find "$${dst}" -type l | while IFS= read -r link; do \
+		target=$$(readlink "$${link}"); \
+		case "$${target}" in "$${src}"/*) ln -sfn "$${dst}$${target#"$${src}"}" "$${link}" ;; esac; \
+	done; \
+	echo "relocated program data from '$${src}' to '$${dst}'"; \
+fi
+endef
 
 define standard-install-macro
 @set -e;
@@ -229,6 +262,7 @@ ${USER_BIN}/npm: ${USER_SRC}/node
 .PHONY: $(addprefix ${USER_DATA}/, ${PROGRAMS})
 ${USER_DATA}/nvim: ${PATH_DATA}/nvim
 	$(standard-install-macro)
+	$(relocate-data-macro)
 
 ################################################################################
 ################################################################################
@@ -246,7 +280,7 @@ ${USER_DOTCONFIG}/nvim: ${PATH_CONFIG}/nvim
 ################################################################################
 ################################################################################
 
-${PATH_DATA}/nvim: $(addprefix ${PATH_ARTIFACTS}/, nvim node npm) $(addprefix ${PATH_CONFIG}/, nvim)
+${PATH_DATA}/nvim: $(addprefix ${PATH_ARTIFACTS}/, nvim node npm tree-sitter) $(addprefix ${PATH_CONFIG}/, nvim)
 	@echo "preparing nvim instance for future deployment. an instance of the"
 	@echo "application will open to install plugins and plugin specific"
 	@echo "dependencies."
@@ -254,8 +288,10 @@ ${PATH_DATA}/nvim: $(addprefix ${PATH_ARTIFACTS}/, nvim node npm) $(addprefix ${
 	export \
 		XDG_CONFIG_HOME=$$(realpath "${PATH_CONFIG}") \
 		XDG_DATA_HOME=$$(realpath "${PATH_DATA}") \
-		PATH=$$(realpath "${PATH_ARTIFACTS}/node${node_internal_bin_dir}"):${PATH} && \
+		PATH=$$(realpath "${PATH_ARTIFACTS}/node${node_internal_bin_dir}"):$$(realpath "${PATH_ARTIFACTS}/tree-sitter/bin"):${PATH} && \
 		./${PATH_ARTIFACTS}/nvim${nvim_internal_bin_dir}/nvim
+	@# remember where program data was staged so `install` can relocate it
+	realpath "${PATH_DATA}/nvim" > "${PATH_DATA}/nvim/.staging-path"
 
 
 ################################################################################
@@ -274,6 +310,24 @@ ${PATH_ARTIFACTS}/rg:
 
 ${PATH_ARTIFACTS}/node:
 	$(download-tool-macro)
+
+${PATH_ARTIFACTS}/tree-sitter:
+	@set -e
+	URL_TARGET=${rustup_${HOST_DIST}_${HOST_ARCH}_url}
+	if [ -z "$${URL_TARGET}" ]; then
+		echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."
+		exit 1
+	fi
+	mkdir -vp "${PATH_STAGE}/rust" "${PATH_ARTIFACTS}"
+	export RUSTUP_HOME=$$(realpath "${PATH_STAGE}/rust")/rustup CARGO_HOME=$$(realpath "${PATH_STAGE}/rust")/cargo
+	wget -O "${PATH_STAGE}/rust/rustup-init" "$${URL_TARGET}"
+	chmod +x "${PATH_STAGE}/rust/rustup-init"
+	"${PATH_STAGE}/rust/rustup-init" -y --no-modify-path --profile minimal --default-toolchain "${rust_toolchain_version}"
+	@# no-default-features drops the embedded javascript runtime (needs libclang to build)
+	"$${CARGO_HOME}/bin/cargo" install tree-sitter-cli --version "${tree_sitter_version}" --locked \
+		--no-default-features --root "$$(realpath -m "$@")"
+	rm -rf "${PATH_STAGE}/rust"
+	@echo "compiled tree-sitter-cli ${tree_sitter_version} at '$@'"
 
 # NOTE: npm is a runnable packaged with node. no fancy download logic here.
 ${PATH_ARTIFACTS}/npm: ${PATH_ARTIFACTS}/node

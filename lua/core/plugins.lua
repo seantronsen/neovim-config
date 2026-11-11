@@ -41,12 +41,8 @@ require("lazy").setup({
 		},
 	},
 
-	-- NOTE: the `master` branch is frozen (archived upstream) and officially
-	-- unsupported on nvim 0.12, but still works with this config. the `main`
-	-- branch rewrite requires tree-sitter-cli >= 0.26.1, whose release binaries
-	-- need glibc >= 2.39. stay on the final master commit until that's sorted.
-	{ "nvim-treesitter/nvim-treesitter", branch = "master", commit = "cf12346", build = ":TSUpdate" },
-	{ "mfussenegger/nvim-lint", commit = "52107ce" },
+	-- NOTE: compiling parsers requires tree-sitter-cli (built by the Makefile)
+	{ "nvim-treesitter/nvim-treesitter", branch = "main", commit = "a2f6944", build = ":TSUpdate" },
 
 	-- NOTES
 	--------------------------------

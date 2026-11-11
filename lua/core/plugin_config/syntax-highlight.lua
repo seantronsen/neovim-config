@@ -1,35 +1,31 @@
 -- CONFIGURATION FOR SYNTAX HIGHLIGHTING
 --------------------------------
-local path_parser = vim.fn.stdpath("data") .. "/parsers"
-vim.opt.runtimepath:append(path_parser)
+-- nvim-treesitter only installs parsers and queries. highlighting itself is
+-- nvim's builtin treesitter, started by the FileType autocmd below.
 
-require("nvim-treesitter.configs").setup({
-	parser_install_dir = path_parser,
-	ensure_installed = {
-		"bash",
-		"c",
-		"cpp",
-		"dockerfile",
-		"go",
-		"html",
-		"json",
-		"jsonc",
-		"lua",
-		"make",
-		"markdown",
-		"markdown_inline",
-		"python",
-		"rust",
-		"toml",
-		"vim",
-		"yaml",
-	},
-	auto_install = false,
-	highlight = {
-		enable = true,
-		-- NOTE: "markdown" was dropped from this list. under nvim 0.11 the regex
-		-- syntax was cleared again after attach, so it never applied. nvim 0.12
-		-- changes the ordering, which would turn it on for the first time.
-		additional_vim_regex_highlighting = { "latex" },
-	},
+-- no-op for parsers that are already installed
+require("nvim-treesitter").install({
+	"bash",
+	"c",
+	"cpp",
+	"dockerfile",
+	"go",
+	"html",
+	"json", -- also covers jsonc
+	"lua",
+	"make",
+	"markdown",
+	"markdown_inline",
+	"python",
+	"rust",
+	"toml",
+	"vim",
+	"yaml",
+})
+
+-- highlight any filetype that has a parser. the rest keep regex highlighting.
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function(args)
+		pcall(vim.treesitter.start, args.buf)
+	end,
 })
