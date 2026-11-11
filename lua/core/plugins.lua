@@ -23,12 +23,6 @@ require("lazy").setup({
 	--------------------------------
 	{ "EdenEast/nightfox.nvim" },
 
-	--STATUS
-	--------------------------------
-
-	{ "nvim-lualine/lualine.nvim", commit = "221ce6b" },
-	{ "j-hui/fidget.nvim", tag = "v2.0.0", event = "LspAttach" },
-
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
 
