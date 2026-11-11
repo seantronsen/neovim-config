@@ -27,7 +27,7 @@ highlighting, install the treesitter grammar for the target language using
 
 ## Runtime Dependencies
 
-- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.11.2
+- [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.12.5
 - [find-fd](https://github.com/sharkdp/fd)
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - python v3.\*

@@ -28,6 +28,9 @@ require("nvim-treesitter.configs").setup({
 	auto_install = false,
 	highlight = {
 		enable = true,
-		additional_vim_regex_highlighting = { "markdown", "latex" },
+		-- NOTE: "markdown" was dropped from this list. under nvim 0.11 the regex
+		-- syntax was cleared again after attach, so it never applied. nvim 0.12
+		-- changes the ordering, which would turn it on for the first time.
+		additional_vim_regex_highlighting = { "latex" },
 	},
 })

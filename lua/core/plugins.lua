@@ -26,30 +26,39 @@ require("lazy").setup({
 	--STATUS
 	--------------------------------
 
-	{ "nvim-lualine/lualine.nvim", commit = "a94fc68" },
-	{ "j-hui/fidget.nvim", tag = "v1.6.1", event = "LspAttach" },
+	{ "nvim-lualine/lualine.nvim", commit = "221ce6b" },
+	{ "j-hui/fidget.nvim", tag = "v2.0.0", event = "LspAttach" },
 
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
 
 	{
-		"williamboman/mason-lspconfig.nvim",
-		tag = "v2.0.0",
+		"mason-org/mason-lspconfig.nvim",
+		tag = "v2.3.0",
 		dependencies = {
-			{ "neovim/nvim-lspconfig", tag = "v2.3.0" },
-			{ "williamboman/mason.nvim", tag = "v2.0.0" },
-			{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "93a9ff9" },
+			{ "neovim/nvim-lspconfig", tag = "v2.12.0" },
+			{ "mason-org/mason.nvim", tag = "v2.3.1" },
+			{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "443f1ef" },
 		},
 	},
 
-	{ "nvim-treesitter/nvim-treesitter", tag = "v0.10.0", build = ":TSUpdate" },
-	{ "mfussenegger/nvim-lint", commit = "eab58b4" },
+	-- NOTE: the `master` branch is frozen (archived upstream) and officially
+	-- unsupported on nvim 0.12, but still works with this config. the `main`
+	-- branch rewrite requires tree-sitter-cli >= 0.26.1, whose release binaries
+	-- need glibc >= 2.39. stay on the final master commit until that's sorted.
+	{ "nvim-treesitter/nvim-treesitter", branch = "master", commit = "cf12346", build = ":TSUpdate" },
+	{ "mfussenegger/nvim-lint", commit = "52107ce" },
 
 	-- NOTES
 	--------------------------------
 	-- since this is lazy loaded, docs are unavailable until one opens a .tex file
-	{ "lervag/vimtex", tag = "v2.16", ft = { "tex", "markdown" } },
-	{ "obsidian-nvim/obsidian.nvim", tag = "v3.11.0", ft = { "markdown" }, dependencies = { "nvim-lua/plenary.nvim" } },
+	{ "lervag/vimtex", tag = "v2.18", ft = { "tex", "markdown" } },
+	{
+		"obsidian-nvim/obsidian.nvim",
+		tag = "v3.16.10",
+		ft = { "markdown" },
+		dependencies = { "nvim-lua/plenary.nvim" },
+	},
 	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy", ft = { "markdown" } },
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
@@ -59,8 +68,9 @@ require("lazy").setup({
 		tag = "0.10.0",
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
-			{ "rcarriga/nvim-dap-ui", tag = "v4.0.0", dependencies = { { "nvim-neotest/nvim-nio" } } },
-			{ "rcarriga/cmp-dap", commit = "d16f14a" },
+			-- latest tag (v4.0.0) calls vim.tbl_flatten, deprecated in nvim 0.12
+			{ "rcarriga/nvim-dap-ui", commit = "cc9dd33", dependencies = { { "nvim-neotest/nvim-nio" } } },
+			{ "rcarriga/cmp-dap", commit = "ea92773" },
 			{ "theHamsta/nvim-dap-virtual-text", commit = "fbdb48c" },
 		},
 	},
@@ -71,10 +81,10 @@ require("lazy").setup({
 
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
-	{ "stevearc/oil.nvim", tag = "v2.2.0" },
+	{ "stevearc/oil.nvim", tag = "v2.16.0" },
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.8",
+		tag = "v0.2.2",
 		dependencies = { { "nvim-lua/plenary.nvim" } },
 	},
 
@@ -82,7 +92,8 @@ require("lazy").setup({
 	--------------------------------
 	{
 		"hrsh7th/nvim-cmp",
-		tag = "v0.0.2",
+		-- latest tag (v0.0.2) predates nvim 0.11 and calls apis deprecated in 0.12
+		commit = "fe29aba",
 		opts = function(_, opts)
 			opts.sources = opts.sources or {}
 			table.insert(opts.sources, {
@@ -103,7 +114,7 @@ require("lazy").setup({
 
 	-- AUTODOCUMENTATION
 	--------------------------------
-	{ "danymat/neogen", tag = "2.17.1" },
+	{ "danymat/neogen", tag = "2.20.0" },
 
 	-- CONFIGURATION TOOLS
 	--------------------------------

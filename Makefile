@@ -40,11 +40,13 @@ OVERWRITE_INSTALLATION?=0
 ################################################################################
 # glibc compatibility repository, neovim-releases, doesn't support aarch64 at
 # this time. maybe we don't need it? will need to determine that later. 
+# NOTE: official linux builds require glibc >= 2.34 (neovim-releases needs
+# 2.17). neovim-releases lags behind, so swap linux to v0.12.6 once published.
 nvim_internal_bin_dir:=/bin
-nvim_Linux_x86_64_url:=https://github.com/neovim/neovim-releases/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
-# nvim_Linux_x86_64_url:=https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
+nvim_Linux_x86_64_url:=https://github.com/neovim/neovim-releases/releases/download/v0.12.5/nvim-linux-x86_64.tar.gz
+# nvim_Linux_x86_64_url:=https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-linux-x86_64.tar.gz
 nvim_Linux_aarch64_url:=
-nvim_Darwin_arm64_url:=https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-macos-arm64.tar.gz
+nvim_Darwin_arm64_url:=https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-macos-arm64.tar.gz
 
 fd_internal_bin_dir:=
 fd_Linux_x86_64_url:=https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz

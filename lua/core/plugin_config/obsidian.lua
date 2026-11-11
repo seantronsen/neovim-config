@@ -7,26 +7,24 @@ if not vim.uv.fs_stat(path_notes) then
 	vim.notify("configured notes directory did not exist, so it was created", vim.log.levels.INFO)
 end
 
+-- v3.16 adds buffer keymaps for <CR>, <C-a>, <C-x>, [o, and ]o in notes.
+vim.g.obsidian_default_keymap = false
+
 local obs = require("obsidian")
 obs.setup({
+	-- `ObsidianXxx` commands are deprecated as of v3.16 in favor of `Obsidian xxx`.
+	-- leaving them enabled triggers a deprecation warning on every startup.
+	legacy_commands = false,
 	dir = path_notes,
 	new_notes_location = "current_dir",
+	-- completion is now provided by the plugin's built-in lsp server (obsidian-ls),
+	-- which nvim-cmp picks up through the nvim_lsp source.
 	completion = {
-		nvim_cmp = true,
 		min_chars = 3,
 	},
 
-	open_app_foreground = false,
-	preferred_link_style = "wiki",
-
-	mappings = {
-		-- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
-		["gf"] = {
-			action = function()
-				return require("obsidian").util.gf_passthrough()
-			end,
-			opts = { noremap = false, expr = true, buffer = true },
-		},
+	link = {
+		style = "wiki",
 	},
 	note_id_func = function(title)
 		local suffix = ""
@@ -67,20 +65,27 @@ obs.setup({
 	ui = {
 		enable = false,
 	},
+	-- the default note template no longer inserts a `# title` heading
+	note = {
+		template = vim.fn.stdpath("config") .. "/templates/obsidian-note.md",
+	},
 })
 
-vim.keymap.set("n", "<leader>ol", function() vim.cmd("ObsidianLinks") end, { desc = "[o]bsidian [l]inks" })
-vim.keymap.set("n", "<leader>fo", function() vim.cmd("ObsidianSearch") end, { desc = "[f]ind note (search [o]bsidian)" })
-vim.keymap.set("n", "<leader>ob", function() vim.cmd("ObsidianBacklinks") end, { desc = "[o]bsidian [b]acklinks" })
-vim.keymap.set("n", "<leader>oo", function() vim.cmd("ObsidianOpen") end, { desc = "[o]bsidian [o]pen" })
-vim.keymap.set("n", "<leader>ot", function() vim.cmd("ObsidianTags") end, { desc = "[o]bsidian [t]ags" })
-vim.keymap.set("n", "<leader>oc", function() vim.cmd("ObsidianTOC") end, { desc = "[o]bsidian note table of [c]ontents" })
+-- `gf` follows [[links]] natively (via 'includeexpr') since v3.16. mapped only so
+-- it shows up in the keymaps picker.
+vim.keymap.set("n", "gf", "gf", { desc = "[g]o to [f]ile (follows note links)" })
+vim.keymap.set("n", "<leader>ol", function() vim.cmd("Obsidian links") end, { desc = "[o]bsidian [l]inks" })
+vim.keymap.set("n", "<leader>fo", function() vim.cmd("Obsidian search") end, { desc = "[f]ind note (search [o]bsidian)" })
+vim.keymap.set("n", "<leader>ob", function() vim.cmd("Obsidian backlinks") end, { desc = "[o]bsidian [b]acklinks" })
+vim.keymap.set("n", "<leader>oo", function() vim.cmd("Obsidian open") end, { desc = "[o]bsidian [o]pen" })
+vim.keymap.set("n", "<leader>ot", function() vim.cmd("Obsidian tags") end, { desc = "[o]bsidian [t]ags" })
+vim.keymap.set("n", "<leader>oc", function() vim.cmd("Obsidian toc") end, { desc = "[o]bsidian note table of [c]ontents" })
 
 -- todo: create new bindings for
 
 -- - obsidian paste image (replace image paste plugin)
 -- vim.keymap.set("n", "<leader>pi", function()
--- 	vim.cmd("ObsidianPasteImg")
+-- 	vim.cmd("Obsidian paste_img")
 -- end, { desc = "[p]aste [i]mage reference" })
 
 -- - obsidian rename (also renames links across the vault)
@@ -108,5 +113,5 @@ vim.keymap.set("n", "<leader>on", function()
 	end
 
 	-- leverage existing obsidian nvim command to create the notefile
-	vim.cmd("ObsidianNew " .. result)
+	vim.cmd("Obsidian new " .. result)
 end, { desc = "[o]bsidian create [n]ew note" })

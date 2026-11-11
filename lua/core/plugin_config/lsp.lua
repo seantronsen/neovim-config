@@ -63,6 +63,11 @@ require("mason-lspconfig").setup({
 		"taplo",
 		"yamlls",
 	},
+	-- nvim-lspconfig now ships a `stylua` server config, so the formatter would
+	-- otherwise start attaching as a language server.
+	automatic_enable = {
+		exclude = { "stylua" },
+	},
 })
 
 require("mason-tool-installer").setup({
