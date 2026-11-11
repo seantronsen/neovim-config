@@ -33,11 +33,10 @@ require("lazy").setup({
 	--------------------------------
 
 	{
-		"mason-org/mason-lspconfig.nvim",
-		tag = "v2.3.0",
+		"mason-org/mason.nvim",
+		tag = "v2.3.1",
 		dependencies = {
 			{ "neovim/nvim-lspconfig", tag = "v2.12.0" },
-			{ "mason-org/mason.nvim", tag = "v2.3.1" },
 			{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "443f1ef" },
 		},
 	},
@@ -70,14 +69,13 @@ require("lazy").setup({
 			{ "mfussenegger/nvim-dap-python" },
 			-- latest tag (v4.0.0) calls vim.tbl_flatten, deprecated in nvim 0.12
 			{ "rcarriga/nvim-dap-ui", commit = "cc9dd33", dependencies = { { "nvim-neotest/nvim-nio" } } },
-			{ "rcarriga/cmp-dap", commit = "ea92773" },
 			{ "theHamsta/nvim-dap-virtual-text", commit = "fbdb48c" },
 		},
 	},
 
 	--DOCUMENT FORMATTING
 	--------------------------------
-	{ "mhartington/formatter.nvim", commit = "b9d7f85" },
+	{ "stevearc/conform.nvim", tag = "v9.1.0" },
 
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
@@ -88,29 +86,10 @@ require("lazy").setup({
 		dependencies = { { "nvim-lua/plenary.nvim" } },
 	},
 
-	-- AUTOCOMPLETE
+	-- SNIPPETS
 	--------------------------------
-	{
-		"hrsh7th/nvim-cmp",
-		-- latest tag (v0.0.2) predates nvim 0.11 and calls apis deprecated in 0.12
-		commit = "fe29aba",
-		opts = function(_, opts)
-			opts.sources = opts.sources or {}
-			table.insert(opts.sources, {
-				name = "lazydev",
-				group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-			})
-		end,
-		dependencies = {
-			{ "hrsh7th/cmp-nvim-lsp" },
-			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
-			{ "hrsh7th/cmp-path" },
-			{ "hrsh7th/cmp-buffer" },
-			{ "hrsh7th/cmp-cmdline" },
-			{ "L3MON4D3/LuaSnip" },
-			{ "saadparwaiz1/cmp_luasnip" },
-		},
-	},
+	-- completion itself is builtin as of nvim 0.12 (see autocomplete.lua)
+	{ "L3MON4D3/LuaSnip" },
 
 	-- AUTODOCUMENTATION
 	--------------------------------

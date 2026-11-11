@@ -1,7 +1,8 @@
 -- ease of use -- sanity -- pane motion without the tmux bullshit
+-- NOTE: insert mode <C-j>/<C-k> live in autocomplete.lua (completion menu first)
 vim.keymap.set({"n", "i"}, "<C-h>", function () vim.cmd("wincmd h") end, {desc="focus pane left"})
-vim.keymap.set({"n", "i"}, "<C-j>", function () vim.cmd("wincmd j") end, {desc="focus pane down"})
-vim.keymap.set({"n", "i"}, "<C-k>", function () vim.cmd("wincmd k") end, {desc="focus pane up"})
+vim.keymap.set("n", "<C-j>", function () vim.cmd("wincmd j") end, {desc="focus pane down"})
+vim.keymap.set("n", "<C-k>", function () vim.cmd("wincmd k") end, {desc="focus pane up"})
 vim.keymap.set({"n", "i"}, "<C-l>", function () vim.cmd("wincmd l") end, {desc="focus pane right"})
 
 -- NOTE: fixes pain point where <C-w> keybinding in a `prompt` type buffer

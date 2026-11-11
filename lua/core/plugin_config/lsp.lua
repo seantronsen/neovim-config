@@ -18,8 +18,8 @@ vim.keymap.set("n", "[d", diag_prev, { desc = "go to previous [d]iagnostic", nor
 -- server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
-		-- disable formatting from non formatter.nvim sources, so it doesn't
-		-- interfere with gqq
+		-- disable formatting from lsp sources, so it doesn't interfere with gqq
+		-- (formatting is handled by conform.nvim, see formatter.lua)
 		vim.bo[args.buf].formatexpr = nil
 
 		-- local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -50,52 +50,8 @@ require("mason").setup({
 	},
 })
 
-require("mason-lspconfig").setup({
-	ensure_installed = {
-		"bashls",
-		"clangd",
-		"gopls",
-		"html",
-		"jsonls",
-		"lua_ls",
-		"marksman",
-		"pyright",
-		"taplo",
-		"yamlls",
-	},
-	-- nvim-lspconfig now ships a `stylua` server config, so the formatter would
-	-- otherwise start attaching as a language server.
-	automatic_enable = {
-		exclude = { "stylua" },
-	},
-})
-
-require("mason-tool-installer").setup({
-	ensure_installed = {
-		"bibtex-tidy",
-		"clangd",
-		"debugpy",
-		"html",
-		"jsonls",
-		"lua_ls",
-		"latexindent",
-		"marksman",
-		"prettier",
-		"pyright",
-		"ruff",
-		"shfmt",
-		"stylua",
-		"taplo",
-		"yamlfmt",
-	},
-	auto_update = false,
-})
-
-vim.lsp.config("*", {
-	capabilities = require("cmp_nvim_lsp").default_capabilities(),
-})
-
-vim.lsp.config("gopls", {
+-- per-server overrides, passed to vim.lsp.config() (see `servers` below)
+local config_gopls = {
 	settings = {
 		gopls = {
 			analyses = {
@@ -105,9 +61,9 @@ vim.lsp.config("gopls", {
 			gofumpt = true,
 		},
 	},
-})
+}
 
-vim.lsp.config("pyright", {
+local config_pyright = {
 	settings = {
 		python = {
 			analysis = {
@@ -118,10 +74,10 @@ vim.lsp.config("pyright", {
 			},
 		},
 	},
-})
+}
 
 -- pulled from: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
-vim.lsp.config("lua_ls", {
+local config_lua_ls = {
 	on_init = function(client)
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name
@@ -164,4 +120,62 @@ vim.lsp.config("lua_ls", {
 			},
 		},
 	},
+}
+
+-- language servers to install and enable. one entry per server:
+--   mason  = mason package name (what `:Mason` shows, what gets installed)
+--   lsp    = nvim-lspconfig config name (its `lsp/<name>.lua`, not ours). also the
+--            name used by vim.lsp.config(), vim.lsp.enable(), and `:lsp`
+--   bin    = executable the server runs as. reference only, it often matches
+--            neither of the names above
+--   config = optional overrides passed to vim.lsp.config()
+-- NOTE: unknown names and missing binaries are skipped silently. check
+-- `:checkhealth vim.lsp` when a server doesn't start.
+local servers = {
+	{ mason = "bash-language-server", lsp = "bashls", bin = "bash-language-server" },
+	{ mason = "clangd", lsp = "clangd", bin = "clangd" },
+	{ mason = "cmake-language-server", lsp = "cmake", bin = "cmake-language-server" },
+	{ mason = "dockerfile-language-server", lsp = "dockerls", bin = "docker-langserver" },
+	{ mason = "gopls", lsp = "gopls", bin = "gopls", config = config_gopls },
+	{ mason = "html-lsp", lsp = "html", bin = "vscode-html-language-server" },
+	{ mason = "json-lsp", lsp = "jsonls", bin = "vscode-json-language-server" },
+	{ mason = "lua-language-server", lsp = "lua_ls", bin = "lua-language-server", config = config_lua_ls },
+	{ mason = "marksman", lsp = "marksman", bin = "marksman" },
+	{ mason = "pyright", lsp = "pyright", bin = "pyright-langserver", config = config_pyright },
+	{ mason = "ruff", lsp = "ruff", bin = "ruff" },
+	{ mason = "rust-analyzer", lsp = "rust_analyzer", bin = "rust-analyzer" },
+	{ mason = "taplo", lsp = "taplo", bin = "taplo" },
+	{ mason = "yaml-language-server", lsp = "yamlls", bin = "yaml-language-server" },
+}
+
+-- everything else installed through mason (formatters, linters, debuggers)
+local tools = {
+	"bash-debug-adapter",
+	"bibtex-tidy",
+	"clang-format",
+	"cmakelang",
+	"codelldb",
+	"debugpy",
+	"latexindent",
+	"prettier",
+	"shellcheck",
+	"shfmt",
+	"sqlfmt",
+	"stylua",
+	"xmlformatter",
+	"yamlfmt",
+}
+
+local ensure_installed = vim.list_slice(tools)
+for _, server in ipairs(servers) do
+	table.insert(ensure_installed, server.mason)
+	if server.config then
+		vim.lsp.config(server.lsp, server.config)
+	end
+	vim.lsp.enable(server.lsp)
+end
+
+require("mason-tool-installer").setup({
+	ensure_installed = ensure_installed,
+	auto_update = false,
 })

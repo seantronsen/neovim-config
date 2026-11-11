@@ -18,7 +18,7 @@ obs.setup({
 	dir = path_notes,
 	new_notes_location = "current_dir",
 	-- completion is now provided by the plugin's built-in lsp server (obsidian-ls),
-	-- which nvim-cmp picks up through the nvim_lsp source.
+	-- which feeds the builtin completion popup like any other server.
 	completion = {
 		min_chars = 3,
 	},

@@ -12,7 +12,6 @@ require("nvim-treesitter.configs").setup({
 		"dockerfile",
 		"go",
 		"html",
-		"java",
 		"json",
 		"jsonc",
 		"lua",
