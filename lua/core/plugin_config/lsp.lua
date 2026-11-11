@@ -14,22 +14,6 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display er
 vim.keymap.set("n", "]d", diag_next, { desc = "go to next [d]iagnostic", noremap = true, silent = true })
 vim.keymap.set("n", "[d", diag_prev, { desc = "go to previous [d]iagnostic", noremap = true, silent = true })
 
--- forward lsp progress as nvim progress messages, which the default statusline
--- displays (see `:h LspProgress`). replaces fidget.nvim.
-vim.api.nvim_create_autocmd("LspProgress", {
-	callback = function(ev)
-		local value = ev.data.params.value
-		vim.api.nvim_echo({ { value.message or "done" } }, false, {
-			id = "lsp." .. ev.data.params.token,
-			kind = "progress",
-			source = "vim.lsp",
-			title = value.title,
-			status = value.kind ~= "end" and "running" or "success",
-			percent = value.percentage,
-		})
-	end,
-})
-
 -- Use an on_attach function to only map the following keys after the language
 -- server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {

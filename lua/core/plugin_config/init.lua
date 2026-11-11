@@ -1,4 +1,5 @@
 require("core.plugin_config.colorscheme")
+require("core.plugin_config.status-line")
 require("core.plugin_config.file-explorer")
 require("core.plugin_config.syntax-highlight")
 require("core.plugin_config.search")
