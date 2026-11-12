@@ -24,6 +24,7 @@ require("conform").setup({
 
 		-- object documents
 		json = { "prettier" },
+		proto = { "buf" },
 
 		-- markup languages
 		bib = { "bibtex-tidy" },

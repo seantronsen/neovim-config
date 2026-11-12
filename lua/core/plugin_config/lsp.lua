@@ -90,6 +90,7 @@ local config_lua_ls = {
 -- `:checkhealth vim.lsp` when a server doesn't start.
 local servers = {
 	{ mason = "bash-language-server", lsp = "bashls", bin = "bash-language-server" },
+	{ mason = "buf", lsp = "buf_ls", bin = "buf" }, -- protobuf
 	{ mason = "clangd", lsp = "clangd", bin = "clangd" },
 	{ mason = "cmake-language-server", lsp = "cmake", bin = "cmake-language-server" },
 	{ mason = "dockerfile-language-server", lsp = "dockerls", bin = "docker-langserver" },

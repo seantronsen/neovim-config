@@ -16,6 +16,7 @@ require("nvim-treesitter").install({
 	"make",
 	"markdown",
 	"markdown_inline",
+	"proto",
 	"python",
 	"rust",
 	"toml",
