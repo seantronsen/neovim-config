@@ -138,7 +138,7 @@ environment-check: ${REQUIRED_SYSTEM_COMMANDS}
 	@for install_path in ${INSTALLATION_PATHS}; do \
 		if [ -e $$(realpath -m "$${install_path}") ]; then \
 			echo "WARNING: overwrite required. installation files detected at: '$${install_path}'"; \
-			if [ "${OVERWRITE_INSTALLATION}" -eq 0 ]; then
+			if [ "${OVERWRITE_INSTALLATION}" -eq 0 ]; then \
 				echo "ERROR: overwrite disabled. build sequence cannot continue."; \
 				exit 1; \
 			fi; \
@@ -311,23 +311,27 @@ ${PATH_ARTIFACTS}/rg:
 ${PATH_ARTIFACTS}/node:
 	$(download-tool-macro)
 
+# --no-default-features drops the embedded javascript runtime (needs libclang to
+# build). the recipe is one shell command so it also runs without .ONESHELL
+# (e.g. macOS's make 3.81).
 ${PATH_ARTIFACTS}/tree-sitter:
-	@set -e
-	URL_TARGET=${rustup_${HOST_DIST}_${HOST_ARCH}_url}
-	if [ -z "$${URL_TARGET}" ]; then
-		echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."
-		exit 1
-	fi
-	mkdir -vp "${PATH_STAGE}/rust" "${PATH_ARTIFACTS}"
-	export RUSTUP_HOME=$$(realpath "${PATH_STAGE}/rust")/rustup CARGO_HOME=$$(realpath "${PATH_STAGE}/rust")/cargo
-	wget -O "${PATH_STAGE}/rust/rustup-init" "$${URL_TARGET}"
-	chmod +x "${PATH_STAGE}/rust/rustup-init"
-	"${PATH_STAGE}/rust/rustup-init" -y --no-modify-path --profile minimal --default-toolchain "${rust_toolchain_version}"
-	@# no-default-features drops the embedded javascript runtime (needs libclang to build)
+	@set -e; \
+	URL_TARGET=${rustup_${HOST_DIST}_${HOST_ARCH}_url}; \
+	if [ -z "$${URL_TARGET}" ]; then \
+		echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."; \
+		exit 1; \
+	fi; \
+	mkdir -vp "${PATH_STAGE}/rust" "$(@D)"; \
+	ROOT="$$(cd "$(@D)" && pwd)/$(@F)"; \
+	export RUSTUP_HOME="$$(realpath "${PATH_STAGE}/rust")/rustup"; \
+	export CARGO_HOME="$$(realpath "${PATH_STAGE}/rust")/cargo"; \
+	wget -O "${PATH_STAGE}/rust/rustup-init" "$${URL_TARGET}"; \
+	chmod +x "${PATH_STAGE}/rust/rustup-init"; \
+	"${PATH_STAGE}/rust/rustup-init" -y --no-modify-path --profile minimal --default-toolchain "${rust_toolchain_version}"; \
 	"$${CARGO_HOME}/bin/cargo" install tree-sitter-cli --version "${tree_sitter_version}" --locked \
-		--no-default-features --root "$$(realpath -m "$@")"
-	rm -rf "${PATH_STAGE}/rust"
-	@echo "compiled tree-sitter-cli ${tree_sitter_version} at '$@'"
+		--no-default-features --root "$${ROOT}"; \
+	rm -rf "${PATH_STAGE}/rust"; \
+	echo "compiled tree-sitter-cli ${tree_sitter_version} at '$@'"
 
 # NOTE: npm is a runnable packaged with node. no fancy download logic here.
 ${PATH_ARTIFACTS}/npm: ${PATH_ARTIFACTS}/node
