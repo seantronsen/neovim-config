@@ -25,6 +25,20 @@ for that server in `lua/core/plugin_config/lsp.lua`. For better syntax
 highlighting, install the treesitter grammar for the target language using
 `:TSInstall <lang-name>`.
 
+### Filetypes That Need a Modeline
+
+Language servers only start for the filetypes they list. Neovim doesn't detect
+these from the file name, so mark each file with a modeline in its first or
+last 5 lines. For files you can't edit, run `:set ft=...` after opening
+them instead.
+
+| Files                                                  | Modeline                 | Enables                                |
+| ------------------------------------------------------ | ------------------------ | -------------------------------------- |
+| ansible playbooks, role tasks/handlers                 | `# vim: ft=yaml.ansible` | ansible language server + ansible-lint |
+| systemd units outside a `systemd/` dir (e.g. in repos) | `# vim: ft=systemd`      | systemd language server, highlighting  |
+
+Units under `/etc/systemd/` and `~/.config/systemd/` are already detected.
+
 ## Git Diffs
 
 Diff views are a viewer layer on top of the git CLI (gitsigns.nvim plus a few
@@ -51,7 +65,8 @@ staged version is labelled `staged:`.
 - [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.12.5
 - [find-fd](https://github.com/sharkdp/fd)
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
-- python v3.\*
+- python v3.\* with the `venv` module (`python3-venv` on Debian/Ubuntu), which
+  mason needs for python based tools
 - nodejs $\geq$ v18
 
 > The `Makefile` based installer will handle everything except for the
@@ -64,6 +79,7 @@ staged version is labelled `staged:`.
 - [gcc](https://gcc.gnu.org/)
 - [xzutils](https://tukaani.org/xz/)
 - [zip](https://infozip.sourceforge.net/Zip.html)
-- [python3](https://github.com/python/cpython)
+- [python3](https://github.com/python/cpython) with the `venv` module
+  (`python3-venv` on Debian/Ubuntu)
 - [wget](https://www.gnu.org/software/wget/)
 - [git](https://git-scm.com/) $\geq$ v2
