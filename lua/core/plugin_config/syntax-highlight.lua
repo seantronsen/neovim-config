@@ -18,6 +18,7 @@ require("nvim-treesitter").install({
 	"markdown_inline",
 	"proto",
 	"python",
+	"ruby", -- Vagrantfile
 	"rust",
 	"toml",
 	"vim",
