@@ -1,5 +1,3 @@
-vim.cmd("filetype plugin on")
-vim.cmd("syntax enable")
 -- local in_mathzone = function()
 -- 	local is_mathzone = vim.fn["vimtex#syntax#in_mathzone"]() == 1
 -- 	print("is math zone: " .. tostring(is_mathzone))

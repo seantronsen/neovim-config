@@ -9,7 +9,6 @@ vim.o.shiftwidth = tab_spaces
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
 vim.o.completeopt = "menu,menuone,noselect"
 vim.o.number = true
-vim.o.hlsearch = true
 vim.o.showmatch = true
 vim.o.mouse = "a"
 vim.cmd([[set termguicolors]])
