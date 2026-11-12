@@ -20,8 +20,8 @@ end
 -- vim.keymap.set("n", "<leader>mz", in_mathzone, { desc = "is [m]ath[z]one" })
 vim.keymap.set("n", "<leader>mt", markdown_math_toggle, { desc = "[m]arkdown [m]ath [t]oggle" })
 
-vim.keymap.set("n", "<leader>vv", function() vim.cmd("VimtexView") end, { desc = "[v]imtex [v]iew" })
-vim.keymap.set("n", "<leader>vc", function() vim.cmd("VimtexCompile") end, { desc = "[v]imtex [c]ompile (sync)" })
+vim.keymap.set("n", "<leader>lv", function() vim.cmd("VimtexView") end, { desc = "[l]atex [v]iew" })
+vim.keymap.set("n", "<leader>lc", function() vim.cmd("VimtexCompile") end, { desc = "[l]atex [c]ompile (sync)" })
 
 vim.g.vimtex_syntax_enabled = 0
 vim.g.vimtex_syntax_conceal_disable = 1

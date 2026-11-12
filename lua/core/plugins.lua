@@ -23,10 +23,16 @@ require("lazy").setup({
 	--------------------------------
 	{ "EdenEast/nightfox.nvim" },
 
+	--STATUS
+	--------------------------------
+	{ "nvim-lualine/lualine.nvim", commit = "221ce6b" },
+
 	--GIT
 	--------------------------------
 	-- also feeds the branch/diff section of the statusline (see status-line.lua)
-	{ "lewis6991/gitsigns.nvim", tag = "v2.1.0", event = { "BufReadPre", "BufNewFile" }, opts = {} },
+	-- latest tag (v2.1.0) predates the unified (inline) diff view and several
+	-- blame/diffthis fixes
+	{ "lewis6991/gitsigns.nvim", commit = "74bbddd", event = { "BufReadPre", "BufNewFile" }, opts = {} },
 
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------

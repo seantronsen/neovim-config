@@ -12,7 +12,7 @@ vim.o.number = true
 vim.o.showmatch = true
 vim.o.mouse = "a"
 vim.cmd([[set termguicolors]])
-vim.o.diffopt = "vertical"
+vim.opt.diffopt:append("vertical")
 
 ------------------------
 --  DISABLED
