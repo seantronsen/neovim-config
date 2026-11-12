@@ -89,6 +89,7 @@ local config_lua_ls = {
 -- NOTE: unknown names and missing binaries are skipped silently. check
 -- `:checkhealth vim.lsp` when a server doesn't start.
 local servers = {
+	{ mason = "ansible-language-server", lsp = "ansiblels", bin = "ansible-language-server" },
 	{ mason = "bash-language-server", lsp = "bashls", bin = "bash-language-server" },
 	{ mason = "buf", lsp = "buf_ls", bin = "buf" }, -- protobuf
 	{ mason = "clangd", lsp = "clangd", bin = "clangd" },
@@ -102,12 +103,14 @@ local servers = {
 	{ mason = "pyright", lsp = "pyright", bin = "pyright-langserver", config = config_pyright },
 	{ mason = "ruff", lsp = "ruff", bin = "ruff" },
 	{ mason = "rust-analyzer", lsp = "rust_analyzer", bin = "rust-analyzer" },
+	{ mason = "systemd-lsp", lsp = "systemd_lsp", bin = "systemd-lsp" }, -- needs glibc >= 2.34
 	{ mason = "taplo", lsp = "taplo", bin = "taplo" },
 	{ mason = "yaml-language-server", lsp = "yamlls", bin = "yaml-language-server" },
 }
 
 -- everything else installed through mason (formatters, linters, debuggers)
 local tools = {
+	"ansible-lint", -- run by ansiblels, not conform
 	"bash-debug-adapter",
 	"bibtex-tidy",
 	"clang-format",
