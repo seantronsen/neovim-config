@@ -24,9 +24,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "<leader>gt", vim.lsp.buf.type_definition, { desc = "[g]o to symbol [t]ype definition" })
 		vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, { desc = "[g]o to [i]mplementation" })
 		vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
-		vim.keymap.set("n", "<leader>fr", function()
-			require("telescope.builtin").lsp_references()
-		end, { desc = "[f]ind [r]eferences" })
+		vim.keymap.set(
+			"n",
+			"<leader>fr",
+			function() require("telescope.builtin").lsp_references() end,
+			{ desc = "[f]ind [r]eferences" }
+		)
 
 		-- REFACTORING
 		vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
@@ -139,9 +142,7 @@ function M.config()
 	local ensure_installed = vim.list_slice(tools)
 	for _, server in ipairs(servers) do
 		table.insert(ensure_installed, server.mason)
-		if server.config then
-			vim.lsp.config(server.lsp, server.config)
-		end
+		if server.config then vim.lsp.config(server.lsp, server.config) end
 		vim.lsp.enable(server.lsp)
 	end
 

@@ -12,11 +12,21 @@ function M.init()
 	-- it shows up in the keymaps picker.
 	vim.keymap.set("n", "gf", "gf", { desc = "[g]o to [f]ile (follows note links)" })
 	vim.keymap.set("n", "<leader>ol", function() vim.cmd("Obsidian links") end, { desc = "[o]bsidian [l]inks" })
-	vim.keymap.set("n", "<leader>fo", function() vim.cmd("Obsidian search") end, { desc = "[f]ind note (search [o]bsidian)" })
+	vim.keymap.set(
+		"n",
+		"<leader>fo",
+		function() vim.cmd("Obsidian search") end,
+		{ desc = "[f]ind note (search [o]bsidian)" }
+	)
 	vim.keymap.set("n", "<leader>ob", function() vim.cmd("Obsidian backlinks") end, { desc = "[o]bsidian [b]acklinks" })
 	vim.keymap.set("n", "<leader>oo", function() vim.cmd("Obsidian open") end, { desc = "[o]bsidian [o]pen" })
 	vim.keymap.set("n", "<leader>ot", function() vim.cmd("Obsidian tags") end, { desc = "[o]bsidian [t]ags" })
-	vim.keymap.set("n", "<leader>oc", function() vim.cmd("Obsidian toc") end, { desc = "[o]bsidian note table of [c]ontents" })
+	vim.keymap.set(
+		"n",
+		"<leader>oc",
+		function() vim.cmd("Obsidian toc") end,
+		{ desc = "[o]bsidian note table of [c]ontents" }
+	)
 
 	-- todo: create new bindings for
 

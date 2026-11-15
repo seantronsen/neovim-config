@@ -53,12 +53,8 @@ dapui.setup(dapui_config)
 
 -- ATTACH DAPUI TO EVENT LISTENERS
 ------------------------------------------
-local function open_dap_ui()
-	dapui.open({ reset = true })
-end
-local function close_dap_ui()
-	dapui.close()
-end
+local function open_dap_ui() dapui.open({ reset = true }) end
+local function close_dap_ui() dapui.close() end
 
 local dap = require("dap")
 dap.listeners.after.event_initialized["dapui_config"] = open_dap_ui

@@ -9,9 +9,11 @@ function M.init()
 	-- toggle a delta-like inline view of the buffer's changes: deleted lines shown
 	-- in place, added lines and changed words highlighted. compares against the
 	-- index by default, or any revision, e.g. `:GitInline main` or `:GitInline ~3`.
-	vim.api.nvim_create_user_command("GitInline", function(opts)
-		require("gitsigns").diffthis(opts.args ~= "" and opts.args or nil, { unified = true })
-	end, { nargs = "?", desc = "toggle inline diff view against the index or a revision" })
+	vim.api.nvim_create_user_command(
+		"GitInline",
+		function(opts) require("gitsigns").diffthis(opts.args ~= "" and opts.args or nil, { unified = true }) end,
+		{ nargs = "?", desc = "toggle inline diff view against the index or a revision" }
+	)
 
 	-- diff two revisions of a file side by side: `:GitDiffRefs <left> <right> [path]`
 	-- left is the older side, right the newer. path defaults to the current file.
@@ -20,9 +22,7 @@ function M.init()
 		local left, right, path = opts.fargs[1], opts.fargs[2], opts.fargs[3] or "%"
 		local gitsigns = require("gitsigns")
 		vim.w.git_diff_refs_buf = vim.api.nvim_get_current_buf()
-		gitsigns.show(right .. ":" .. path, {}, function()
-			gitsigns.diffthis(left)
-		end)
+		gitsigns.show(right .. ":" .. path, {}, function() gitsigns.diffthis(left) end)
 	end, {
 		nargs = "+",
 		desc = "diff two revisions of a file: <left> <right> [path]",
@@ -39,9 +39,7 @@ function M.init()
 				"refs/remotes",
 			})
 			table.insert(refs, 1, "HEAD")
-			return vim.tbl_filter(function(ref)
-				return vim.startswith(ref, lead)
-			end, refs)
+			return vim.tbl_filter(function(ref) return vim.startswith(ref, lead) end, refs)
 		end,
 	})
 
@@ -72,12 +70,8 @@ function M.init()
 	-- focused: closes the revision (gitsigns://) windows, and for GitDiffRefs puts
 	-- the pane's original buffer back. otherwise closes the focused revision.
 	vim.api.nvim_create_user_command("GitDiffClose", function()
-		local diffs = vim.tbl_filter(function(win)
-			return vim.wo[win].diff
-		end, vim.api.nvim_tabpage_list_wins(0))
-		if #diffs == 0 then
-			return
-		end
+		local diffs = vim.tbl_filter(function(win) return vim.wo[win].diff end, vim.api.nvim_tabpage_list_wins(0))
+		if #diffs == 0 then return end
 		local revisions, keep = {}, nil
 		for _, win in ipairs(diffs) do
 			local original = vim.w[win].git_diff_refs_buf
@@ -95,9 +89,7 @@ function M.init()
 			vim.api.nvim_win_close(win, false)
 		end
 		vim.cmd("diffoff!")
-		if keep and vim.api.nvim_win_is_valid(keep) then
-			vim.api.nvim_set_current_win(keep)
-		end
+		if keep and vim.api.nvim_win_is_valid(keep) then vim.api.nvim_set_current_win(keep) end
 	end, { desc = "close the git diff view, keeping the working file" })
 
 	-- toggle the blame panel: closes an open one (from either window), otherwise
@@ -141,8 +133,6 @@ function M.init()
 	vim.keymap.set("n", "<leader>vb", "<Cmd>GitBlame<CR>", { desc = "[v]cs toggle [b]lame" })
 end
 
-function M.config()
-	require("gitsigns").setup({})
-end
+function M.config() require("gitsigns").setup({}) end
 
 return M

@@ -6,13 +6,9 @@ local is_package_installed = function(package_name)
 	return vim.uv.fs_stat(mason_path .. "/packages/" .. package_name) ~= nil
 end
 
-local package_install_path = function(package_name)
-	return mason_path .. "/packages/" .. package_name
-end
+local package_install_path = function(package_name) return mason_path .. "/packages/" .. package_name end
 
-local package_bin_path = function(package_name)
-	return mason_path .. "/bin/" .. package_name
-end
+local package_bin_path = function(package_name) return mason_path .. "/bin/" .. package_name end
 
 ------------------------------------------
 -- ADAPTERS (DEBUGGERS)
@@ -54,9 +50,7 @@ dap.configurations.c = {
 		name = "Launch file",
 		type = "codelldb",
 		request = "launch",
-		program = function()
-			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-		end,
+		program = function() return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file") end,
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
 	},

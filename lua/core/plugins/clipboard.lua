@@ -9,9 +9,12 @@
 local M = {}
 
 function M.init()
-	vim.keymap.set("n", "<leader>pi", function()
-		require("img-clip").paste_image()
-	end, { desc = "[p]aste [i]mage reference" })
+	vim.keymap.set(
+		"n",
+		"<leader>pi",
+		function() require("img-clip").paste_image() end,
+		{ desc = "[p]aste [i]mage reference" }
+	)
 end
 
 function M.config()
