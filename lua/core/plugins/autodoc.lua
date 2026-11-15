@@ -51,8 +51,6 @@ function M.config()
 				},
 			},
 		},
-		-- todo: need to fix this at some point.
-		-- snippet_engine = "luasnip", -- this breaks tree-sitter highlighting
 	})
 end
 
