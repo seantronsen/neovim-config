@@ -4,8 +4,8 @@ Simple backup of the `nvim` config used for writing code within `*nix`
 terminals.
 
 As for how to actually use the tooling, view a list of currently installed
-plugins within `plugins.lua` and visit the docs of the associated projects. It
-should be possible to find most of that information using nvims
+plugins within `lua/core/plugins/init.lua` and visit the docs of the associated
+projects. It should be possible to find most of that information using nvims
 `:help [item-name]` command. There's also a helpful `,fh` keybinding which
 spawns an interactive search over the same help pages.
 
@@ -21,7 +21,7 @@ outside my preferences) the kit must be installed manually.
 
 To perform a one-time installation, execute `:Mason` and use the built-in UI to
 download the relevant language server. If necessary, specify additional settings
-for that server in `lua/core/plugin_config/lsp.lua`. For better syntax
+for that server in `lua/core/plugins/lsp.lua`. For better syntax
 highlighting, install the treesitter grammar for the target language using
 `:TSInstall <lang-name>`.
 
@@ -42,7 +42,7 @@ Units under `/etc/systemd/` and `~/.config/systemd/` are already detected.
 ## Git Diffs
 
 Diff views are a viewer layer on top of the git CLI (gitsigns.nvim plus a few
-commands in `lua/core/plugin_config/git.lua`).
+commands in `lua/core/plugins/git.lua`).
 
 | Keys      | Command                          | Does                                                         |
 | --------- | -------------------------------- | ------------------------------------------------------------ |

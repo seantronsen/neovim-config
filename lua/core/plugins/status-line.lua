@@ -1,3 +1,6 @@
+-- lazy loaded right after startup (VeryLazy, see plugins/init.lua)
+local M = {}
+
 -- most readable name for a revision: tag > branch > short commit sha
 local function ref_label(repo, rev)
 	if rev == ":0" then
@@ -50,25 +53,29 @@ local function gitsigns_diff()
 	end
 end
 
-require("lualine").setup({
-	options = {
-		icons_enabled = false,
-		theme = "auto",
-		component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
-	},
-	sections = {
-		lualine_b = { "branch", { "diff", source = gitsigns_diff }, "diagnostics" },
-		lualine_c = { filename },
-		-- lsp progress (replaces fidget.nvim). ascii only, like the rest
-		lualine_x = {
-			{ "lsp_status", symbols = { spinner = { "-", "\\", "|", "/" }, done = "", separator = " " } },
-			"encoding",
-			"fileformat",
-			"filetype",
+function M.config()
+	require("lualine").setup({
+		options = {
+			icons_enabled = false,
+			theme = "auto",
+			component_separators = { left = '', right = ''},
+	    section_separators = { left = '', right = ''},
 		},
-	},
-	inactive_sections = {
-		lualine_c = { filename },
-	},
-})
+		sections = {
+			lualine_b = { "branch", { "diff", source = gitsigns_diff }, "diagnostics" },
+			lualine_c = { filename },
+			-- lsp progress (replaces fidget.nvim). ascii only, like the rest
+			lualine_x = {
+				{ "lsp_status", symbols = { spinner = { "-", "\\", "|", "/" }, done = "", separator = " " } },
+				"encoding",
+				"fileformat",
+				"filetype",
+			},
+		},
+		inactive_sections = {
+			lualine_c = { filename },
+		},
+	})
+end
+
+return M
