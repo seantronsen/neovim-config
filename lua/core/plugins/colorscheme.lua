@@ -1,5 +1,5 @@
 --------------------------------
--- COLORSCHEME CONFIGUTATION
+-- COLORSCHEME CONFIGURATION
 --------------------------------
 -- always loaded, before the other plugins (see plugins/init.lua)
 local M = {}
