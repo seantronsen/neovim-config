@@ -30,7 +30,6 @@ local formatter = require("core.plugins.formatter")
 local lsp = require("core.plugins.lsp")
 local notes = require("core.plugins.obsidian")
 local search = require("core.plugins.search")
-local snippets = require("core.plugins.luasnip")
 local status_line = require("core.plugins.status-line")
 local autodoc = require("core.plugins.autodoc")
 local clipboard = require("core.plugins.clipboard")
@@ -141,18 +140,6 @@ require("lazy").setup({
 		init = search.init,
 		config = search.config,
 		dependencies = { { "nvim-lua/plenary.nvim" } },
-	},
-
-	-- SNIPPETS
-	--------------------------------
-	-- completion itself is builtin as of nvim 0.12 (see autocomplete.lua)
-	{
-		"L3MON4D3/LuaSnip",
-		lazy = true,
-		-- visual mode too: store_selection_keys maps <C-S> there
-		event = { "InsertEnter", "ModeChanged *:[vV\x16]*" },
-		init = snippets.init,
-		config = snippets.config,
 	},
 
 	-- AUTODOCUMENTATION
