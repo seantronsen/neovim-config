@@ -4,9 +4,7 @@
 
 -- function from the dap module by name, loaded on first use
 local function dap(name)
-	return function()
-		require("dap")[name]()
-	end
+	return function() require("dap")[name]() end
 end
 
 vim.keymap.set("n", "<leader>db", dap("toggle_breakpoint"), { desc = "[d]ap toggle [b]reakpoint" })

@@ -30,9 +30,7 @@ function M.config()
 
 	-- highlight any filetype that has a parser. the rest keep regex highlighting.
 	vim.api.nvim_create_autocmd("FileType", {
-		callback = function(args)
-			pcall(vim.treesitter.start, args.buf)
-		end,
+		callback = function(args) pcall(vim.treesitter.start, args.buf) end,
 	})
 end
 

@@ -7,9 +7,7 @@ local M = {}
 
 -- picker by name from telescope.builtin, loaded on first use
 local function picker(name, opts)
-	return function()
-		require("telescope.builtin")[name](opts)
-	end
+	return function() require("telescope.builtin")[name](opts) end
 end
 
 -- bindings to search relative to the current buffer position

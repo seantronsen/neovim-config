@@ -2,9 +2,7 @@
 -- the first debug keymap (config). see plugins/init.lua
 local M = {}
 
-function M.init()
-	require("core.plugins.dap.keymaps")
-end
+function M.init() require("core.plugins.dap.keymaps") end
 
 function M.config()
 	require("core.plugins.dap.base")

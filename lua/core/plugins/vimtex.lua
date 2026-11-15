@@ -21,7 +21,7 @@ function M.init()
 	-- 		print("filetype '" .. cft .. "' is not supported. markdown and tex files only.")
 	-- 	end
 	-- end
-	-- 
+	--
 	-- -- vim.keymap.set("n", "<leader>mz", in_mathzone, { desc = "is [m]ath[z]one" })
 	-- vim.keymap.set("n", "<leader>mt", markdown_math_toggle, { desc = "[m]arkdown [m]ath [t]oggle" })
 

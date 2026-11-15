@@ -4,9 +4,7 @@ local M = {}
 
 -- generate a doc comment for the annotation type under the cursor
 local function generate(type)
-	return function()
-		return require("neogen").generate({ type = type })
-	end
+	return function() return require("neogen").generate({ type = type }) end
 end
 
 function M.init()

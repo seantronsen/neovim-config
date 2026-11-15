@@ -6,9 +6,12 @@
 local M = {}
 
 function M.init()
-	vim.keymap.set("n", "<leader>re", function()
-		require("conform").format({ async = true })
-	end, { desc = "[r]e[f]ormat" })
+	vim.keymap.set(
+		"n",
+		"<leader>re",
+		function() require("conform").format({ async = true }) end,
+		{ desc = "[r]e[f]ormat" }
+	)
 	vim.keymap.set("n", "<leader>nh", function() vim.cmd("nohls") end, { desc = "[n]o [h]ighlight" })
 end
 
