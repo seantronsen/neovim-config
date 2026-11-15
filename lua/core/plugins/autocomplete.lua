@@ -48,10 +48,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = "TelescopePrompt",
 	callback = function(args) vim.bo[args.buf].autocomplete = false end,
 })
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "dapui_watches",
-	callback = function(args) vim.bo[args.buf].omnifunc = "v:lua.require'dap.repl'.omnifunc" end,
-})
 
 -- KEYMAPS
 --------------------------------
