@@ -87,8 +87,8 @@ require("lazy").setup({
 
 	-- NOTES
 	--------------------------------
-	-- since this is lazy loaded, docs are unavailable until one opens a .tex file
-	{ "lervag/vimtex", tag = "v2.18", lazy = true, ft = { "tex", "markdown" }, init = latex.init },
+	-- lazy load, docs are unavailable until opening a .tex file
+	{ "lervag/vimtex", tag = "v2.18", lazy = true, ft = { "tex" }, init = latex.init },
 	{
 		"obsidian-nvim/obsidian.nvim",
 		tag = "v3.16.10",
@@ -154,7 +154,6 @@ require("lazy").setup({
 		ft = "lua", -- only load on lua files
 		opts = {
 			library = {
-				-- See the configuration section for more details
 				-- Load luvit types when the `vim.uv` word is found
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},

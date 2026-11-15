@@ -50,7 +50,7 @@ function M.config()
 		sections = {
 			lualine_b = { "branch", { "diff", source = gitsigns_diff }, "diagnostics" },
 			lualine_c = { filename },
-			-- lsp progress (replaces fidget.nvim). ascii only, like the rest
+			-- lsp progress. ascii only, like the rest
 			lualine_x = {
 				{ "lsp_status", symbols = { spinner = { "-", "\\", "|", "/" }, done = "", separator = " " } },
 				"encoding",

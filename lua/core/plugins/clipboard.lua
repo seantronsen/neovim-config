@@ -1,7 +1,7 @@
 -- enable users to persist an image on the clipboard to the filesystem and
 -- simultaneously paste in a reference to that image, formatted appropriately for the markup language type.
 
--- important: remember to install pngpaste when editting on macOS
+-- important: remember to install pngpaste when editing on macOS
 -- https://github.com/jcsalterego/pngpaste
 
 -- lazy loaded: keymap at startup (init), img-clip loads on first paste

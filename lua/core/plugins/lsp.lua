@@ -9,15 +9,12 @@ local M = {}
 
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "display error", noremap = true, silent = true })
 
--- Use an on_attach function to only map the following keys after the language
--- server attaches to the current buffer
+-- buffer keymaps, set when a server attaches
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		-- disable formatting from lsp sources, so it doesn't interfere with gqq
 		-- (formatting is handled by conform.nvim, see formatter.lua)
 		vim.bo[args.buf].formatexpr = nil
-
-		-- local client = vim.lsp.get_client_by_id(args.data.client_id)
 
 		vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, { desc = "[g]o to [D]eclaration" })
 		vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "[g]o to [d]efinition" })
