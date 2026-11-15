@@ -3,19 +3,30 @@
 
 -- important: remember to install pngpaste when editting on macOS
 -- https://github.com/jcsalterego/pngpaste
-local image_clipper = require("img-clip")
-image_clipper.setup({
-	default = {
-		dir_path = "attachments",
-		file_name = "img-clip-%Y%m%d%H%M%S",
-		extension = "jpg",
-		relative_to_current_file = true,
-		show_dir_path_in_prompt = true,
 
-        insert_mode_after_paste = false,
-        prompt_for_file_name = false,
-	},
-})
+-- lazy loaded: keymap at startup (init), img-clip loads on first paste
+-- (config). see plugins.lua
+local M = {}
 
----@diagnostic disable-next-line: undefined-field, need-check-nil
-vim.keymap.set("n", "<leader>pi", image_clipper.paste_image, { desc = "[p]aste [i]mage reference" })
+function M.init()
+	vim.keymap.set("n", "<leader>pi", function()
+		require("img-clip").paste_image()
+	end, { desc = "[p]aste [i]mage reference" })
+end
+
+function M.config()
+	require("img-clip").setup({
+		default = {
+			dir_path = "attachments",
+			file_name = "img-clip-%Y%m%d%H%M%S",
+			extension = "jpg",
+			relative_to_current_file = true,
+			show_dir_path_in_prompt = true,
+
+			insert_mode_after_paste = false,
+			prompt_for_file_name = false,
+		},
+	})
+end
+
+return M

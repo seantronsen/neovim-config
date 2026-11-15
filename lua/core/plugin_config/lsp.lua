@@ -1,3 +1,8 @@
+-- lazy loaded: the keymaps and LspAttach autocmd below are set at startup.
+-- mason, the servers, and tool installs (config) load right after startup
+-- (VeryLazy). servers still attach to buffers opened before that. see plugins.lua
+local M = {}
+
 -- ------------------------------
 -- IDE-LIKE COMMANDS
 -- ------------------------------
@@ -19,7 +24,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "<leader>gt", vim.lsp.buf.type_definition, { desc = "[g]o to symbol [t]ype definition" })
 		vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, { desc = "[g]o to [i]mplementation" })
 		vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, { desc = "[h]elp (information for hovered item)" })
-		vim.keymap.set("n", "<leader>fr", require("telescope.builtin").lsp_references, { desc = "[f]ind [r]eferences" })
+		vim.keymap.set("n", "<leader>fr", function()
+			require("telescope.builtin").lsp_references()
+		end, { desc = "[f]ind [r]eferences" })
 
 		-- REFACTORING
 		vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename, { desc = "[r]efactor [r]ename symbol and references" })
@@ -30,15 +37,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 --------------------------------
 -- CONFIGURATION FOR LSP SERVERS
 --------------------------------
-require("mason").setup({
-	ui = {
-		icons = {
-			package_installed = "I",
-			package_pending = "->",
-			package_uninstalled = "X",
-		},
-	},
-})
 
 -- per-server overrides, passed to vim.lsp.config() (see `servers` below)
 local config_gopls = {
@@ -127,16 +125,30 @@ local tools = {
 	"yamlfmt",
 }
 
-local ensure_installed = vim.list_slice(tools)
-for _, server in ipairs(servers) do
-	table.insert(ensure_installed, server.mason)
-	if server.config then
-		vim.lsp.config(server.lsp, server.config)
+function M.config()
+	require("mason").setup({
+		ui = {
+			icons = {
+				package_installed = "I",
+				package_pending = "->",
+				package_uninstalled = "X",
+			},
+		},
+	})
+
+	local ensure_installed = vim.list_slice(tools)
+	for _, server in ipairs(servers) do
+		table.insert(ensure_installed, server.mason)
+		if server.config then
+			vim.lsp.config(server.lsp, server.config)
+		end
+		vim.lsp.enable(server.lsp)
 	end
-	vim.lsp.enable(server.lsp)
+
+	require("mason-tool-installer").setup({
+		ensure_installed = ensure_installed,
+		auto_update = false,
+	})
 end
 
-require("mason-tool-installer").setup({
-	ensure_installed = ensure_installed,
-	auto_update = false,
-})
+return M

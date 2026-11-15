@@ -1,6 +1,6 @@
 local dap = require("dap")
-local registry = require("mason-registry")
-local mason_path = vim.fn.expand("$MASON")
+-- $MASON is only set once mason loads (lazy, see plugins.lua)
+local mason_path = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
 
 local is_package_installed = function(package_name)
 	return vim.uv.fs_stat(mason_path .. "/packages/" .. package_name) ~= nil

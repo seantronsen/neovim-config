@@ -17,22 +17,47 @@ vim.opt.rtp:prepend(lazypath)
 -- lazy requires map leader to be set before plugin setups
 vim.g.mapleader = ","
 
+-- plugin configs. each module has `init` (runs at startup, before the plugin
+-- loads: keymaps and commands, which load lazy plugins on first use) and/or
+-- `config` (runs when the plugin loads, right away for `lazy = false`).
+local colorscheme = require("core.plugin_config.colorscheme")
+local file_explorer = require("core.plugin_config.file-explorer")
+local syntax = require("core.plugin_config.syntax-highlight")
+local git = require("core.plugin_config.git")
+local latex = require("core.plugin_config.vimtex")
+local dap = require("core.plugin_config.dap")
+local formatter = require("core.plugin_config.formatter")
+local lsp = require("core.plugin_config.lsp")
+local notes = require("core.plugin_config.obsidian")
+local search = require("core.plugin_config.search")
+local snippets = require("core.plugin_config.luasnip")
+local status_line = require("core.plugin_config.status-line")
+local autodoc = require("core.plugin_config.autodoc")
+local clipboard = require("core.plugin_config.clipboard")
+
 require("lazy").setup({
 
 	--COLORSCHEME
 	--------------------------------
-	{ "EdenEast/nightfox.nvim" },
+	{ "EdenEast/nightfox.nvim", lazy = false, priority = 1000, config = colorscheme.config },
 
 	--STATUS
 	--------------------------------
-	{ "nvim-lualine/lualine.nvim", commit = "221ce6b" },
+	{ "nvim-lualine/lualine.nvim", commit = "221ce6b", lazy = true, event = "VeryLazy", config = status_line.config },
 
 	--GIT
 	--------------------------------
 	-- also feeds the branch/diff section of the statusline (see status-line.lua)
 	-- latest tag (v2.1.0) predates the unified (inline) diff view and several
 	-- blame/diffthis fixes
-	{ "lewis6991/gitsigns.nvim", commit = "74bbddd", event = { "BufReadPre", "BufNewFile" }, opts = {} },
+	{
+		"lewis6991/gitsigns.nvim",
+		commit = "74bbddd",
+		lazy = true,
+		event = { "BufReadPre", "BufNewFile" },
+		init = git.init,
+		config = git.config,
+	},
 
 	--LANGUAGE SERVERS & HIGHLIGHTING
 	--------------------------------
@@ -40,32 +65,52 @@ require("lazy").setup({
 	{
 		"mason-org/mason.nvim",
 		tag = "v2.3.1",
+		lazy = true,
+		event = "VeryLazy",
+		config = lsp.config,
 		dependencies = {
+			-- data only: the per-server `lsp/<name>.lua` defaults that vim.lsp.enable()
+			-- reads (see lsp.lua). its old setup() API is what's deprecated
 			{ "neovim/nvim-lspconfig", tag = "v2.12.0" },
 			{ "WhoIsSethDaniel/mason-tool-installer.nvim", commit = "443f1ef" },
 		},
 	},
 
 	-- NOTE: compiling parsers requires tree-sitter-cli (built by the Makefile)
-	{ "nvim-treesitter/nvim-treesitter", branch = "main", commit = "a2f6944", build = ":TSUpdate" },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		commit = "a2f6944",
+		lazy = false,
+		build = ":TSUpdate",
+		config = syntax.config,
+	},
 
 	-- NOTES
 	--------------------------------
 	-- since this is lazy loaded, docs are unavailable until one opens a .tex file
-	{ "lervag/vimtex", tag = "v2.18", ft = { "tex", "markdown" } },
+	{ "lervag/vimtex", tag = "v2.18", lazy = true, ft = { "tex", "markdown" }, init = latex.init },
 	{
 		"obsidian-nvim/obsidian.nvim",
 		tag = "v3.16.10",
+		lazy = true,
 		ft = { "markdown" },
-		dependencies = { "nvim-lua/plenary.nvim" },
+		cmd = "Obsidian",
+		init = notes.init,
+		config = notes.config,
+		-- its picker config only finds telescope once telescope is loaded
+		dependencies = { "nvim-telescope/telescope.nvim" },
 	},
-	{ "HakonHarnes/img-clip.nvim", event = "VeryLazy", ft = { "markdown" } },
+	{ "HakonHarnes/img-clip.nvim", lazy = true, init = clipboard.init, config = clipboard.config },
 
 	-- DEBUGGING | DEBUG-ADAPTER-PROTOCOL
 	--------------------------------
 	{
 		"mfussenegger/nvim-dap",
 		tag = "0.10.0",
+		lazy = true,
+		init = dap.init,
+		config = dap.config,
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
 			-- latest tag (v4.0.0) calls vim.tbl_flatten, deprecated in nvim 0.12
@@ -76,30 +121,49 @@ require("lazy").setup({
 
 	--DOCUMENT FORMATTING
 	--------------------------------
-	{ "stevearc/conform.nvim", tag = "v9.1.0" },
+	{
+		"stevearc/conform.nvim",
+		tag = "v9.1.0",
+		lazy = true,
+		cmd = "ConformInfo",
+		init = formatter.init,
+		config = formatter.config,
+	},
 
 	--FILE EXPLORATION AND PREVIEWS
 	--------------------------------
-	{ "stevearc/oil.nvim", tag = "v2.16.0" },
+	{ "stevearc/oil.nvim", tag = "v2.16.0", lazy = false, config = file_explorer.config },
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "v0.2.2",
+		lazy = true,
+		cmd = "Telescope",
+		init = search.init,
+		config = search.config,
 		dependencies = { { "nvim-lua/plenary.nvim" } },
 	},
 
 	-- SNIPPETS
 	--------------------------------
 	-- completion itself is builtin as of nvim 0.12 (see autocomplete.lua)
-	{ "L3MON4D3/LuaSnip" },
+	{
+		"L3MON4D3/LuaSnip",
+		lazy = true,
+		-- visual mode too: store_selection_keys maps <C-S> there
+		event = { "InsertEnter", "ModeChanged *:[vV\x16]*" },
+		init = snippets.init,
+		config = snippets.config,
+	},
 
 	-- AUTODOCUMENTATION
 	--------------------------------
-	{ "danymat/neogen", tag = "2.20.0" },
+	{ "danymat/neogen", tag = "2.20.0", lazy = true, cmd = "Neogen", init = autodoc.init, config = autodoc.config },
 
 	-- CONFIGURATION TOOLS
 	--------------------------------
 	{
 		"folke/lazydev.nvim",
+		lazy = true,
 		ft = "lua", -- only load on lua files
 		opts = {
 			library = {
@@ -110,3 +174,6 @@ require("lazy").setup({
 		},
 	},
 }, { rocks = { enabled = false } })
+
+-- builtin completion (no plugin, so no spec above). nvim 0.12+
+require("core.plugin_config.autocomplete")

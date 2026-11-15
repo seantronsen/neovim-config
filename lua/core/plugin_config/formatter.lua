@@ -1,62 +1,73 @@
 -----------------------------
 -- CONFIGURATION FOR DOCUMENT FORMATTING
 -----------------------------
+-- lazy loaded: keymaps at startup (init), conform loads on the first format
+-- (config). see plugins.lua
+local M = {}
 
-require("conform").setup({
-	formatters_by_ft = {
-		-- programming languages
-		c = { "clang_format" },
-		cpp = { "clang_format" },
-		cmake = { "cmake_format" },
-		go = { "gofmt" },
-		javascript = { "prettier" },
-		lua = { "stylua" },
-		python = { "ruff_format", "ruff_organize_imports" },
-		rust = { "rustfmt" },
-		typescript = { "prettier" },
+function M.init()
+	vim.keymap.set("n", "<leader>re", function()
+		require("conform").format({ async = true })
+	end, { desc = "[r]e[f]ormat" })
+	vim.keymap.set("n", "<leader>nh", function() vim.cmd("nohls") end, { desc = "[n]o [h]ighlight" })
+end
 
-		-- data manipulation languages
-		sql = { "sqlfmt" },
+function M.config()
+	require("conform").setup({
+		formatters_by_ft = {
+			-- programming languages
+			c = { "clang_format" },
+			cpp = { "clang_format" },
+			cmake = { "cmake_format" },
+			go = { "gofmt" },
+			javascript = { "prettier" },
+			lua = { "stylua" },
+			python = { "ruff_format", "ruff_organize_imports" },
+			rust = { "rustfmt" },
+			typescript = { "prettier" },
 
-		-- scripting languages
-		sh = { "shfmt" },
-		bash = { "shfmt" },
+			-- data manipulation languages
+			sql = { "sqlfmt" },
 
-		-- object documents
-		json = { "prettier" },
-		proto = { "buf" },
+			-- scripting languages
+			sh = { "shfmt" },
+			bash = { "shfmt" },
 
-		-- markup languages
-		bib = { "bibtex-tidy" },
-		html = { "prettier" },
-		xml = { "xmlformatter" },
-		latex = { "latexindent" },
-		tex = { "latexindent" },
-		markdown = { "prettier" },
-		toml = { "taplo" },
-		yaml = { "yamlfmt" },
+			-- object documents
+			json = { "prettier" },
+			proto = { "buf" },
 
-		["*"] = { "trim_whitespace" },
-	},
-	-- overrides for the builtin formatter definitions above
-	formatters = {
-		["bibtex-tidy"] = {
-			prepend_args = { "--v2" },
+			-- markup languages
+			bib = { "bibtex-tidy" },
+			html = { "prettier" },
+			xml = { "xmlformatter" },
+			latex = { "latexindent" },
+			tex = { "latexindent" },
+			markdown = { "prettier" },
+			toml = { "taplo" },
+			yaml = { "yamlfmt" },
+
+			["*"] = { "trim_whitespace" },
 		},
-		latexindent = {
-			args = { "-g", "/dev/null", "-m", "-l", vim.fn.stdpath("config") .. "/latexindent.yaml", "-" },
+		-- overrides for the builtin formatter definitions above
+		formatters = {
+			["bibtex-tidy"] = {
+				prepend_args = { "--v2" },
+			},
+			latexindent = {
+				args = { "-g", "/dev/null", "-m", "-l", vim.fn.stdpath("config") .. "/latexindent.yaml", "-" },
+			},
+			-- enforce auto line wrapping in markdown docs
+			prettier = {
+				prepend_args = function(_, ctx)
+					if vim.bo[ctx.buf].filetype == "markdown" then
+						return { "--print-width", "80", "--prose-wrap", "always" }
+					end
+					return {}
+				end,
+			},
 		},
-		-- enforce auto line wrapping in markdown docs
-		prettier = {
-			prepend_args = function(_, ctx)
-				if vim.bo[ctx.buf].filetype == "markdown" then
-					return { "--print-width", "80", "--prose-wrap", "always" }
-				end
-				return {}
-			end,
-		},
-	},
-})
+	})
+end
 
-vim.keymap.set("n", "<leader>re", function() require("conform").format({ async = true }) end, { desc = "[r]e[f]ormat" })
-vim.keymap.set("n", "<leader>nh", function() vim.cmd("nohls") end, { desc = "[n]o [h]ighlight" })
+return M
