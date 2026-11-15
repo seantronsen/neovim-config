@@ -1,5 +1,5 @@
 -----------------------------
--- CONFIGURATION FOR GIT (gitsigns.nvim, see plugins.lua)
+-- CONFIGURATION FOR GIT (gitsigns.nvim, see plugins/init.lua)
 -----------------------------
 -- lazy loaded: the commands, keymaps, and diff colors below are set at startup
 -- (init). gitsigns itself loads on the first file opened (config)

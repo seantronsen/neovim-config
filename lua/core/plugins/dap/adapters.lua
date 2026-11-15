@@ -1,5 +1,5 @@
 local dap = require("dap")
--- $MASON is only set once mason loads (lazy, see plugins.lua)
+-- $MASON is only set once mason loads (lazy, see plugins/init.lua)
 local mason_path = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
 
 local is_package_installed = function(package_name)

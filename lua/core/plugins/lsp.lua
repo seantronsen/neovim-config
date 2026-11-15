@@ -1,6 +1,6 @@
 -- lazy loaded: the keymaps and LspAttach autocmd below are set at startup.
 -- mason, the servers, and tool installs (config) load right after startup
--- (VeryLazy). servers still attach to buffers opened before that. see plugins.lua
+-- (VeryLazy). servers still attach to buffers opened before that. see plugins/init.lua
 local M = {}
 
 -- ------------------------------

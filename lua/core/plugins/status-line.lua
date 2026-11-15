@@ -1,4 +1,4 @@
--- lazy loaded right after startup (VeryLazy, see plugins.lua)
+-- lazy loaded right after startup (VeryLazy, see plugins/init.lua)
 local M = {}
 
 -- most readable name for a revision: tag > branch > short commit sha

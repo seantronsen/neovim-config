@@ -5,7 +5,7 @@
 -- https://github.com/jcsalterego/pngpaste
 
 -- lazy loaded: keymap at startup (init), img-clip loads on first paste
--- (config). see plugins.lua
+-- (config). see plugins/init.lua
 local M = {}
 
 function M.init()

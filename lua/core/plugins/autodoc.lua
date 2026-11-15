@@ -1,5 +1,5 @@
 -- lazy loaded: keymaps at startup (init), neogen loads on first use (config).
--- see plugins.lua
+-- see plugins/init.lua
 local M = {}
 
 -- generate a doc comment for the annotation type under the cursor

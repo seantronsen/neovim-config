@@ -1,4 +1,4 @@
--- lazy loaded on tex/markdown (see plugins.lua). everything here is set at
+-- lazy loaded on tex/markdown (see plugins/init.lua). everything here is set at
 -- startup (init): vimtex reads its vim.g options when it loads
 local M = {}
 

@@ -20,20 +20,20 @@ vim.g.mapleader = ","
 -- plugin configs. each module has `init` (runs at startup, before the plugin
 -- loads: keymaps and commands, which load lazy plugins on first use) and/or
 -- `config` (runs when the plugin loads, right away for `lazy = false`).
-local colorscheme = require("core.plugin_config.colorscheme")
-local file_explorer = require("core.plugin_config.file-explorer")
-local syntax = require("core.plugin_config.syntax-highlight")
-local git = require("core.plugin_config.git")
-local latex = require("core.plugin_config.vimtex")
-local dap = require("core.plugin_config.dap")
-local formatter = require("core.plugin_config.formatter")
-local lsp = require("core.plugin_config.lsp")
-local notes = require("core.plugin_config.obsidian")
-local search = require("core.plugin_config.search")
-local snippets = require("core.plugin_config.luasnip")
-local status_line = require("core.plugin_config.status-line")
-local autodoc = require("core.plugin_config.autodoc")
-local clipboard = require("core.plugin_config.clipboard")
+local colorscheme = require("core.plugins.colorscheme")
+local file_explorer = require("core.plugins.file-explorer")
+local syntax = require("core.plugins.syntax-highlight")
+local git = require("core.plugins.git")
+local latex = require("core.plugins.vimtex")
+local dap = require("core.plugins.dap")
+local formatter = require("core.plugins.formatter")
+local lsp = require("core.plugins.lsp")
+local notes = require("core.plugins.obsidian")
+local search = require("core.plugins.search")
+local snippets = require("core.plugins.luasnip")
+local status_line = require("core.plugins.status-line")
+local autodoc = require("core.plugins.autodoc")
+local clipboard = require("core.plugins.clipboard")
 
 require("lazy").setup({
 
@@ -176,4 +176,4 @@ require("lazy").setup({
 }, { rocks = { enabled = false } })
 
 -- builtin completion (no plugin, so no spec above). nvim 0.12+
-require("core.plugin_config.autocomplete")
+require("core.plugins.autocomplete")

@@ -2,7 +2,7 @@
 -- CONFIGURATION FOR DOCUMENT FORMATTING
 -----------------------------
 -- lazy loaded: keymaps at startup (init), conform loads on the first format
--- (config). see plugins.lua
+-- (config). see plugins/init.lua
 local M = {}
 
 function M.init()

@@ -1,7 +1,7 @@
 ---@diagnostic disable: missing-fields
 
 -- lazy loaded on markdown files or the first `:Obsidian` command (config). the
--- keymaps (init) only call `:Obsidian ...`, which loads it. see plugins.lua
+-- keymaps (init) only call `:Obsidian ...`, which loads it. see plugins/init.lua
 local M = {}
 
 function M.init()

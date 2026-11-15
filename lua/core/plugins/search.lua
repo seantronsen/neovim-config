@@ -2,7 +2,7 @@
 -- CONFIGURATION FOR TELESCOPE
 -----------------------------
 -- lazy loaded: keymaps are set at startup (init) and telescope itself loads on
--- the first picker (config). see plugins.lua
+-- the first picker (config). see plugins/init.lua
 local M = {}
 
 -- picker by name from telescope.builtin, loaded on first use

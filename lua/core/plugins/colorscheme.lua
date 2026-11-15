@@ -1,7 +1,7 @@
 --------------------------------
 -- COLORSCHEME CONFIGUTATION
 --------------------------------
--- always loaded, before the other plugins (see plugins.lua)
+-- always loaded, before the other plugins (see plugins/init.lua)
 local M = {}
 
 function M.config()

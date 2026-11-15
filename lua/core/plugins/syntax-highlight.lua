@@ -2,7 +2,7 @@
 --------------------------------
 -- nvim-treesitter only installs parsers and queries. highlighting itself is
 -- nvim's builtin treesitter, started by the FileType autocmd below.
--- always loaded (see plugins.lua)
+-- always loaded (see plugins/init.lua)
 local M = {}
 
 function M.config()

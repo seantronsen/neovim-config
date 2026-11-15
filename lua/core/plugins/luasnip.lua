@@ -1,6 +1,6 @@
 -- lazy loaded: the snippet listing keymap is set at startup (init). luasnip
 -- itself, its insert mode keymaps, and the snippet files load on the first
--- InsertEnter (config). see plugins.lua
+-- InsertEnter (config). see plugins/init.lua
 local M = {}
 
 function M.init()
