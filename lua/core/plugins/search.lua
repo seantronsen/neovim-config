@@ -57,7 +57,9 @@ function M.config()
 			},
 			preview = {
 				hide_on_startup = true,
+				msg_bg_fillchar = " ",
 			},
+			borderchars = { "-", "|", "-", "|", "+", "+", "+", "+" },
 		},
 	})
 end

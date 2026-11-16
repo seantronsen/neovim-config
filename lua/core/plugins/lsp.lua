@@ -51,6 +51,11 @@ local config_gopls = {
 	},
 }
 
+-- no "•" in front of completions that would add an #include
+local config_clangd = {
+	cmd = { "clangd", "--header-insertion-decorators=0" },
+}
+
 local config_pyright = {
 	settings = {
 		python = {
@@ -90,7 +95,7 @@ local servers = {
 	{ mason = "ansible-language-server", lsp = "ansiblels", bin = "ansible-language-server" },
 	{ mason = "bash-language-server", lsp = "bashls", bin = "bash-language-server" },
 	{ mason = "buf", lsp = "buf_ls", bin = "buf" }, -- protobuf
-	{ mason = "clangd", lsp = "clangd", bin = "clangd" },
+	{ mason = "clangd", lsp = "clangd", bin = "clangd", config = config_clangd },
 	{ mason = "cmake-language-server", lsp = "cmake", bin = "cmake-language-server" },
 	{ mason = "dockerfile-language-server", lsp = "dockerls", bin = "docker-langserver" },
 	{ mason = "gopls", lsp = "gopls", bin = "gopls", config = config_gopls },
