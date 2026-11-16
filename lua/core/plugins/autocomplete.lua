@@ -12,9 +12,19 @@ vim.o.pumborder = "+,-,+,|,+,-,+,|"
 -- one toggle for both auto popups (completion while typing, signature help)
 local popups_enabled = true
 
+-- color the kind column (Function, Variable, ...) per kind. nightfox still
+-- defines the nvim-cmp groups for it (CmpItemKind<Kind>), which follow the
+-- syntax colors. Color items keep nvim's own swatch
+local function convert(item)
+	local kind = vim.lsp.protocol.CompletionItemKind[item.kind]
+	if not kind or kind == "Color" then return {} end
+	local group = "CmpItemKind" .. kind
+	return { kind_hlgroup = vim.fn.hlexists(group) == 1 and group or "CmpItemKindDefault" }
+end
+
 local function enable_lsp_completion(bufnr)
 	for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr, method = "textDocument/completion" })) do
-		vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = popups_enabled })
+		vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = popups_enabled, convert = convert })
 	end
 end
 
