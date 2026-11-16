@@ -1,64 +1,43 @@
--- DAPUI SETUP
+-- DAP-VIEW SETUP
 ------------------------------------------
-local dapui = require("dapui")
-local dapui_config = {
-	controls = {
-		element = "repl",
-		enabled = true,
-		icons = {
-			disconnect = "disconnect",
-			pause = "pause",
-			play = "play",
-			run_last = "run-last",
-			step_back = "step-back",
-			step_into = "step-into",
-			step_out = "step-out",
-			step_over = "step-over",
-			terminate = "terminate",
-		},
+-- one window left of the editor that switches between sections (winbar), with
+-- the program's console under it. opens when a debug session starts and closes
+-- when the last one ends (auto_toggle). ascii only: every glyph it draws comes
+-- from `icons` below.
+require("dap-view").setup({
+	winbar = {
+		sections = { "scopes", "watches", "breakpoints", "threads", "exceptions", "repl" },
+		default_section = "scopes",
+		-- section keys (S, W, B, ...) still work, `g?` lists them. hiding the hints
+		-- keeps the winbar (and so the pane) narrow
+		show_keymap_hints = false,
+		-- no control buttons: the ,d keymaps cover them
+		controls = { enabled = false },
 	},
+	-- the button glyphs are set too (pause also marks the stopped thread), so
+	-- nothing falls back to nerd fonts
 	icons = {
-		collapsed = ">",
-		current_frame = "*",
-		expanded = "v",
+		collapsed = "> ",
+		expanded = "v ",
+		enabled = "[x]",
+		disabled = "[ ]",
+		filter = "filter:",
+		negate = "!",
+		pause = "pause",
+		play = "play",
+		step_into = "into",
+		step_over = "over",
+		step_out = "out",
+		terminate = "stop",
+		run_last = "last",
+		step_back = "back",
+		disconnect = "disc",
 	},
-	layouts = {
-		{
-			elements = {
-				{ id = "scopes", size = 0.5 },
-				{ id = "watches", size = 0.2 },
-				{ id = "breakpoints", size = 0.15 },
-				{ id = "stacks", size = 0.15 },
-			},
-			position = "left",
-			size = 90,
-		},
-		{
-			elements = {
-				{ id = "console", size = 1 },
-			},
-			position = "bottom",
-			size = 15,
-		},
-		{
-			elements = {
-				{ id = "repl", size = 1 },
-			},
-			position = "bottom",
-			size = 15,
-		},
+	windows = {
+		position = "left",
+		-- the winbar (section labels plus padding) needs 57
+		size = 64,
+		terminal = { position = "below" },
 	},
-}
-dapui.setup(dapui_config)
-
--- ATTACH DAPUI TO EVENT LISTENERS
-------------------------------------------
-local function open_dap_ui() dapui.open({ reset = true }) end
-local function close_dap_ui() dapui.close() end
-
-local dap = require("dap")
-dap.listeners.after.event_initialized["dapui_config"] = open_dap_ui
-dap.listeners.after.event_breakpoint["dapui_config"] = open_dap_ui
-
-dap.listeners.before.event_terminated["dapui_config"] = close_dap_ui
-dap.listeners.before.event_exited["dapui_config"] = close_dap_ui
+	auto_toggle = true,
+})

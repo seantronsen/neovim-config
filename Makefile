@@ -285,7 +285,10 @@ ${PATH_DATA}/nvim: $(addprefix ${PATH_ARTIFACTS}/, nvim node npm tree-sitter) $(
 	@echo "application will open to install plugins and plugin specific"
 	@echo "dependencies."
 	mkdir -vp "${PATH_DATA}"
+	@# linux: mason builds go packages (gopls, delve) with `go install`. without
+	@# cgo they're static, instead of needing the build host's (newer) glibc
 	export \
+		$(if $(filter Linux,${HOST_DIST}),CGO_ENABLED=0) \
 		XDG_CONFIG_HOME=$$(realpath "${PATH_CONFIG}") \
 		XDG_DATA_HOME=$$(realpath "${PATH_DATA}") \
 		PATH=$$(realpath "${PATH_ARTIFACTS}/node${node_internal_bin_dir}"):$$(realpath "${PATH_ARTIFACTS}/tree-sitter/bin"):${PATH} && \

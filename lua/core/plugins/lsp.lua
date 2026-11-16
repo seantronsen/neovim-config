@@ -115,6 +115,7 @@ local tools = {
 	"cmakelang",
 	"codelldb",
 	"debugpy",
+	"delve",
 	"latexindent",
 	"prettier",
 	"shellcheck",
@@ -147,6 +148,9 @@ function M.config()
 		ensure_installed = ensure_installed,
 		auto_update = false,
 	})
+	-- its own install-on-start hook waits for VimEnter, which has already passed
+	-- by the time this loads (VeryLazy)
+	vim.cmd("MasonToolsInstall")
 end
 
 return M

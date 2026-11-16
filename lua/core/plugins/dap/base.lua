@@ -5,17 +5,12 @@ local dap = require("dap")
 
 -- SUPPORT LAUNCH.JSON FILES
 ------------------------------------------
-local launch_path = vim.uv.cwd() .. "/.launch.json"
-local launch_filetype_maps = {
-	debugpy = { "python" },
-	codelldb = { "c", "cpp" },
-}
-
--- this method of config is deprecated as of Sat Jun 28 03:24:11 PM MDT 2025
--- however, the new batteries included method seems to mandate placing the
--- config in a `.vscode/.launch.json` file, which I'm not willing to conform
--- to.
-require("dap.ext.vscode").load_launchjs(launch_path, launch_filetype_maps)
+-- read ./.launch.json (launch.json format) from the cwd on each `,dc`. its
+-- configs are listed for every filetype
+dap.providers.configs["dap.launch.json"] = nil -- don't read ./.vscode/launch.json
+dap.providers.configs["core.launch.json"] = function()
+	return require("dap.ext.vscode").getconfigs(vim.fn.getcwd() .. "/.launch.json")
+end
 
 -- SETUP VIRTUAL TEXT
 ------------------------------------------

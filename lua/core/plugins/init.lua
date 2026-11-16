@@ -106,14 +106,14 @@ require("lazy").setup({
 	--------------------------------
 	{
 		"mfussenegger/nvim-dap",
-		tag = "0.10.0",
+		-- past the 0.10.0 tag for listeners.on_session, which nvim-dap-view needs
+		commit = "40a8189",
 		lazy = true,
 		init = dap.init,
 		config = dap.config,
 		dependencies = {
 			{ "mfussenegger/nvim-dap-python" },
-			-- latest tag (v4.0.0) calls vim.tbl_flatten, deprecated in nvim 0.12
-			{ "rcarriga/nvim-dap-ui", commit = "cc9dd33", dependencies = { { "nvim-neotest/nvim-nio" } } },
+			{ "igorlfs/nvim-dap-view", tag = "v1.3.0" },
 			{ "theHamsta/nvim-dap-virtual-text", commit = "fbdb48c" },
 		},
 	},
