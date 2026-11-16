@@ -159,7 +159,32 @@ require("lazy").setup({
 			},
 		},
 	},
-}, { rocks = { enabled = false } })
+}, {
+	rocks = { enabled = false },
+	ui = {
+		icons = {
+			cmd = "cmd ",
+			config = "config ",
+			debug = "* ",
+			event = "event ",
+			favorite = "* ",
+			ft = "ft ",
+			init = "init ",
+			import = "import ",
+			keys = "keys ",
+			lazy = "lazy ",
+			loaded = "*",
+			not_loaded = "o",
+			plugin = "plugin ",
+			runtime = "runtime ",
+			require = "require ",
+			source = "source ",
+			start = "start ",
+			task = "done ",
+			list = { "*", "->", "+", "-" },
+		},
+	},
+})
 
 -- builtin completion (no plugin, so no spec above). nvim 0.12+
 require("core.plugins.autocomplete")

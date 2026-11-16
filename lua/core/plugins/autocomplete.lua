@@ -7,7 +7,7 @@
 vim.o.autocomplete = true
 vim.o.complete = "o"
 vim.opt.completeopt:append({ "popup", "fuzzy" })
-vim.o.pumborder = "rounded"
+vim.o.pumborder = "+,-,+,|,+,-,+,|"
 
 -- one toggle for both auto popups (completion while typing, signature help)
 local popups_enabled = true

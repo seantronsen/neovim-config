@@ -12,6 +12,9 @@ dap.providers.configs["core.launch.json"] = function()
 	return require("dap.ext.vscode").getconfigs(vim.fn.getcwd() .. "/.launch.json")
 end
 
+-- the current line marker. the other signs (B, C, L, R) are ascii already
+vim.fn.sign_define("DapStopped", { text = "->" })
+
 -- SETUP VIRTUAL TEXT
 ------------------------------------------
 require("nvim-dap-virtual-text").setup({})

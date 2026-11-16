@@ -133,6 +133,15 @@ function M.init()
 	vim.keymap.set("n", "<leader>vb", "<Cmd>GitBlame<CR>", { desc = "[v]cs toggle [b]lame" })
 end
 
-function M.config() require("gitsigns").setup({}) end
+local signs = {
+	add = { text = "|" },
+	change = { text = "|" },
+	delete = { text = "_" },
+	topdelete = { text = "-" },
+	changedelete = { text = "~" },
+	untracked = { text = ":" },
+}
+
+function M.config() require("gitsigns").setup({ signs = signs, signs_staged = signs }) end
 
 return M

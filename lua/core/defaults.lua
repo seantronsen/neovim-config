@@ -13,6 +13,18 @@ vim.o.showmatch = true
 vim.o.mouse = "a"
 vim.cmd([[set termguicolors]])
 vim.opt.diffopt:append("vertical")
+-- ascii window separators and fold fillers (the defaults are box-drawing chars)
+vim.opt.fillchars = {
+	horiz = "-",
+	horizup = "-",
+	horizdown = "-",
+	vert = "|",
+	vertleft = "|",
+	vertright = "|",
+	verthoriz = "+",
+	fold = "-",
+	foldsep = "|",
+}
 
 ------------------------
 --  DISABLED
