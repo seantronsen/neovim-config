@@ -34,40 +34,73 @@ PROGRAM_DATA:=nvim
 
 OVERWRITE_INSTALLATION?=0
 
+# 0: reuse tools already on the host (fd, rg, node/npm, tree-sitter) instead of
+# fetching them, and leave them out of the bundle. 1: bundle everything, for
+# hosts with no internet (the airgap). tree-sitter is reused either way, since
+# it's only needed while building.
+BUNDLE_ALL?=0
+
+# HOST TOOLS
+# host-tool: resolved path of `$(1)` on PATH, unless it's one this Makefile
+# installed (under USER_SRC). version-ok: nonempty when version $(2) >= $(1).
+host-tool = $(shell p=$$(command -v $(1) 2>/dev/null) && r=$$(realpath "$$p") && \
+	u=$$(realpath -m "${USER_SRC}") && [ "$${r#"$$u"/}" = "$$r" ] && echo "$$r")
+version-ok = $(shell printf '%s\n' "$(1)" "$(2)" | sort -C -V && echo y)
+
+HOST_fd:=$(call host-tool,fd)
+HOST_rg:=$(call host-tool,rg)
+# node >= 18 (see README), and only together with its npm
+HOST_node:=$(call host-tool,node)
+HOST_node:=$(if ${HOST_node},$(if $(call version-ok,18,$(patsubst v%,%,$(shell "${HOST_node}" --version))),${HOST_node}))
+HOST_npm:=$(if ${HOST_node},$(call host-tool,npm))
+HOST_node:=$(if ${HOST_npm},${HOST_node})
+# nvim-treesitter needs tree-sitter-cli >= 0.26.1
+HOST_tree-sitter:=$(call host-tool,tree-sitter)
+HOST_tree-sitter:=$(if ${HOST_tree-sitter},$(if $(call version-ok,0.26.1,$(word 2,$(shell "${HOST_tree-sitter}" --version))),${HOST_tree-sitter}))
+
+# build: tools linked from the host instead of downloaded
+REUSED_PROGRAMS:=$(if $(filter 0,${BUNDLE_ALL}),$(foreach t,fd rg node npm,$(if ${HOST_$(t)},$(t))))
+# install: tools already on the installing host's PATH are left alone
+INSTALL_PROGRAMS:=nvim $(foreach t,fd rg node npm,$(if ${HOST_$(t)},,$(t)))
+
+# where the config is cloned from. ssh so the installed copy can push. without a
+# github key: make CONFIG_REPO_URL=https://github.com/seantronsen/neovim-config.git
+CONFIG_REPO_URL?=git@github.com:seantronsen/neovim-config.git
+
 ################################################################################
 ################################################################################
 # TARGET SPECIFIC CONFIGURATION
 ################################################################################
 ################################################################################
-# glibc compatibility repository, neovim-releases, doesn't support aarch64 at
-# this time. maybe we don't need it? will need to determine that later. 
 # NOTE: official linux builds require glibc >= 2.34 (neovim-releases needs
 # 2.17). neovim-releases lags behind, so swap linux to v0.12.6 once published.
+# every linux url below runs on glibc 2.28 (checked with readelf).
 nvim_internal_bin_dir:=/bin
 nvim_Linux_x86_64_url:=https://github.com/neovim/neovim-releases/releases/download/v0.12.5/nvim-linux-x86_64.tar.gz
 # nvim_Linux_x86_64_url:=https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-linux-x86_64.tar.gz
-nvim_Linux_aarch64_url:=
+nvim_Linux_aarch64_url:=https://github.com/neovim/neovim-releases/releases/download/v0.12.5/nvim-linux-arm64.tar.gz
 nvim_Darwin_arm64_url:=https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-macos-arm64.tar.gz
 
 fd_internal_bin_dir:=
 fd_Linux_x86_64_url:=https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz
-fd_Linux_aarch64_url:=
+fd_Linux_aarch64_url:=https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-aarch64-unknown-linux-musl.tar.gz
 fd_Darwin_arm64_url:=https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-aarch64-apple-darwin.tar.gz
 
 rg_internal_bin_dir:=
 rg_Linux_x86_64_url:=https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
-rg_Linux_aarch64_url:=
+rg_Linux_aarch64_url:=https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-unknown-linux-gnu.tar.gz
 rg_Darwin_arm64_url:=https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-apple-darwin.tar.gz
 
 node_internal_bin_dir:=/bin
 npm_internal_bin_dir:=${node_internal_bin_dir}
 node_Linux_x86_64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-x64.tar.xz
-node_Linux_aarch64_url:=
+node_Linux_aarch64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-linux-arm64.tar.xz
 node_Darwin_arm64_url:=https://nodejs.org/dist/v20.18.0/node-v20.18.0-darwin-arm64.tar.gz
 
 # nvim-treesitter compiles parsers with tree-sitter-cli. its release binaries
-# need glibc >= 2.39, so it's compiled from source with a throwaway rust
-# toolchain that only ever lives inside the staging directory.
+# need glibc >= 2.39, so it comes from (first that works): a host tree-sitter
+# >= 0.26.1, the host's cargo, or a throwaway rust toolchain that only ever
+# lives inside the staging directory.
 tree_sitter_version:=0.27.1
 rust_toolchain_version:=1.99.1
 rustup_Linux_x86_64_url:=https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
@@ -90,7 +123,7 @@ define download-tool-macro
 	mkdir -vp ${PATH_STAGE}; \
 	URL_TARGET=${${@F}_${HOST_DIST}_${HOST_ARCH}_url}; \
 	if [ -z "$${URL_TARGET}" ]; then \
-		@echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."; \
+		echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."; \
 		exit 1; \
 	fi; \
 	case "$${URL_TARGET##*.}" in \
@@ -106,14 +139,19 @@ define download-tool-macro
 	rm -vrf "${PATH_STAGE}/${@F}"* ; 
 endef
 
+define link-host-tool-macro
+	mkdir -vp "$@${${@F}_internal_bin_dir}" && \
+	ln -sv "${HOST_${@F}}" "$@${${@F}_internal_bin_dir}/${@F}"
+endef
+
 
 ###############################################################################
 ###############################################################################
 # GENERAL PURPOSE RECIPES
 ###############################################################################
 ###############################################################################
-INSTALLATION_PATHS:=$(addprefix ${USER_SRC}/, ${PROGRAMS}) \
-										$(addprefix ${USER_BIN}/, ${PROGRAMS}) \
+INSTALLATION_PATHS:=$(addprefix ${USER_SRC}/, ${INSTALL_PROGRAMS}) \
+										$(addprefix ${USER_BIN}/, ${INSTALL_PROGRAMS}) \
 										$(addprefix ${USER_DOTCONFIG}/, ${CONFIGS})  \
 										$(addprefix ${USER_DATA}/, ${PROGRAM_DATA})
 ILLEGAL_PWDS:= ${USER_SRC} ${USER_BIN} ${USER_DOTCONFIG} ${USER_DATA} ${INSTALLATION_PATHS}
@@ -134,6 +172,14 @@ environment-check: ${REQUIRED_SYSTEM_COMMANDS}
 		fi; \
 	done;
 	@echo "INFO: installation path verified."
+	@for t in fd rg node npm tree-sitter; do \
+		case "$${t}" in \
+			fd) p="${HOST_fd}" ;; rg) p="${HOST_rg}" ;; node) p="${HOST_node}" ;; \
+			npm) p="${HOST_npm}" ;; tree-sitter) p="${HOST_tree-sitter}" ;; \
+		esac; \
+		if [ -n "$${p}" ]; then echo "INFO: found host '$${t}' at '$${p}'. it's reused, not installed."; fi; \
+	done
+	@if [ "${BUNDLE_ALL}" -ne 0 ]; then echo "INFO: BUNDLE_ALL=1: the build bundles every tool anyway."; fi
 	@echo "INFO: searching for existing installation(s) and related components."
 	@for install_path in ${INSTALLATION_PATHS}; do \
 		if [ -e $$(realpath -m "$${install_path}") ]; then \
@@ -155,7 +201,7 @@ initialize: build $(addprefix ${PATH_DATA}/, ${PROGRAM_DATA})
 
 install: \
 	${USER_SRC} \
-	${USER_BIN} $(addprefix ${USER_BIN}/, ${PROGRAMS}) \
+	${USER_BIN} $(addprefix ${USER_BIN}/, ${INSTALL_PROGRAMS}) \
 	${USER_DOTCONFIG} $(addprefix ${USER_DOTCONFIG}/, ${CONFIGS})  \
 	${USER_DATA} $(addprefix ${USER_DATA}/, ${PROGRAM_DATA})
 	@echo "installation successful."
@@ -305,27 +351,38 @@ ${PATH_DATA}/nvim: $(addprefix ${PATH_ARTIFACTS}/, nvim node npm tree-sitter) $(
 ${PATH_ARTIFACTS}/nvim:
 	$(download-tool-macro)
 
+# reused host tools are symlinked in, laid out like the downloads
 ${PATH_ARTIFACTS}/fd:
-	$(download-tool-macro)
+	$(if $(filter fd,${REUSED_PROGRAMS}),$(link-host-tool-macro),$(download-tool-macro))
 
 ${PATH_ARTIFACTS}/rg:
-	$(download-tool-macro)
+	$(if $(filter rg,${REUSED_PROGRAMS}),$(link-host-tool-macro),$(download-tool-macro))
 
 ${PATH_ARTIFACTS}/node:
-	$(download-tool-macro)
+	$(if $(filter node,${REUSED_PROGRAMS}),$(link-host-tool-macro) && ln -sv "${HOST_npm}" "$@${npm_internal_bin_dir}/npm",$(download-tool-macro))
 
 # --no-default-features drops the embedded javascript runtime (needs libclang to
 # build). the recipe is one shell command so it also runs without .ONESHELL
 # (e.g. macOS's make 3.81).
 ${PATH_ARTIFACTS}/tree-sitter:
 	@set -e; \
+	if [ -n "${HOST_tree-sitter}" ]; then \
+		mkdir -vp "$@/bin"; \
+		ln -sv "${HOST_tree-sitter}" "$@/bin/tree-sitter"; \
+		exit 0; \
+	fi; \
+	ROOT="$$(mkdir -p "$(@D)" && cd "$(@D)" && pwd)/$(@F)"; \
+	if command -v cargo >/dev/null && cargo install tree-sitter-cli --version "${tree_sitter_version}" \
+		--locked --no-default-features --root "$${ROOT}"; then \
+		exit 0; \
+	fi; \
+	echo "INFO: no host tree-sitter or working cargo. using a throwaway rust toolchain."; \
 	URL_TARGET=${rustup_${HOST_DIST}_${HOST_ARCH}_url}; \
 	if [ -z "$${URL_TARGET}" ]; then \
 		echo "ERROR: explicit support for '${HOST_ARCH}' on '${HOST_DIST}' has not been configured."; \
 		exit 1; \
 	fi; \
-	mkdir -vp "${PATH_STAGE}/rust" "$(@D)"; \
-	ROOT="$$(cd "$(@D)" && pwd)/$(@F)"; \
+	mkdir -vp "${PATH_STAGE}/rust"; \
 	export RUSTUP_HOME="$$(realpath "${PATH_STAGE}/rust")/rustup"; \
 	export CARGO_HOME="$$(realpath "${PATH_STAGE}/rust")/cargo"; \
 	wget -O "${PATH_STAGE}/rust/rustup-init" "$${URL_TARGET}"; \
@@ -352,7 +409,7 @@ ${PATH_CONFIG}/nvim:
 	@set -e
 	@echo "verifying '${@F}' configuration files"
 	@mkdir -vp "${PATH_CONFIG}"
-	@git clone https://github.com/seantronsen/neovim-config.git $@
+	@git clone "${CONFIG_REPO_URL}" $@
 
 ################################################################################
 ################################################################################
