@@ -178,6 +178,24 @@ Breakpoints and watches don't survive restarting nvim (#60).
 In the view, `S` `W` `B` `T` `E` `R` switch sections (scopes, watches,
 breakpoints, threads, exceptions, repl) and `g?` lists the rest.
 
+## Install
+
+```sh
+make initialize   # downloads/builds into build/, then opens nvim once to install plugins and tools
+make install      # copies into ~/.local/{bin,sources,share} and ~/.config
+```
+
+- `OVERWRITE_INSTALLATION=1`: replace an existing install
+- `BUNDLE_ALL=1`: bundle every tool, for a host without internet (copy this
+  directory, `build/` included, over and run `make install` there). Without it, fd, rg and node/npm already on
+  the host are used instead of downloaded, and `build/` only works on that host
+- `CONFIG_REPO_URL=https://github.com/seantronsen/neovim-config.git`: clone
+  without a GitHub ssh key (the default is ssh)
+
+`install` only links fd, rg and node/npm into `~/.local/bin` when they aren't
+already on PATH. tree-sitter (build only) comes from the host when it's >=
+0.26.1, else the host's cargo builds it, else a throwaway rust toolchain.
+
 ## Runtime Dependencies
 
 - [neovim](https://github.com/neovim/neovim/releases) $\geq$ v0.12.5
