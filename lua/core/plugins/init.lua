@@ -23,6 +23,7 @@ vim.g.mapleader = ","
 local colorscheme = require("core.plugins.colorscheme")
 local file_explorer = require("core.plugins.file-explorer")
 local syntax = require("core.plugins.syntax-highlight")
+local textobjects = require("core.plugins.textobjects")
 local git = require("core.plugins.git")
 local latex = require("core.plugins.vimtex")
 local dap = require("core.plugins.dap")
@@ -83,6 +84,15 @@ require("lazy").setup({
 		lazy = false,
 		build = ":TSUpdate",
 		config = syntax.config,
+	},
+	-- no tags on its main branch (the one for nvim-treesitter main)
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		commit = "5c7b026",
+		lazy = true,
+		init = textobjects.init,
+		config = textobjects.config,
 	},
 
 	-- NOTES
