@@ -106,8 +106,7 @@ require("lazy").setup({
 	--------------------------------
 	{
 		"mfussenegger/nvim-dap",
-		-- past the 0.10.0 tag for listeners.on_session, which nvim-dap-view needs.
-		-- later commits warn on every session about load_launchjs (see dap/base.lua)
+		-- past the 0.10.0 tag for listeners.on_session, which nvim-dap-view needs
 		commit = "40a8189",
 		lazy = true,
 		init = dap.init,

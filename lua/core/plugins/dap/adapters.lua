@@ -21,6 +21,8 @@ if codelldb then
 		port = "${port}",
 		executable = { command = codelldb, args = { "--port", "${port}" } },
 	}
+	-- the type name VS Code's CodeLLDB uses, so launch.json files from it work as is
+	dap.adapters.lldb = dap.adapters.codelldb
 end
 
 -- prompts for the executable, starting from `dir` (relative to the cwd)
