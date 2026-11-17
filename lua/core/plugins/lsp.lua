@@ -96,7 +96,7 @@ local servers = {
 	{ mason = "bash-language-server", lsp = "bashls", bin = "bash-language-server" },
 	{ mason = "buf", lsp = "buf_ls", bin = "buf" }, -- protobuf
 	{ mason = "clangd", lsp = "clangd", bin = "clangd", config = config_clangd },
-	{ mason = "cmake-language-server", lsp = "cmake", bin = "cmake-language-server" },
+	{ mason = "neocmakelsp", lsp = "neocmake", bin = "neocmakelsp" },
 	{ mason = "dockerfile-language-server", lsp = "dockerls", bin = "docker-langserver" },
 	{ mason = "gopls", lsp = "gopls", bin = "gopls", config = config_gopls },
 	{ mason = "html-lsp", lsp = "html", bin = "vscode-html-language-server" },
